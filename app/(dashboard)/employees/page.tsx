@@ -2,7 +2,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import {
   Table,
   TableHeader,
@@ -34,7 +33,6 @@ export default function EmployeePage() {
                 <div className="flex-1 ml-2">Doreen Barch</div>
                 <Badge variant="secondary">Offline</Badge>
               </div>
-              {/* Repeat for each employee */}
             </div>
           </CardContent>
         </Card>
@@ -43,7 +41,6 @@ export default function EmployeePage() {
           <CardHeader className="pb-2">Other</CardHeader>
           <CardContent className="space-y-2">
             <div className="space-y-2">
-              {/* Example employee row */}
               <div className="flex justify-between items-center text-sm">
                 <div>205</div>
                 <div className="flex-1 ml-2">Scot Hester</div>

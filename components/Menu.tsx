@@ -84,7 +84,7 @@ const Menu = () => {
               href={i.href}
               className={`flex items-center justify-center lg:justify-start gap-4 py-2 md:px-2 rounded-md font-medium transition-colors ${
                 isActive
-                  ? "border-l-4 border-[#40BF60] text-[#40BF60]"
+                  ? "border-l-2 lg:border-l-4 border-[#40BF60] text-[#40BF60]"
                   : "text-[#142B52] hover:text-[#40BF60]"
               }`}
             >
