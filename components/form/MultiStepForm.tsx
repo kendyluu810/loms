@@ -1,0 +1,139 @@
+"use client";
+import { Load_Data } from "@/type";
+import { useState } from "react";
+import Step1Route from "./Step1Route";
+import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
+import Step2Shipments from "./Step2Shipments";
+import Step3Owner from "./Step3Owner";
+import Step4Review from "./Step4Review";
+import { Check } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+interface StepProgressBarProps {
+  currentStep: number; // 1-based (1 to 4)
+}
+
+const MultiStepForm = ({ currentStep }: StepProgressBarProps) => {
+  const [step, setStep] = useState(1);
+  const router = useRouter();
+
+  // const [formData, setFormData] = useState<Load_Data>({
+  //   origin: "",
+  //   pickupNumber: "",
+  //   shipperSchedule: new Date(),
+  //   pickupDate: new Date(),
+  //   pickupTime: new Date(),
+  //   destination: "",
+  //   deliveryNumber: "",
+  //   receiverSchedule: new Date(),
+  //   deliveryDate: new Date(),
+  //   deliveryTime: new Date(),
+  //   additionalStop: "",
+  //   warehoouseNumber: "",
+  //   warehouseSchedule: new Date(),
+  //   date: new Date(),
+  //   time: new Date(),
+  //   itemCategory: "",
+  //   weight: "",
+  //   length: "",
+  //   rate: "",
+  //   equipmentType: "",
+  //   truckLoad: "",
+  //   dangerousGoods: false,
+  //   dangerType: false,
+  //   customer: "",
+  //   companyEmail: "",
+  //   companyPhone: "",
+  //   contactPerson: "",
+  //   contactEmail: "",
+  //   contactPhone: "",
+  // });
+
+  const steps = ["ROUTE", "SHIPMENTS", "OWNER", "REVIEW"];
+
+  const nextStep = () => setStep((prev) => prev + 1);
+  const prevStep = () => setStep((prev) => prev - 1);
+
+  return (
+    <div className="">
+      <div className="flex items-center justify-between w-full max-w-7xl mx-auto mb-8">
+        <div className="w-1/4 pt-2">
+          <h2 className="text-2xl font-semibold text-gray-800">
+            {steps[step - 1].charAt(0) + steps[step - 1].slice(1).toLowerCase()}
+          </h2>
+          <span className="text-sm text-gray-500">
+            Please complete each step to proceed.
+          </span>
+        </div>
+        {steps.map((label, index) => {
+          const stepNumber = index + 1;
+          const isActive = currentStep === stepNumber;
+          const isCompleted = currentStep > stepNumber;
+
+          return (
+            <div key={label} className="flex-1 flex items-center relative">
+              {/* Line between steps */}
+              {index !== 0 && (
+                <div
+                  className={cn(
+                    "absolute left-0 top-1/2 w-full h-1 -z-10 transform -translate-y-1/2",
+                    isCompleted ? "bg-blue-600" : "bg-gray-300"
+                  )}
+                />
+              )}
+
+              <div className="flex flex-col items-center w-full z-10">
+                {/* Step Number Circle */}
+                <div
+                  className={cn(
+                    "flex items-center justify-center w-8 h-8 rounded-full border-2 text-sm font-medium",
+                    isActive
+                      ? "bg-blue-600 text-white border-blue-600"
+                       : isCompleted
+                      ? "bg-blue-600 text-white border-blue-600"
+                      : "bg-white text-gray-500 border-gray-300"
+                  )}
+                >
+                  {isCompleted ? <Check size={16} /> : stepNumber}
+                </div>
+                {/* Step Label */}
+                <span className="mt-2 text-xs text-center text-gray-700">
+                  {label}
+                </span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <div>
+        {step === 1 && <Step1Route />}
+        {step === 2 && <Step2Shipments />}
+        {step === 3 && <Step3Owner />}
+        {step === 4 && <Step4Review />}
+        <div className="mt-6 flex justify-between">
+          {step > 1 ? (
+            <Button variant="outline" onClick={() => setStep(step - 1)}>
+              Back
+            </Button>
+          ) : (
+            <Button
+              variant="outline"
+              onClick={() => router.push("/load_board")}
+            >
+              Cancel
+            </Button>
+          )}
+
+          {step < 4 ? (
+            <Button onClick={() => setStep(step + 1)}>Next</Button>
+          ) : (
+            <Button type="submit">Submit</Button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default MultiStepForm;

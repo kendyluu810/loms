@@ -1,0 +1,196 @@
+"use client";
+import { columns, Load, Loadsdata } from "@/components/columns";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  ColumnFiltersState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
+  useReactTable,
+} from "@tanstack/react-table";
+import { Plus, Search } from "lucide-react";
+import { useState } from "react";
+
+const LegoPage = () => {
+  const [search, setSearch] = useState("");
+  const [sort, setSort] = useState("latest");
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [loadId, setLoadId] = useState("");
+
+  const table = useReactTable({
+    data: Loadsdata,
+    columns,
+    state: {
+      sorting,
+      columnFilters,
+    },
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+  });
+
+  return (
+    <div className="p-4 md:p-8">
+      <h1 className="text-2xl font-bold text-[#142B52] mb-6">Lego Loads</h1>
+
+      {/* Toolbar */}
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
+        {/* Search */}
+        <div className="relative w-full md:w-1/3">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search by Load ID..."
+            className="pl-10"
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              table.setColumnFilters([
+                {
+                  id: "id",
+                  value: e.target.value,
+                },
+              ]);
+            }}
+          />
+        </div>
+
+        {/* Right Actions */}
+        <div className="flex gap-4">
+          {/* Glue Dialog */}
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className="bg-[#40BF60] hover:bg-[#34a653] text-white">
+                <Plus className="mr-2 h-4 w-4" />
+                Glue Load
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle>Glue Load</DialogTitle>
+                <DialogDescription>
+                  Enter a Load ID to glue manually.
+                </DialogDescription>
+              </DialogHeader>
+              <Input
+                placeholder="Enter Load ID"
+                value={loadId}
+                onChange={(e) => setLoadId(e.target.value)}
+              />
+              <DialogFooter>
+                <Button
+                  onClick={() => {
+                    console.log("Glue Load:", loadId);
+                    setLoadId("");
+                  }}
+                >
+                  Confirm Glue
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+
+          {/* Sort Dropdown */}
+          <Select
+            value={sort}
+            onValueChange={(value) => {
+              setSort(value);
+              setSorting([
+                {
+                  id: "id", // or any other column
+                  desc: value === "latest",
+                },
+              ]);
+            }}
+          >
+            <SelectTrigger className="w-[160px]">
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="latest">Latest</SelectItem>
+              <SelectItem value="oldest">Oldest</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      {/* Data Table */}
+      <div className="rounded-md border overflow-auto">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+
+          <TableBody>
+            {table.getRowModel().rows.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="text-center">
+                  No results found.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
+  );
+};
+
+export default LegoPage;
