@@ -34,6 +34,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const initialData: Customer[] = [
   {
@@ -288,7 +289,7 @@ const CustomersPage = () => {
                 </SelectItem>
               ))}
             </SelectContent>
-          </Select> 
+          </Select>
 
           <div className="flex space-x-2">
             <Button
@@ -316,41 +317,56 @@ const CustomersPage = () => {
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-4">
-            <Input
-              placeholder="Name / Company"
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-            />
-            <Input
-              placeholder="Email"
-              value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
-            />
-            <Input
-              placeholder="Phone"
-              value={form.phone}
-              onChange={(e) => setForm({ ...form, phone: e.target.value })}
-            />
-            <Select
-              value={form.deliveryMethod}
-              onValueChange={(v) =>
-                setForm({
-                  ...form,
-                  deliveryMethod: v as Customer["deliveryMethod"],
-                })
-              }
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {["Air", "Sea", "Road"].map((m) => (
-                  <SelectItem key={m} value={m}>
-                    {m}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <div className="space-y-4">
+              <Label htmlFor="name">Name / Company</Label>
+              <Input
+                id="name"
+                placeholder="Name / Company"
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+              />
+            </div>
+            <div className="space-y-4">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                placeholder="Email"
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+              />
+            </div>
+            <div className="space-y-4">
+              <Label htmlFor="phone">Phone</Label>
+              <Input
+                id="phone"
+                placeholder="Phone"
+                value={form.phone}
+                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+              />
+            </div>
+            <div className="space-y-4">
+              <Label htmlFor="deliveryMethod">Delivery Method</Label>
+              <Select
+                value={form.deliveryMethod}
+                onValueChange={(v) =>
+                  setForm({
+                    ...form,
+                    deliveryMethod: v as Customer["deliveryMethod"],
+                  })
+                }
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {["Air", "Sea", "Land"].map((m) => (
+                    <SelectItem key={m} value={m}>
+                      {m}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
           <DialogFooter>
             <Button onClick={saveCustomer}>
