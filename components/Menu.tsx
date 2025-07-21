@@ -45,7 +45,7 @@ const menuItem = {
     },
     {
       title: "Driver",
-      href: "/driver",
+      href: "/drivers",
       icon: <Truck />,
     },
     {

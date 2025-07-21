@@ -1,11 +1,23 @@
-const mongoose = require("mongoose");
+import mongoose, { Schema, Document } from "mongoose";
 
-const EmployeeSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  phone: { type: String, required: true },
-  email: { type: String, required: true },
-  status: { type: String, enum: ["Online", "Offline"], default: "Offline" },
-  team: { type: mongoose.Schema.Types.ObjectId, ref: "Team" },
-});
+export interface IEmployee extends Document {
+  Eid: string;
+  name: string;
+  phone: string;
+  email: string;
+  position: string;
+}
 
-module.exports = mongoose.model("Employee", EmployeeSchema);
+const EmployeeSchema: Schema = new Schema(
+  {
+    Eid: { type: String, required: true, unique: true },
+    name: { type: String, required: true },
+    phone: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    position: { type: String, required: true },
+  },
+  { timestamps: true }
+);
+
+export default mongoose.models.Employee ||
+  mongoose.model<IEmployee>("Employee", EmployeeSchema);

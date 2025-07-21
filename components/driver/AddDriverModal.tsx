@@ -1,0 +1,169 @@
+"use client";
+
+import { Employee } from "@/type";
+import React, { useEffect, useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "../ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+
+export default function AddDriverModal({ onAdded }: { onAdded: () => void }) {
+  const [open, setOpen] = useState(false);
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [form, setForm] = useState({
+    Eid: "",
+    driverlicense: "",
+    licensetype: "",
+    licenseexpiry: "",
+    vehicleid: "",
+    vehicleType: "",
+    vehicleNumber: "",
+  });
+
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      const res = await fetch(`/api/employees?position=Driver`);
+      const data = await res.json();
+      setEmployees(data.employees);
+    };
+    fetchEmployees();
+  }, []);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSelect = (value: string) => {
+    setForm({ ...form, Eid: value });
+  };
+
+  const handleSubmit = async () => {
+    await fetch("/api/drivers", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
+    });
+    setOpen(false);
+    setForm({
+      Eid: "",
+      driverlicense: "",
+      licensetype: "",
+      licenseexpiry: "",
+      vehicleid: "",
+      vehicleType: "",
+      vehicleNumber: "",
+    });
+    onAdded();
+  };
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button>Add Driver</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Add New Driver</DialogTitle>
+        </DialogHeader>
+
+        <div className="space-y-2">
+          <div className="space-x-4 space-y-4">
+            <Label>Select Employee</Label>
+            <Select onValueChange={handleSelect}>
+              <SelectTrigger>
+                <SelectValue placeholder={`e.g. ${form.Eid}`} />
+              </SelectTrigger>
+              <SelectContent>
+                {employees.map((emp) => (
+                  <SelectItem key={emp._id} value={emp._id}>
+                    {emp.name} ({emp.email})
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-x-4 space-y-4">
+            <Label>Driver License</Label>
+            <Input
+              name="driverlicense"
+              placeholder="Driver License"
+              value={form.driverlicense}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="space-x-4 space-y-4">
+            <Label>License Type</Label>
+            <Input
+              name="licensetype"
+              placeholder="License Type"
+              value={form.licensetype}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="space-x-4 space-y-4">
+            <Label>License Expiry</Label>
+            <Input
+              type="date"
+              name="licenseexpiry"
+              placeholder="License Expiry"
+              value={form.licenseexpiry}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="space-x-4 space-y-4">
+            <Label>Vehicle ID</Label>
+            <Input
+              name="vehicleid"
+              placeholder="Vehicle ID"
+              value={form.vehicleid}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="space-x-4 space-y-4">
+            <Label>Vehicle Type</Label>
+            <Input
+              name="vehicleType"
+              placeholder="Vehicle Type"
+              value={form.vehicleType}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="space-x-4 space-y-4">
+            <Label>Vehicle Number</Label>
+            <Input
+              name="vehicleNumber"
+              placeholder="Vehicle Number"
+              value={form.vehicleNumber}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+
+        <DialogFooter>
+          <Button onClick={handleSubmit}>Add</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}

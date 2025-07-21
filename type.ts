@@ -30,3 +30,32 @@ export type Load_Data = {
   contactEmail: string;
   contactPhone: string;
 };
+
+export type Employee = {
+  _id: string;
+  Eid: string;
+  name: string;
+  email: string;
+  phone: string;
+  position: "Manager" | "Driver" | "Staff";
+};
+
+export type Customer = {
+  _id: string;
+  Cid: string;
+  name: string;
+  email: string;
+  phone: string;
+  deliveryMethod: "Air" | "Sea" | "Land";
+};
+
+export type Driver = {
+  _id: string;
+  employee: Employee; // populated employee document
+  driverlicense: string;
+  licensetype: string;
+  licenseexpiry: string; // Date string
+  vehicleid: string;
+  vehicleType: string;
+  vehicleNumber: string;
+};
