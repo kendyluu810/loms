@@ -1,5 +1,5 @@
 "use client";
-import { columns, Loadsdata } from "@/components/load_board/columns";
+import { columns, Load } from "@/components/load_board/columns";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -26,6 +26,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { fetchLoads } from "@/utils/fetchLoads";
 import {
   ColumnFiltersState,
   flexRender,
@@ -37,7 +38,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { Plus, Search } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const LegoPage = () => {
   const [search, setSearch] = useState("");
@@ -46,8 +47,25 @@ const LegoPage = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [loadId, setLoadId] = useState("");
 
+  const [loads, setLoads] = useState<Load[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const fetched = await fetchLoads();
+        setLoads(fetched);
+      } catch (err) {
+        console.error("Error fetching loads:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
   const table = useReactTable({
-    data: Loadsdata,
+    data: loads,
     columns,
     state: {
       sorting,

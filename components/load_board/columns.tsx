@@ -21,27 +21,6 @@ export type Load = {
   state: string;
 };
 
-export const Loadsdata: Load[] = [
-  {
-    id: "#951159739",
-    age: "00:01",
-    customer: "LG Electronics USA",
-    contact: "John Taylor (888) 865-3026",
-    origin: "Hanover, Virginia",
-    pickupTime: "09:00",
-    pickupDate: "14/05/22",
-    miles: "746mi",
-    destination: "Joliet, Illinois",
-    deliveryTime: "12:00",
-    deliveryDate: "15/05/22",
-    equipment: "Van",
-    weight: "11,287",
-    rate: "$3,500",
-    stop: "One",
-    state: "Posted",
-  },
-
-];
 export const columns: ColumnDef<Load>[] = [
   {
     id: "select",
@@ -118,6 +97,9 @@ export const columns: ColumnDef<Load>[] = [
   {
     accessorKey: "equipment",
     header: "Equipment",
+    cell: ({ row }) => (
+      <div>{row.getValue("equipment") || "N/A"}</div> // ✅ fallback nếu thiếu
+    ),
   },
   {
     accessorKey: "weight",

@@ -44,7 +44,7 @@ export async function fetchLoads(): Promise<Load[]> {
     destination: item.route?.destination || "",
     deliveryTime: formatTime(item.route?.deliveryTime),
     deliveryDate: formatDate(item.route?.deliveryDate),
-    equipment: item.shipment?.equipment || "",
+    equipment: item.shipment?.equipmentType || "",
     weight: item.shipment?.weight || "",
     rate: item.shipment?.rate || "",
     stop: item.stop || "",

@@ -4,7 +4,7 @@ import dbConnect from "@/lib/mongodb";
 import Load from "@/models/load_board/Load";
 import Route from "@/models/load_board/Routes";
 import Shipment from "@/models/load_board/Shipment";
-import Customers from "@/models/Customers";
+import "@/models/Customers";
 
 function generateLoadNumber() {
   const now = new Date();
