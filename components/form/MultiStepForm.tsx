@@ -8,12 +8,9 @@ import Step3Owner from "./Step3Owner";
 import Step4Review from "./Step4Review";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLoadStore } from "@/store/useLoadStore";
 
-interface StepProgressBarProps {
-  currentStep: number; // 1-based (1 to 4)
-}
-
-const MultiStepForm = ({ currentStep }: StepProgressBarProps) => {
+const MultiStepForm = () => {
   const [step, setStep] = useState(1);
   const router = useRouter();
 
@@ -22,8 +19,27 @@ const MultiStepForm = ({ currentStep }: StepProgressBarProps) => {
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
 
+  const handleSubmit = async () => {
+    const { route, shipment, owner, reset } = useLoadStore.getState();
+
+    const res = await fetch("/api/load_board", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ route, shipment, customer: owner._id }),
+    });
+
+    if (res.ok) {
+      reset();
+      router.push("/load_board");
+    } else {
+      alert("Failed to submit load data");
+    }
+  };
+
   return (
-    <div >
+    <div>
       <div className="flex flex-col md:flex-row items-center justify-between max-w-6xl mx-auto mt-10">
         <div className="md:w-1/4 pt-2">
           <h2 className="text-2xl font-semibold text-[#022f7e]">
@@ -35,8 +51,8 @@ const MultiStepForm = ({ currentStep }: StepProgressBarProps) => {
         </div>
         {steps.map((label, index) => {
           const stepNumber = index + 1;
-          const isActive = currentStep === stepNumber;
-          const isCompleted = currentStep > stepNumber;
+          const isActive = stepNumber === step;
+          const isCompleted = stepNumber < step;
 
           return (
             <div key={label} className="md:flex-1 flex items-center relative">
@@ -95,7 +111,9 @@ const MultiStepForm = ({ currentStep }: StepProgressBarProps) => {
           {step < 4 ? (
             <Button onClick={() => setStep(step + 1)}>Next</Button>
           ) : (
-            <Button type="submit">Submit</Button>
+            <Button type="submit" onClick={handleSubmit}>
+              Submit
+            </Button>
           )}
         </div>
       </div>

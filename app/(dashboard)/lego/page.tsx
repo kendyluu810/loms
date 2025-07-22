@@ -1,5 +1,5 @@
 "use client";
-import { columns, Loadsdata } from "@/components/columns";
+import { columns, Loadsdata } from "@/components/load_board/columns";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

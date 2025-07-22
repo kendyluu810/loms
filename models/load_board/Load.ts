@@ -45,5 +45,4 @@ const LoadBoardSchema: Schema = new Schema(
   },
   { timestamps: true }
 );
-export default mongoose.models.Load ||
-  mongoose.model<ILoad>("Load", LoadBoardSchema);
+export default mongoose.models.Load || mongoose.model("Load", LoadBoardSchema);

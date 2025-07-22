@@ -18,7 +18,7 @@ const ShipmentSchema = new mongoose.Schema(
     weight: { type: Number, required: true },
     length: { type: Number, required: true },
     rate: { type: Number, required: true },
-    rateUnit: { type: String, required: true },
+    rateUnit: { type: String },
     equipmentType: { type: String, required: true },
     truckLoad: { type: String, required: true },
     dangerousGoods: { type: Boolean, default: false },
@@ -27,4 +27,5 @@ const ShipmentSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export const Shipment = mongoose.model<IShipment>("Shipment", ShipmentSchema);
+export default mongoose.models.Shipment ||
+  mongoose.model<IShipment>("Shipment", ShipmentSchema);

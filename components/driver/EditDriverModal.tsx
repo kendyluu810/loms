@@ -72,7 +72,7 @@ export default function EditDriverModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-[#022f7e] text-white" variant="outline">
+        <Button className="bg-[#3461ff] text-white" variant="outline">
           Edit
         </Button>
       </DialogTrigger>
@@ -147,7 +147,7 @@ export default function EditDriverModal({
           </div>
         </div>
 
-        <Button className="mt-2 bg-[#022f7e] text-white" onClick={handleSubmit}>
+        <Button className="mt-2 bg-[#3461ff] text-white hover:bg-white hover:text-[#3461ff]" onClick={handleSubmit}>
           Update
         </Button>
       </DialogContent>

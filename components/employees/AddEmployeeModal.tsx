@@ -34,7 +34,7 @@ export default function AddEmployeeModal({ onAdded }: { onAdded: () => void }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-[#022f7e] text-white">Add Employee</Button>
+        <Button className="bg-[#3461ff] text-white hover:bg-white hover:text-[#3461ff]">Add Employee</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -77,7 +77,7 @@ export default function AddEmployeeModal({ onAdded }: { onAdded: () => void }) {
             </select>
           </div>
         </div>
-        <Button onClick={handleSubmit}>Save</Button>
+        <Button className="mt-2 bg-[#3461ff] text-white hover:bg-white hover:text-[#3461ff]" onClick={handleSubmit}>Save</Button>
       </DialogContent>
     </Dialog>
   );

@@ -79,7 +79,7 @@ export default function AddDriverModal({ onAdded }: { onAdded: () => void }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-[#022f7e] text-white">Add Driver</Button>
+        <Button className="bg-[#3461ff] text-white hover:bg-white hover:text-[#3461ff]">Add Driver</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -167,7 +167,7 @@ export default function AddDriverModal({ onAdded }: { onAdded: () => void }) {
             />
           </div>
         </div>
-        <Button className="mt-2 bg-[#022f7e] text-white" onClick={handleSubmit}>
+        <Button className="mt-2 bg-[#3461ff] text-white" onClick={handleSubmit}>
           Add
         </Button>
       </DialogContent>

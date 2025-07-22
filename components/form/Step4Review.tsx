@@ -1,8 +1,10 @@
 import { EllipsisVertical, SquarePen } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Label } from "../ui/label";
+import { useLoadStore } from "@/store/useLoadStore";
 
 export default function Step4Review() {
+  const { route, shipment, owner } = useLoadStore();
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-7xl mx-auto mt-10">
       <div className="space-y-10">
@@ -17,31 +19,31 @@ export default function Step4Review() {
             <CardContent className="space-y-3 p-4">
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">Origin</Label>
-                <span>Hanover, VA</span>
+                <span>{route.origin}</span>
               </div>
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">
                   Pickup Number
                 </Label>
-                <span>#87422500167</span>
+                <span>{route.pickupNumber}</span>
               </div>
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">
                   Shipper Schedule
                 </Label>
-                <span>09:00 - 18:00</span>
+                <span>{route.shipperSchedule}</span>
               </div>
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">
                   Pickup Date
                 </Label>
-                <span>14/05/22</span>
+                <span>{route.pickupDate}</span>
               </div>
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">
                   Pickup Time
                 </Label>
-                <span>09:00</span>
+                <span>{route.pickupTime}</span>
               </div>
             </CardContent>
 
@@ -50,31 +52,31 @@ export default function Step4Review() {
                 <Label className="text-[#022f7e] font-semibold">
                   Destination
                 </Label>
-                <span>Joliet, IL</span>
+                <span>{route.destination}</span>
               </div>
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">
                   Delivery Number
                 </Label>
-                <span>#7660022371</span>
+                <span>{route.deliveryNumber}</span>
               </div>
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">
                   Receiver Schedule
                 </Label>
-                <span>09:00 - 19:00</span>
+                <span>{route.receiverSchedule}</span>
               </div>
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">
                   Delivery Date
                 </Label>
-                <span>15/05/22</span>
+                <span>{route.deliveryDate}</span>
               </div>
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">
                   Delivery Time
                 </Label>
-                <span>12:00</span>
+                <span>{route.deliveryTime}</span>
               </div>
             </CardContent>
           </div>
@@ -90,19 +92,19 @@ export default function Step4Review() {
             <CardContent className="space-y-3 p-4">
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">Origin</Label>
-                <span>Fort Wayne, IN</span>
+                <span>{route.additionalStop}</span>
               </div>
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">
                   Warehouse Number
                 </Label>
-                <span>#31428833167</span>
+                <span>{route.warehouseNumber}</span>
               </div>
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">
                   Warehouse Schedule
                 </Label>
-                <span>10:00 - 19:00</span>
+                <span>{route.warehouseSchedule}</span>
               </div>
             </CardContent>
             <CardContent className="space-y-3 p-4">
@@ -110,15 +112,15 @@ export default function Step4Review() {
                 <Label className="text-[#022f7e] font-semibold">
                   Destination
                 </Label>
-                <span>Joliet, IL</span>
+                <span>{route.destination}</span>
               </div>
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">Date</Label>
-                <span>15/05/22</span>
+                <span>{route.deliveryDate}</span>
               </div>
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">Time</Label>
-                <span>Undefined</span>
+                <span>{route.deliveryTime}</span>
               </div>
             </CardContent>
           </div>
@@ -138,25 +140,25 @@ export default function Step4Review() {
                 <Label className="text-[#022f7e] font-semibold">
                   Item Category
                 </Label>
-                <span>Electronics</span>
+                <span>{shipment.itemCategory}</span>
               </div>
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">
                   Equipment Type
                 </Label>
-                <span>Van</span>
+                <span>{shipment.equipmentType}</span>
               </div>
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">
                   Truck Load
                 </Label>
-                <span>Full</span>
+                <span>{shipment.truckLoad}</span>
               </div>
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">
                   Dangerous Goods
                 </Label>
-                <span>No</span>
+                <span>{shipment.dangerousGoods ? "Yes" : "No"}</span>
               </div>
             </CardContent>
             <CardContent className="space-y-3 p-4">
@@ -164,24 +166,24 @@ export default function Step4Review() {
                 <Label className="text-[#022f7e] font-semibold">
                   Weight (lbs)
                 </Label>
-                <span>11287</span>
+                <span>{shipment.weight}</span>
               </div>
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">
                   Length (Foot)
                 </Label>
-                <span>53 Ft</span>
+                <span>{shipment.length}</span>
               </div>
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">Rate</Label>
-                <span>3,500$</span>
+                <span>{shipment.rate}</span>
               </div>
-              <div className="flex justify-between">
+              {/* <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">
                   Insure Cargo
                 </Label>
                 <span>Yes</span>
-              </div>
+              </div> */}
             </CardContent>
           </div>
         </Card>
@@ -194,39 +196,45 @@ export default function Step4Review() {
             <CardContent className="space-y-3 p-4">
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">Customer</Label>
-                <span>LG Electronics USA</span>
+                <span>{owner.name}</span>
               </div>
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">
                   Company Email
                 </Label>
-                <span>@lgussupport</span>
+                <span>{owner.email}</span>
               </div>
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">
                   Company Phone
                 </Label>
-                <span>(123) 855-1066</span>
+                <span>{owner.phone}</span>
               </div>
-              <div className="flex justify-between">
+              {/* <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">
                   Cargo Instructions
                 </Label>
                 <span>Yes</span>
-              </div>
+              </div> */}
             </CardContent>
             <CardContent className="space-y-3 p-4">
               <div className="flex justify-between">
-                <Label className="text-[#022f7e] font-semibold">Contact Person</Label>
-                <span>John Taylor</span>
+                <Label className="text-[#022f7e] font-semibold">
+                  Contact Person
+                </Label>
+                <span>{owner.contactName}</span>
               </div>
               <div className="flex justify-between">
-                <Label className="text-[#022f7e] font-semibold">Contact Email</Label>
-                <span>john.taylor@lge.com</span>
+                <Label className="text-[#022f7e] font-semibold">
+                  Contact Email
+                </Label>
+                <span>{owner.contactEmail}</span>
               </div>
               <div className="flex justify-between">
-                <Label className="text-[#022f7e] font-semibold">Contact Phone</Label>
-                <span>(888) 865-3026</span>
+                <Label className="text-[#022f7e] font-semibold">
+                  Contact Phone
+                </Label>
+                <span>{owner.contactPhone}</span>
               </div>
             </CardContent>
           </div>

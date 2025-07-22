@@ -1,4 +1,4 @@
-import { Loadsdata } from "@/components/columns";
+import { Loadsdata } from "@/components/load_board/columns";
 import EnterInformation_Form from "@/components/load_board/EnterInformation_Form";
 import LoadDataTable from "@/components/load_board/LoadDataTable";
 

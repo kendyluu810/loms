@@ -35,7 +35,7 @@ export default function EditCustomerModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-[#022f7e] text-white font-semibolds">Edit</Button>
+        <Button className="bg-[#3461ff] text-white font-semibold hover:bg-white hover:text-[#3461ff]">Edit</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -121,7 +121,7 @@ export default function EditCustomerModal({
             </select>
           </div>
         </div>
-        <Button className="mt-2 bg-[#022f7e] text-white" onClick={handleSubmit}>
+        <Button className="mt-2 bg-[#3461ff] text-white hover:bg-white hover:text-[#3461ff]" onClick={handleSubmit}>
           Save
         </Button>
       </DialogContent>

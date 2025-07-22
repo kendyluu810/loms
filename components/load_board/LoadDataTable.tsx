@@ -11,7 +11,7 @@ import {
 } from "../ui/select";
 
 import { useRouter } from "next/navigation";
-import { columns, Load } from "../columns";
+import { columns, Load } from "../load_board/columns";
 import { useState } from "react";
 
 export default function LoadDataTable({ data }: { data: Load[] }) {

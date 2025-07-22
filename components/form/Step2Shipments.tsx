@@ -9,8 +9,11 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Button } from "../ui/button";
+import { useLoadStore } from "@/store/useLoadStore";
 
 export default function Step2Shipments() {
+  const { shipment, updateShipment } = useLoadStore();
+
   return (
     <div className="max-w-7xl mx-auto space-y-6 mt-10 border p-6 rounded-lg shadow-md">
       <div className="flex items-center justify-between mb-4">
@@ -19,12 +22,15 @@ export default function Step2Shipments() {
 
       <div className="space-y-6">
         {/* First Row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 border p-4 rounded-md">
           <div className="space-y-3">
             <Label className="text-[#022f7e] font-semibold">
               Item Category
             </Label>
-            <Select>
+            <Select
+              value={shipment.itemCategory}
+              onValueChange={(value) => updateShipment({ itemCategory: value })}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select Item Category" />
               </SelectTrigger>
@@ -39,7 +45,15 @@ export default function Step2Shipments() {
           <div className="space-y-3">
             <Label className="text-[#022f7e] font-semibold">Weight (lbs)</Label>
             <div className="relative">
-              <Input placeholder="Enter Weight" className="pr-10" />
+              <Input
+                type="number"
+                placeholder="Enter Weight"
+                className="pr-10"
+                value={shipment.weight}
+                onChange={(e) =>
+                  updateShipment({ weight: parseFloat(e.target.value) || 0 })
+                }
+              />
               <Button
                 variant="ghost"
                 size="icon"
@@ -54,7 +68,12 @@ export default function Step2Shipments() {
             <Label className="text-[#022f7e] font-semibold">
               Length (Foot)
             </Label>
-            <Select>
+            <Select
+              value={shipment?.length?.toString()}
+              onValueChange={(value) =>
+                updateShipment({ length: parseFloat(value) || 0 })
+              }
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select Length" />
               </SelectTrigger>
@@ -69,8 +88,18 @@ export default function Step2Shipments() {
           <div className="space-y-3">
             <Label className="text-[#022f7e] font-semibold">Rate</Label>
             <div className="flex space-x-2">
-              <Input placeholder="3,500" />
-              <Select>
+              <Input
+                type="number"
+                placeholder="3,500"
+                value={shipment.rate}
+                onChange={(e) =>
+                  updateShipment({ rate: parseFloat(e.target.value) || 0 })
+                }
+              />
+              <Select
+                value={shipment.rateUnit}
+                onValueChange={(value) => updateShipment({ rateUnit: value })}
+              >
                 <SelectTrigger className="w-fit">
                   <SelectValue placeholder="USD" />
                 </SelectTrigger>
@@ -85,12 +114,17 @@ export default function Step2Shipments() {
         </div>
 
         {/* Second Row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 border p-4 rounded-md">
           <div className="space-y-3">
             <Label className="text-[#022f7e] font-semibold">
               Equipment Type
             </Label>
-            <Select>
+            <Select
+              value={shipment.equipmentType}
+              onValueChange={(value) =>
+                updateShipment({ equipmentType: value })
+              }
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select Equipment Type" />
               </SelectTrigger>
@@ -106,7 +140,10 @@ export default function Step2Shipments() {
             <Label className="text-[#022f7e] font-semibold">
               Truck Load (F/P)
             </Label>
-            <Select>
+            <Select
+              value={shipment.truckLoad}
+              onValueChange={(value) => updateShipment({ truckLoad: value })}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select Truck Load" />
               </SelectTrigger>
@@ -121,7 +158,12 @@ export default function Step2Shipments() {
             <Label className="text-[#022f7e] font-semibold">
               Dangerous Goods
             </Label>
-            <Select>
+            <Select
+              value={shipment.dangerousGoods ? "yes" : "no"}
+              onValueChange={(value) =>
+                updateShipment({ dangerousGoods: value === "yes" })
+              }
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select Dangerous Goods" />
               </SelectTrigger>
@@ -134,7 +176,10 @@ export default function Step2Shipments() {
 
           <div className="space-y-3">
             <Label className="text-[#022f7e] font-semibold">Danger Type</Label>
-            <Select>
+            <Select
+              value={shipment.dangerType}
+              onValueChange={(value) => updateShipment({ dangerType: value })}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select Danger Type" />
               </SelectTrigger>

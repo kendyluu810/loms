@@ -42,7 +42,7 @@ export default function EditEmployeeModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Edit</Button>
+        <Button className="bg-[#3461ff] text-white hover:bg-white hover:text-[#3461ff]">Edit</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -82,7 +82,7 @@ export default function EditEmployeeModal({
             />
           </div>
         </div>
-        <Button className="mt-2" onClick={handleSubmit}>
+        <Button className="mt-2 bg-[#3461ff] text-white hover:bg-white hover:text-[#3461ff]" onClick={handleSubmit}>
           Save
         </Button>
       </DialogContent>
