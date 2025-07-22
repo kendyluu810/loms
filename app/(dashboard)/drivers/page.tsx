@@ -41,7 +41,7 @@ const DriverPage = () => {
 
   return (
     <div className="flex flex-col h-screen p-4 space-y-4">
-      <h2>List of Drivers</h2>
+      <h2 className="font-bold text-2xl text-[#022f7e]">List of Drivers</h2>
       <div className="flex justify-between space-x-4 space-y-4">
         <Input
           type="text"

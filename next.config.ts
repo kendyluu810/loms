@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        source: "/load_board", // what the user types
+        source: "/load_board/", // what the user types
         destination: "/load_board/create-load", // your real page
       },
     ];

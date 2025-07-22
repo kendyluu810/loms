@@ -1,4 +1,3 @@
-import { EllipsisVertical, Plus, SquarePen } from "lucide-react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import {
@@ -13,18 +12,13 @@ export default function Step3Owner() {
   return (
     <div className="max-w-7xl mx-auto space-y-6 mt-10 border p-6 rounded-lg shadow-md">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xl font-semibold">Owner</h3>
-        <div className="flex items-center space-x-6">
-          <Plus />
-          <SquarePen />
-          <EllipsisVertical />
-        </div>
+        <h3 className="text-xl font-semibold text-[#022f7e]">Owner</h3>
       </div>
 
       <div className="flex flex-col space-y-8">
         <div className="grid grid-cols-3 gap-4">
-          <div>
-            <Label>Customer</Label>
+          <div className="space-y-3">
+            <Label className="text-[#022f7e] font-semibold">Customer</Label>
             <Select>
               <SelectTrigger>
                 <SelectValue placeholder="Select Customer" />
@@ -37,18 +31,24 @@ export default function Step3Owner() {
             </Select>
           </div>
 
-          <div>
-            <Label>Company Email</Label>
+          <div className="space-y-3">
+            <Label className="text-[#022f7e] font-semibold">
+              Company Email
+            </Label>
             <Input type="email" placeholder="Enter Company Email" />
           </div>
-          <div>
-            <Label>Company Phone</Label>
+          <div className="space-y-3">
+            <Label className="text-[#022f7e] font-semibold">
+              Company Phone
+            </Label>
             <Input type="tel" placeholder="Enter Company Phone" />
           </div>
         </div>
         <div className="grid grid-cols-3 gap-4">
-          <div>
-            <Label>Contact Person</Label>
+          <div className="space-y-3">
+            <Label className="text-[#022f7e] font-semibold">
+              Contact Person
+            </Label>
             <Select>
               <SelectTrigger>
                 <SelectValue placeholder="Select Contact Person" />
@@ -61,12 +61,16 @@ export default function Step3Owner() {
             </Select>
           </div>
 
-          <div>
-            <Label>Contact Email</Label>
+          <div className="space-y-3">
+            <Label className="text-[#022f7e] font-semibold">
+              Contact Email
+            </Label>
             <Input type="email" placeholder="Enter Contact Email" />
           </div>
-          <div>
-            <Label>Contact Phone</Label>
+          <div className="space-y-3">
+            <Label className="text-[#022f7e] font-semibold">
+              Contact Phone
+            </Label>
             <Input type="tel" placeholder="Enter Contact Phone" />
           </div>
         </div>

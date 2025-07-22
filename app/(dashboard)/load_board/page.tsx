@@ -1,6 +1,6 @@
 import { Loadsdata } from "@/components/columns";
-import EnterInformation_Form from "@/components/EnterInformation_Form";
-import LoadDataTable from "@/components/LoadDataTable";
+import EnterInformation_Form from "@/components/load_board/EnterInformation_Form";
+import LoadDataTable from "@/components/load_board/LoadDataTable";
 
 const LoadBoardPage = () => {
   return (

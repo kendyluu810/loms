@@ -72,32 +72,22 @@ export default function EditDriverModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Edit</Button>
+        <Button className="bg-[#022f7e] text-white" variant="outline">
+          Edit
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit Driver</DialogTitle>
+          <DialogTitle className="text-[#022f7e] font-bold text-2xl">
+            Edit Driver
+          </DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-2">
+        <div className="grid grid-cols-2 gap-4 space-y-3">
           <div className="space-x-4 space-y-4">
-            <Label>Select Employee</Label>
-            <Select onValueChange={handleSelect}>
-              <SelectTrigger>
-                <SelectValue placeholder={`e.g. ${form.Eid}`} />
-              </SelectTrigger>
-              <SelectContent>
-                {employees.map((emp) => (
-                  <SelectItem key={emp._id} value={emp._id}>
-                    {emp.name} ({emp.email})
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="space-x-4 space-y-4">
-            <Label>Driver License</Label>
+            <Label className="text-[#022f7e] font-semibold">
+              Driver License
+            </Label>
             <Input
               name="driverlicense"
               placeholder="Driver License"
@@ -106,7 +96,7 @@ export default function EditDriverModal({
             />
           </div>
           <div className="space-x-4 space-y-4">
-            <Label>License Type</Label>
+            <Label className="text-[#022f7e] font-semibold">License Type</Label>
             <Input
               name="licensetype"
               placeholder="License Type"
@@ -115,7 +105,9 @@ export default function EditDriverModal({
             />
           </div>
           <div className="space-x-4 space-y-4">
-            <Label>License Expiry</Label>
+            <Label className="text-[#022f7e] font-semibold">
+              License Expiry
+            </Label>
             <Input
               type="date"
               name="licenseexpiry"
@@ -125,7 +117,7 @@ export default function EditDriverModal({
             />
           </div>
           <div className="space-x-4 space-y-4">
-            <Label>Vehicle ID</Label>
+            <Label className="text-[#022f7e] font-semibold">Vehicle ID</Label>
             <Input
               name="vehicleid"
               placeholder="Vehicle ID"
@@ -134,7 +126,7 @@ export default function EditDriverModal({
             />
           </div>
           <div className="space-x-4 space-y-4">
-            <Label>Vehicle Type</Label>
+            <Label className="text-[#022f7e] font-semibold">Vehicle Type</Label>
             <Input
               name="vehicleType"
               placeholder="Vehicle Type"
@@ -143,7 +135,9 @@ export default function EditDriverModal({
             />
           </div>
           <div className="space-x-4 space-y-4">
-            <Label>Vehicle Number</Label>
+            <Label className="text-[#022f7e] font-semibold">
+              Vehicle Number
+            </Label>
             <Input
               name="vehicleNumber"
               placeholder="Vehicle Number"
@@ -153,9 +147,9 @@ export default function EditDriverModal({
           </div>
         </div>
 
-        <DialogFooter>
-          <Button onClick={handleSubmit}>Update</Button>
-        </DialogFooter>
+        <Button className="mt-2 bg-[#022f7e] text-white" onClick={handleSubmit}>
+          Update
+        </Button>
       </DialogContent>
     </Dialog>
   );

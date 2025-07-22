@@ -88,7 +88,7 @@ const Menu = () => {
                   : "text-[#142B52] hover:text-[#40BF60]"
               }`}
             >
-              {i.icon}
+              <span>{i.icon}</span>
               <span className="hidden lg:block">{i.title}</span>
             </Link>
           </div>

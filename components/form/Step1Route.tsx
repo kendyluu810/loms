@@ -35,9 +35,9 @@ const RouteSection = ({
   const [date, setDate] = useState<Date>();
   return (
     <div className="border p-4 rounded-md space-y-4">
-      <div className="grid grid-cols-5 gap-4">
-        <div>
-          <Label>{title}</Label>
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-5">
+        <div className="space-y-2">
+          <Label className="text-[#022f7e] font-semibold">{title}</Label>
           <Select>
             <SelectTrigger>
               <SelectValue placeholder="Select Location" />
@@ -52,18 +52,20 @@ const RouteSection = ({
           </Select>
         </div>
 
-        <div>
-          <Label>{numberLabel}</Label>
+        <div className="space-y-2">
+          <Label className="text-[#022f7e] font-semibold">{numberLabel}</Label>
           <Input placeholder={`#123456789`} />
         </div>
 
-        <div>
-          <Label>{scheduleLabel}</Label>
+        <div className="space-y-2">
+          <Label className="text-[#022f7e] font-semibold">
+            {scheduleLabel}
+          </Label>
           <Input type="time" />
         </div>
 
-        <div>
-          <Label>{dateLabel}</Label>
+        <div className="space-y-2">
+          <Label className="text-[#022f7e] font-semibold">{dateLabel}</Label>
           <Popover>
             <PopoverTrigger asChild>
               <button
@@ -86,8 +88,8 @@ const RouteSection = ({
           </Popover>
         </div>
 
-        <div>
-          <Label>{timeLabel}</Label>
+        <div className="space-y-2">
+          <Label className="text-[#022f7e] font-semibold">{timeLabel}</Label>
           <Input type="time" />
         </div>
       </div>
@@ -99,12 +101,7 @@ export default function Step1Route() {
   return (
     <div className="max-w-7xl mx-auto space-y-6 mt-10 border p-6 rounded-lg shadow-md">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xl font-semibold">Route</h3>
-        <div className="flex items-center space-x-6">
-          <Plus />
-          <SquarePen />
-          <EllipsisVertical />
-        </div>
+        <h3 className="text-xl font-semibold text-[#022f7e]">Route</h3>
       </div>
       <RouteSection
         title="Origin"

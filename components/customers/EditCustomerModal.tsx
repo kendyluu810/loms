@@ -10,14 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Label } from "../ui/label";
-
-type Customer = {
-  _id: string;
-  name: string;
-  phone: string;
-  email: string;
-  deliveryMethod: "Air" | "Sea" | "Land";
-};
+import { Customer } from "@/type";
 
 export default function EditCustomerModal({
   customer,
@@ -42,15 +35,17 @@ export default function EditCustomerModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Edit</Button>
+        <Button className="bg-[#022f7e] text-white font-semibolds">Edit</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit Employee</DialogTitle>
+          <DialogTitle className="text-[#022f7e] font-bold text-2xl">
+            Edit Customer
+          </DialogTitle>
         </DialogHeader>
-        <div className="flex flex-col gap-2">
+        <div className="grid grid-cols-2 gap-4 space-y-3">
           <div className="space-y-4">
-            <Label>Name</Label>
+            <Label className="text-[#022f7e] font-semibold">Name</Label>
             <Input
               placeholder="Name"
               value={form.name}
@@ -58,7 +53,7 @@ export default function EditCustomerModal({
             />
           </div>
           <div className="space-y-4">
-            <Label>Phone</Label>
+            <Label className="text-[#022f7e] font-semibold">Phone</Label>
             <Input
               placeholder="Phone"
               value={form.phone}
@@ -66,7 +61,7 @@ export default function EditCustomerModal({
             />
           </div>
           <div className="space-y-4">
-            <Label>Email</Label>
+            <Label className="text-[#022f7e] font-semibold">Email</Label>
             <Input
               placeholder="Email"
               value={form.email}
@@ -74,7 +69,43 @@ export default function EditCustomerModal({
             />
           </div>
           <div className="space-y-4">
-            <Label>Delivery Method</Label>
+            <Label className="text-[#022f7e] font-semibold">Contact Name</Label>
+            <Input
+              placeholder="Name"
+              value={form.contactName}
+              onChange={(e) =>
+                setForm({ ...form, contactName: e.target.value })
+              }
+            />
+          </div>
+          <div className="space-y-4">
+            <Label className="text-[#022f7e] font-semibold">
+              Contact Phone
+            </Label>
+            <Input
+              placeholder="Phone"
+              value={form.contactPhone}
+              onChange={(e) =>
+                setForm({ ...form, contactPhone: e.target.value })
+              }
+            />
+          </div>
+          <div className="space-y-4">
+            <Label className="text-[#022f7e] font-semibold">
+              Contact Email
+            </Label>
+            <Input
+              placeholder="Email"
+              value={form.contactEmail}
+              onChange={(e) =>
+                setForm({ ...form, contactEmail: e.target.value })
+              }
+            />
+          </div>
+          <div className="space-y-4">
+            <Label className="text-[#022f7e] font-semibold">
+              Delivery Method
+            </Label>
             <select
               value={form.deliveryMethod}
               onChange={(e) =>
@@ -89,8 +120,10 @@ export default function EditCustomerModal({
               <option value="Land">Land</option>
             </select>
           </div>
-          <Button onClick={handleSubmit}>Save</Button>
         </div>
+        <Button className="mt-2 bg-[#022f7e] text-white" onClick={handleSubmit}>
+          Save
+        </Button>
       </DialogContent>
     </Dialog>
   );

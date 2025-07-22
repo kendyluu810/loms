@@ -34,13 +34,13 @@ export default function AddEmployeeModal({ onAdded }: { onAdded: () => void }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Add Employee</Button>
+        <Button className="bg-[#022f7e] text-white">Add Employee</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add Employee</DialogTitle>
         </DialogHeader>
-        <div className="flex flex-col gap-2">
+        <div className="grid grid-cols-2 gap-4 space-y-3">
           <div className="space-y-4">
             <Label>Name</Label>
             <Input
@@ -76,8 +76,8 @@ export default function AddEmployeeModal({ onAdded }: { onAdded: () => void }) {
               <option value="Staff">Staff</option>
             </select>
           </div>
-          <Button onClick={handleSubmit}>Save</Button>
         </div>
+        <Button onClick={handleSubmit}>Save</Button>
       </DialogContent>
     </Dialog>
   );

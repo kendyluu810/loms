@@ -1,16 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { Label } from "./ui/label";
+import { Label } from "../ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+} from "../ui/select";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 export default function EnterInformation_Form() {
   const [formData, setFormData] = useState({
     origin: "",
@@ -76,7 +76,10 @@ export default function EnterInformation_Form() {
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold">Enter Information</h2>
         <div className="flex space-x-4">
-          <Button type="submit" className="text-[#6c9ef5] bg-[#fafcff] hover:bg-[#6c9ef5] hover:text-[#fafcff]">
+          <Button
+            type="submit"
+            className="text-[#6c9ef5] bg-[#fafcff] hover:bg-[#6c9ef5] hover:text-[#fafcff]"
+          >
             Apply Filters
           </Button>
           <Button type="button" variant="secondary" onClick={handleReset}>

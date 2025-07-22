@@ -17,6 +17,9 @@ export default function AddCustomerModal({ onAdded }: { onAdded: () => void }) {
     name: "",
     phone: "",
     email: "",
+    contactName: "",
+    contactEmail: "",
+    contactPhone: "",
     deliveryMethod: "Air",
   });
 
@@ -27,23 +30,32 @@ export default function AddCustomerModal({ onAdded }: { onAdded: () => void }) {
       body: JSON.stringify(form),
     });
     setOpen(false);
-    setForm({ name: "", phone: "", email: "", deliveryMethod: "Air" });
+    setForm({
+      name: "",
+      phone: "",
+      email: "",
+      contactName: "",
+      contactEmail: "",
+      contactPhone: "",
+      deliveryMethod: "Air",
+    });
     onAdded();
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Add Customer</Button>
+        <Button className="bg-[#022f7e] text-white font-semibold">
+          Add Customer
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add Customer</DialogTitle>
+          <DialogTitle className="text-[#022f7e] font-bold text-2xl">Add Customer</DialogTitle>
         </DialogHeader>
-        <div className="flex flex-col gap-2">
-         
+        <div className="grid grid-cols-2 gap-4 space-y-3">
           <div className="space-y-4">
-            <Label>Name</Label>
+            <Label className="text-[#022f7e] font-semibold">Name</Label>
             <Input
               placeholder="Name"
               value={form.name}
@@ -51,7 +63,7 @@ export default function AddCustomerModal({ onAdded }: { onAdded: () => void }) {
             />
           </div>
           <div className="space-y-4">
-            <Label>Phone</Label>
+            <Label className="text-[#022f7e] font-semibold">Phone</Label>
             <Input
               placeholder="Phone"
               value={form.phone}
@@ -59,7 +71,7 @@ export default function AddCustomerModal({ onAdded }: { onAdded: () => void }) {
             />
           </div>
           <div className="space-y-4">
-            <Label>Email</Label>
+            <Label className="text-[#022f7e] font-semibold">Email</Label>
             <Input
               placeholder="Email"
               value={form.email}
@@ -67,7 +79,43 @@ export default function AddCustomerModal({ onAdded }: { onAdded: () => void }) {
             />
           </div>
           <div className="space-y-4">
-            <Label>Delivery Method</Label>
+            <Label className="text-[#022f7e] font-semibold">Contact Name</Label>
+            <Input
+              placeholder="Name"
+              value={form.contactName}
+              onChange={(e) =>
+                setForm({ ...form, contactName: e.target.value })
+              }
+            />
+          </div>
+          <div className="space-y-4">
+            <Label className="text-[#022f7e] font-semibold">
+              Contact Phone
+            </Label>
+            <Input
+              placeholder="Phone"
+              value={form.contactPhone}
+              onChange={(e) =>
+                setForm({ ...form, contactPhone: e.target.value })
+              }
+            />
+          </div>
+          <div className="space-y-4">
+            <Label className="text-[#022f7e] font-semibold">
+              Contact Email
+            </Label>
+            <Input
+              placeholder="Email"
+              value={form.contactEmail}
+              onChange={(e) =>
+                setForm({ ...form, contactEmail: e.target.value })
+              }
+            />
+          </div>
+          <div className="space-y-4">
+            <Label className="text-[#022f7e] font-semibold">
+              Delivery Method
+            </Label>
             <select
               value={form.deliveryMethod}
               onChange={(e) =>
@@ -79,8 +127,10 @@ export default function AddCustomerModal({ onAdded }: { onAdded: () => void }) {
               <option value="Land">Land</option>
             </select>
           </div>
-          <Button onClick={handleSubmit}>Save</Button>
         </div>
+        <Button className="mt-2 bg-[#022f7e] text-white" onClick={handleSubmit}>
+          Save
+        </Button>
       </DialogContent>
     </Dialog>
   );

@@ -1,5 +1,4 @@
 "use client";
-import { Load_Data } from "@/type";
 import { useState } from "react";
 import Step1Route from "./Step1Route";
 import { Button } from "../ui/button";
@@ -18,48 +17,16 @@ const MultiStepForm = ({ currentStep }: StepProgressBarProps) => {
   const [step, setStep] = useState(1);
   const router = useRouter();
 
-  // const [formData, setFormData] = useState<Load_Data>({
-  //   origin: "",
-  //   pickupNumber: "",
-  //   shipperSchedule: new Date(),
-  //   pickupDate: new Date(),
-  //   pickupTime: new Date(),
-  //   destination: "",
-  //   deliveryNumber: "",
-  //   receiverSchedule: new Date(),
-  //   deliveryDate: new Date(),
-  //   deliveryTime: new Date(),
-  //   additionalStop: "",
-  //   warehoouseNumber: "",
-  //   warehouseSchedule: new Date(),
-  //   date: new Date(),
-  //   time: new Date(),
-  //   itemCategory: "",
-  //   weight: "",
-  //   length: "",
-  //   rate: "",
-  //   equipmentType: "",
-  //   truckLoad: "",
-  //   dangerousGoods: false,
-  //   dangerType: false,
-  //   customer: "",
-  //   companyEmail: "",
-  //   companyPhone: "",
-  //   contactPerson: "",
-  //   contactEmail: "",
-  //   contactPhone: "",
-  // });
-
   const steps = ["ROUTE", "SHIPMENTS", "OWNER", "REVIEW"];
 
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
 
   return (
-    <div className="">
-      <div className="flex items-center justify-between w-full max-w-7xl mx-auto mb-8">
-        <div className="w-1/4 pt-2">
-          <h2 className="text-2xl font-semibold text-gray-800">
+    <div >
+      <div className="flex flex-col md:flex-row items-center justify-between max-w-6xl mx-auto mt-10">
+        <div className="md:w-1/4 pt-2">
+          <h2 className="text-2xl font-semibold text-[#022f7e]">
             {steps[step - 1].charAt(0) + steps[step - 1].slice(1).toLowerCase()}
           </h2>
           <span className="text-sm text-gray-500">
@@ -72,7 +39,7 @@ const MultiStepForm = ({ currentStep }: StepProgressBarProps) => {
           const isCompleted = currentStep > stepNumber;
 
           return (
-            <div key={label} className="flex-1 flex items-center relative">
+            <div key={label} className="md:flex-1 flex items-center relative">
               {/* Line between steps */}
               {index !== 0 && (
                 <div
@@ -90,7 +57,7 @@ const MultiStepForm = ({ currentStep }: StepProgressBarProps) => {
                     "flex items-center justify-center w-8 h-8 rounded-full border-2 text-sm font-medium",
                     isActive
                       ? "bg-blue-600 text-white border-blue-600"
-                       : isCompleted
+                      : isCompleted
                       ? "bg-blue-600 text-white border-blue-600"
                       : "bg-white text-gray-500 border-gray-300"
                   )}
@@ -98,7 +65,7 @@ const MultiStepForm = ({ currentStep }: StepProgressBarProps) => {
                   {isCompleted ? <Check size={16} /> : stepNumber}
                 </div>
                 {/* Step Label */}
-                <span className="mt-2 text-xs text-center text-gray-700">
+                <span className="mt-2 text-xs text-center text-[#022f7e] font-semibold">
                   {label}
                 </span>
               </div>

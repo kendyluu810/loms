@@ -13,15 +13,8 @@ import {
 import AddCustomerModal from "@/components/customers/AddCustomerModal";
 import EditCustomerModal from "@/components/customers/EditCustomerModal";
 import { Input } from "@/components/ui/input";
+import { Customer } from "@/type";
 
-type Customer = {
-  _id: string;
-  Cid: string;
-  name: string;
-  email: string;
-  phone: string;
-  deliveryMethod: "Air" | "Sea" | "Land";
-};
 export default function CustomersPage() {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [search, setSearch] = useState("");
@@ -46,7 +39,7 @@ export default function CustomersPage() {
 
   return (
     <div className="flex flex-col h-screen p-4 space-y-4">
-      <h2 className="font-bold text-2xl">List of Customers</h2>
+      <h2 className="font-bold text-2xl text-[#022f7e]">List of Customers</h2>
       <div className="flex justify-between space-x-4 space-y-4">
         <Input
           placeholder="Search customers..."
@@ -63,6 +56,9 @@ export default function CustomersPage() {
             <TableHead>Name</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Phone</TableHead>
+            <TableHead>Contact Name</TableHead>
+            <TableHead>Contact Email</TableHead>
+            <TableHead>Contact Phone</TableHead>
             <TableHead>Delivery Method</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
@@ -75,6 +71,9 @@ export default function CustomersPage() {
                 <TableCell>{customer.name}</TableCell>
                 <TableCell>{customer.email}</TableCell>
                 <TableCell>{customer.phone}</TableCell>
+                <TableCell>{customer.contactName}</TableCell>
+                <TableCell>{customer.contactEmail}</TableCell>
+                <TableCell>{customer.contactPhone}</TableCell>
                 <TableCell>{customer.deliveryMethod}</TableCell>
                 <TableCell className=" flex gap-2 space-x-2 items-center">
                   <EditCustomerModal

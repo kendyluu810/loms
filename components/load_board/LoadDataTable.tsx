@@ -1,17 +1,17 @@
 "use client";
 
-import { DataTable } from "./ui/data-table";
-import { Button } from "./ui/button";
+import { DataTable } from "../ui/data-table";
+import { Button } from "../ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
+} from "../ui/select";
 
 import { useRouter } from "next/navigation";
-import { columns, Load } from "./columns";
+import { columns, Load } from "../columns";
 import { useState } from "react";
 
 export default function LoadDataTable({ data }: { data: Load[] }) {
@@ -42,14 +42,7 @@ export default function LoadDataTable({ data }: { data: Load[] }) {
     <div className="flex flex-col space-y-6 bg-[#fafcff] p-6 rounded-lg shadow">
       <div className="flex justify-between items-center">
         <div className=" flex items-center space-x-4">
-          <h2>Available Loads</h2>
-          <Button
-            type="button"
-            className=" flex items-center justify-center text-[#6c9ef5] bg-[#fafcff] hover:bg-[#6c9ef5] hover:text-[#fafcff]"
-          >
-            <span className="font-bold text-xl">+</span>
-            Add Filters
-          </Button>
+          <h2 className="font-bold text-xl text-[#022f7e]">Available Loads</h2>
         </div>
         <div className="flex space-x-4">
           <Select
@@ -66,7 +59,7 @@ export default function LoadDataTable({ data }: { data: Load[] }) {
           <Button
             type="button"
             onClick={goToForm}
-            className="text-[#6c9ef5] bg-[#fafcff] hover:bg-[#6c9ef5] hover:text-[#fafcff]"
+            className="text-[#022f7e] bg-[#fafcff] hover:bg-[#022f7e] hover:text-[#fafcff]"
           >
             Create Load
           </Button>
