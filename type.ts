@@ -59,3 +59,18 @@ export type ShipmentData = {
   dangerousGoods?: boolean;
   dangerType?: string;
 };
+
+export interface TrackingItem {
+  id: string;
+  pickup: string;
+  delivery: string;
+  status: "In Delivery" | "Previous" | "Late";
+  driver: string;
+}
+
+export interface RouteCheckpoint {
+  label: string;
+  location: string;
+  time?: string;
+  done?: boolean;
+}

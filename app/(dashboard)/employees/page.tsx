@@ -38,61 +38,68 @@ export default function EmployeePage() {
   }, [search, page, pageSize]);
 
   return (
-    <div className="flex flex-col h-screen p-4 space-y-4">
+    <div className="flex flex-col h-full p-4 space-y-4">
       <h2 className="font-bold text-2xl text-[#022f7e]">List of Employees</h2>
-      <div className="flex justify-between space-x-4 space-y-4">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <Input
           placeholder="Search employees..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
+          className="md:w-1/2"
         />
         <AddEmployeeModal onAdded={fecthEmployees} />
       </div>
-
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Eid</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Phone</TableHead>
-            <TableHead>Position</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {employees.map((employee) => (
-            <TableRow key={employee._id}>
-              <TableCell>{employee.Eid}</TableCell>
-              <TableCell>{employee.name}</TableCell>
-              <TableCell>{employee.email}</TableCell>
-              <TableCell>{employee.phone}</TableCell>
-              <TableCell>{employee.position}</TableCell>
-              <TableCell className=" flex gap-2 space-x-2 items-center">
-                <EditEmployeeModal
-                  employee={employee}
-                  onUpdated={fecthEmployees}
-                />
-                <Button
-                  variant="destructive"
-                  onClick={async () => {
-                    await fetch(`/api/employees/${employee._id}`, {
-                      method: "DELETE",
-                    });
-                    fecthEmployees();
-                  }}
-                >
-                  Delete
-                </Button>
-              </TableCell>
+      {/* Table */}
+      <div className="overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Eid</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Phone</TableHead>
+              <TableHead>Position</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <div className="flex justify-between items-center mt-4">
+          </TableHeader>
+          <TableBody>
+            {employees.map((employee) => (
+              <TableRow key={employee._id}>
+                <TableCell>{employee.Eid}</TableCell>
+                <TableCell>{employee.name}</TableCell>
+                <TableCell>{employee.email}</TableCell>
+                <TableCell>{employee.phone}</TableCell>
+                <TableCell>{employee.position}</TableCell>
+                <TableCell>
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <EditEmployeeModal
+                      employee={employee}
+                      onUpdated={fecthEmployees}
+                    />
+                    <Button
+                      variant="destructive"
+                      onClick={async () => {
+                        await fetch(`/api/employees/${employee._id}`, {
+                          method: "DELETE",
+                        });
+                        fecthEmployees();
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+      {/* Pagination */}
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4">
         <select
           value={pageSize}
           onChange={(e) => setPageSize(Number(e.target.value))}
+          className="border rounded px-2 py-1"
         >
           {[5, 10, 20, 50].map((size) => (
             <option key={size} value={size}>
@@ -100,7 +107,7 @@ export default function EmployeePage() {
             </option>
           ))}
         </select>
-        <div>
+        <div className="flex items-center gap-2">
           <Button disabled={page === 1} onClick={() => setPage(page - 1)}>
             Prev
           </Button>

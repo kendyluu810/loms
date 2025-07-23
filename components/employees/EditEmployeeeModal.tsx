@@ -42,13 +42,17 @@ export default function EditEmployeeModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-[#3461ff] text-white hover:bg-white hover:text-[#3461ff]">Edit</Button>
+        <Button className="bg-[#3461ff] text-white hover:bg-white hover:text-[#3461ff]">
+          Edit
+        </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-h-[90vh] overflow-y-auto px-4">
         <DialogHeader>
-          <DialogTitle>Edit Employee</DialogTitle>
+          <DialogTitle className="text-[#022f7e] font-bold text-2xl">
+            Edit Employee
+          </DialogTitle>
         </DialogHeader>
-        <div className="grid grid-cols-2 gap-4 space-y-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           <div className="space-y-4">
             <Label>Name</Label>
             <Input
@@ -82,9 +86,15 @@ export default function EditEmployeeModal({
             />
           </div>
         </div>
-        <Button className="mt-2 bg-[#3461ff] text-white hover:bg-white hover:text-[#3461ff]" onClick={handleSubmit}>
-          Save
-        </Button>
+
+        <div className="mt-4 flex justify-end">
+          <Button
+            className="mt-2 bg-[#3461ff] text-white hover:bg-white hover:text-[#3461ff]"
+            onClick={handleSubmit}
+          >
+            Save
+          </Button>
+        </div>
       </DialogContent>
     </Dialog>
   );

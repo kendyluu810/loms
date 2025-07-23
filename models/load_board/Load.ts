@@ -5,10 +5,11 @@ export interface ILoad extends Document {
   customer: mongoose.Types.ObjectId;
   route: mongoose.Types.ObjectId;
   shipment: mongoose.Types.ObjectId;
+  driver: mongoose.Types.ObjectId;
   createdAt: Date;
   miles?: string;
   stop?: string;
-  status?: "Available" | "Assigned" | "In Transit" | "Delivered";
+  status?:string;
 }
 
 const LoadBoardSchema: Schema = new Schema(
@@ -33,14 +34,19 @@ const LoadBoardSchema: Schema = new Schema(
       ref: "Shipment",
       required: true,
     },
+    // driver
+    driver: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Driver",
+      required: false, // nếu có thể null
+    },
     createdAt: { type: Date, default: Date.now },
 
     miles: { type: String },
-    stop: { type: String, default: "One Stop" },
+    stop: { type: String },
     status: {
       type: String,
       enum: ["Available", "Assigned", "In Transit", "Delivered"],
-      default: "Available",
     },
   },
   { timestamps: true }

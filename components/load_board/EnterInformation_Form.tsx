@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Label } from "../ui/label";
 import {
   Select,
@@ -11,6 +11,15 @@ import {
 } from "../ui/select";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import countries from "world-countries";
+import { Customer } from "@/type";
+import { useLoadStore } from "@/store/useLoadStore";
+
+const countryOptions = countries.map((country) => ({
+  value: country.cca2,
+  label: country.name.common,
+}));
+
 export default function EnterInformation_Form() {
   const [formData, setFormData] = useState({
     origin: "",
@@ -68,13 +77,41 @@ export default function EnterInformation_Form() {
       ratePerMile: "",
     });
   };
+  const { owner, updateOwner } = useLoadStore();
+
+  const [customers, setCustomers] = useState<Customer[]>([]);
+
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      const res = await fetch("/api/customers");
+      const data = await res.json();
+      setCustomers(data.customers || []);
+    };
+    fetchCustomers();
+  }, []);
+
+  const handleSelectCustomer = (_id: string) => {
+    const selected = customers.find((c) => c._id === _id);
+    if (selected) {
+      updateOwner({
+        _id: selected._id,
+        Cid: selected.Cid,
+        name: selected.name,
+        email: selected.email,
+        phone: selected.phone,
+        contactName: selected.contactName,
+        contactEmail: selected.contactEmail,
+        contactPhone: selected.contactPhone,
+      });
+    }
+  };
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-6 bg-[#fafcff] p-6 rounded-lg shadow"
+      className="space-y-6 bg-[#fafcff] p-6 rounded-lg shadow max-w-full xl:max-w-[1600px] mx-auto"
     >
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold">Enter Information</h2>
+        <h2 className="text-xl font-bold text-[#022f7e]">Enter Information</h2>
         <div className="flex space-x-4">
           <Button
             type="submit"
@@ -87,16 +124,20 @@ export default function EnterInformation_Form() {
           </Button>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {/* Origin */}
         <div className="flex flex-col space-y-2">
           <Label>Origin</Label>
           <Select onValueChange={(v) => handleChange("origin", v)}>
-            <SelectTrigger className="border border-[#d6e5ff] ">
+            <SelectTrigger className="w-full border border-[#d6e5ff] ">
               <SelectValue placeholder="Select Origin" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Hanover">Hanover</SelectItem>
+              {countryOptions.map((country) => (
+                <SelectItem key={country.value} value={country.label}>
+                  {country.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -105,11 +146,15 @@ export default function EnterInformation_Form() {
         <div className="flex flex-col space-y-2">
           <Label>State From</Label>
           <Select onValueChange={(v) => handleChange("stateFrom", v)}>
-            <SelectTrigger className="border border-[#d6e5ff] ">
+            <SelectTrigger className="w-full border border-[#d6e5ff] ">
               <SelectValue placeholder="Select State" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Virginia">Virginia</SelectItem>
+              {countryOptions.map((country) => (
+                <SelectItem key={country.value} value={country.label}>
+                  {country.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -128,11 +173,15 @@ export default function EnterInformation_Form() {
         <div className="flex flex-col space-y-2">
           <Label>Additional Stop</Label>
           <Select onValueChange={(v) => handleChange("additionalStop", v)}>
-            <SelectTrigger className="border border-[#d6e5ff] ">
+            <SelectTrigger className="w-full border border-[#d6e5ff] ">
               <SelectValue placeholder="Select Stop" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="One">One</SelectItem>
+              {countryOptions.map((country) => (
+                <SelectItem key={country.value} value={country.label}>
+                  {country.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -170,7 +219,7 @@ export default function EnterInformation_Form() {
         <div className="flex flex-col space-y-2">
           <Label>Destination</Label>
           <Select onValueChange={(v) => handleChange("destination", v)}>
-            <SelectTrigger className="border border-[#d6e5ff] ">
+            <SelectTrigger className="w-full border border-[#d6e5ff] ">
               <SelectValue placeholder="Select Destination" />
             </SelectTrigger>
             <SelectContent>
@@ -183,11 +232,15 @@ export default function EnterInformation_Form() {
         <div className="flex flex-col space-y-2">
           <Label>State To</Label>
           <Select onValueChange={(v) => handleChange("stateTo", v)}>
-            <SelectTrigger className="border border-[#d6e5ff] ">
+            <SelectTrigger className="w-full border border-[#d6e5ff] ">
               <SelectValue placeholder="Select State" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Illinois">Illinois</SelectItem>
+              {countryOptions.map((country) => (
+                <SelectItem key={country.value} value={country.label}>
+                  {country.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -234,34 +287,52 @@ export default function EnterInformation_Form() {
         {/* Customer */}
         <div className="flex flex-col space-y-2">
           <Label>Customer</Label>
-          <Select onValueChange={(v) => handleChange("customer", v)}>
-            <SelectTrigger className="border border-[#d6e5ff] ">
+          <Select onValueChange={(id) => handleSelectCustomer(id)}>
+            <SelectTrigger className="w-full border border-[#d6e5ff] ">
               <SelectValue placeholder="Select Customer" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="LG Electronics USA">
-                LG Electronics USA
-              </SelectItem>
+              {customers.map((customer) => (
+                <SelectItem key={customer._id ?? ""} value={customer._id ?? ""}>
+                  {customer.name}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
 
-        {/* Customer Type */}
+        {/* Customer Phone */}
         <div className="flex flex-col space-y-2">
-          <Label>Customer Type</Label>
-          <Input
-            value={formData.customerType}
-            onChange={(e) => handleChange("customerType", e.target.value)}
-          />
+          <Label>Customer Phone</Label>
+          <Select onValueChange={(id) => handleSelectCustomer(id)}>
+            <SelectTrigger className="w-full border border-[#d6e5ff] ">
+              <SelectValue placeholder="Select Customer Phone" />
+            </SelectTrigger>
+            <SelectContent>
+              {customers.map((customer) => (
+                <SelectItem key={customer._id ?? ""} value={customer._id ?? ""}>
+                  {customer.phone}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
-        {/* Contact Person */}
+        {/* Contact Email */}
         <div className="flex flex-col space-y-2">
-          <Label>Contact Person</Label>
-          <Input
-            value={formData.contactPerson}
-            onChange={(e) => handleChange("contactPerson", e.target.value)}
-          />
+          <Label>Contact Email</Label>
+          <Select onValueChange={(id) => handleSelectCustomer(id)}>
+            <SelectTrigger className="w-full border border-[#d6e5ff] ">
+              <SelectValue placeholder="Select Customer Email" />
+            </SelectTrigger>
+            <SelectContent>
+              {customers.map((customer) => (
+                <SelectItem key={customer._id ?? ""} value={customer._id ?? ""}>
+                  {customer.email}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Min Weight */}

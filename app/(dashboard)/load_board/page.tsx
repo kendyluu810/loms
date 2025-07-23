@@ -25,10 +25,12 @@ export default function LoadBoardPage() {
   }, []);
 
   return (
-    <div className="max-w-[1589px] mx-auto flex flex-col h-screen mt-5 space-y-5">
-      <EnterInformation_Form />
-      <div className="flex items-center justify-between mx-auto">
-        <LoadDataTable data={loads} />
+    <div className="p-4 w-full max-w-[1580px] mx-auto space-y-4">
+      <div className="bg-white p-4 rounded-xl shadow-md overflow-x-auto">
+        <EnterInformation_Form />
+        <div className="bg-white p-4 rounded-xl shadow-md overflow-auto mt-5">
+          <LoadDataTable data={loads} />
+        </div>
       </div>
     </div>
   );

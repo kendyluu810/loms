@@ -98,7 +98,7 @@ export const columns: ColumnDef<Load>[] = [
     accessorKey: "equipment",
     header: "Equipment",
     cell: ({ row }) => (
-      <div>{row.getValue("equipment") || "N/A"}</div> // ✅ fallback nếu thiếu
+      <div>{row.getValue("equipment") || "N/A"}</div> 
     ),
   },
   {

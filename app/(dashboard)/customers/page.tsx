@@ -38,34 +38,36 @@ export default function CustomersPage() {
   }, [search, page, pageSize]);
 
   return (
-    <div className="flex flex-col h-screen p-4 space-y-4">
+    <div className="p-4 space-y-4">
       <h2 className="font-bold text-2xl text-[#022f7e]">List of Customers</h2>
-      <div className="flex justify-between space-x-4 space-y-4">
+      {/* Search + Add */}
+      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <Input
           placeholder="Search customers..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
+          className="w-full sm:w-1/2"
         />
         <AddCustomerModal onAdded={fetchCustomers} />
       </div>
-
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Cid</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Phone</TableHead>
-            <TableHead>Contact Name</TableHead>
-            <TableHead>Contact Email</TableHead>
-            <TableHead>Contact Phone</TableHead>
-            <TableHead>Delivery Method</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {customers &&
-            customers.map((customer) => (
+      {/* Customers Table */}
+      <div className="overflow-x-auto rounded-lg border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Cid</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Phone</TableHead>
+              <TableHead>Contact Name</TableHead>
+              <TableHead>Contact Email</TableHead>
+              <TableHead>Contact Phone</TableHead>
+              <TableHead>Delivery Method</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {customers.map((customer) => (
               <TableRow key={customer._id}>
                 <TableCell>{customer.Cid}</TableCell>
                 <TableCell>{customer.name}</TableCell>
@@ -75,31 +77,36 @@ export default function CustomersPage() {
                 <TableCell>{customer.contactEmail}</TableCell>
                 <TableCell>{customer.contactPhone}</TableCell>
                 <TableCell>{customer.deliveryMethod}</TableCell>
-                <TableCell className=" flex gap-2 space-x-2 items-center">
-                  <EditCustomerModal
-                    customer={customer}
-                    onUpdated={fetchCustomers}
-                  />
-                  <Button
-                    variant="destructive"
-                    onClick={async () => {
-                      await fetch(`/api/customers/${customer._id}`, {
-                        method: "DELETE",
-                      });
-                      fetchCustomers();
-                    }}
-                  >
-                    Delete
-                  </Button>
+                <TableCell>
+                  <div className="flex flex-wrap gap-2">
+                    <EditCustomerModal
+                      customer={customer}
+                      onUpdated={fetchCustomers}
+                    />
+                    <Button
+                      variant="destructive"
+                      onClick={async () => {
+                        await fetch(`/api/customers/${customer._id}`, {
+                          method: "DELETE",
+                        });
+                        fetchCustomers();
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
-        </TableBody>
-      </Table>
-      <div className="flex justify-between items-center mt-4">
+          </TableBody>
+        </Table>
+      </div>
+      {/* Pagination */}
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4">
         <select
           value={pageSize}
           onChange={(e) => setPageSize(Number(e.target.value))}
+          className="border rounded px-2 py-1"
         >
           {[5, 10, 20, 50].map((size) => (
             <option key={size} value={size}>
@@ -107,11 +114,11 @@ export default function CustomersPage() {
             </option>
           ))}
         </select>
-        <div>
+        <div className="flex items-center gap-2">
           <Button disabled={page === 1} onClick={() => setPage(page - 1)}>
             Prev
           </Button>
-          <span className="px-2">Page {page}</span>
+          <span className="text-sm">Page {page}</span>
           <Button
             disabled={page * pageSize >= total}
             onClick={() => setPage(page + 1)}

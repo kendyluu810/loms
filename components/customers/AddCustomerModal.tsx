@@ -6,6 +6,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
+
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -49,11 +57,13 @@ export default function AddCustomerModal({ onAdded }: { onAdded: () => void }) {
           Add Customer
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-w-[95vw] sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle className="text-[#022f7e] font-bold text-2xl">Add Customer</DialogTitle>
+          <DialogTitle className="text-[#022f7e] font-bold text-2xl">
+            Add Customer
+          </DialogTitle>
         </DialogHeader>
-        <div className="grid grid-cols-2 gap-4 space-y-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
           <div className="space-y-4">
             <Label className="text-[#022f7e] font-semibold">Name</Label>
             <Input
@@ -116,21 +126,32 @@ export default function AddCustomerModal({ onAdded }: { onAdded: () => void }) {
             <Label className="text-[#022f7e] font-semibold">
               Delivery Method
             </Label>
-            <select
+            <Select
               value={form.deliveryMethod}
-              onChange={(e) =>
-                setForm({ ...form, deliveryMethod: e.target.value })
+              onValueChange={(value) =>
+                setForm({ ...form, deliveryMethod: value })
               }
             >
-              <option value="Air">Air</option>
-              <option value="Sea">Sea</option>
-              <option value="Land">Land</option>
-            </select>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select delivery method" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Air">Air</SelectItem>
+                <SelectItem value="Sea">Sea</SelectItem>
+                <SelectItem value="Land">Land</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
-        <Button className="mt-2 bg-[#3461ff] text-white hover:bg-white hover:text-[#3461ff]" onClick={handleSubmit}>
-          Save
-        </Button>
+
+        <div className="mt-4 flex justify-end sm:justify-end">
+          <Button
+            className="bg-[#3461ff] text-white hover:bg-white hover:text-[#3461ff]"
+            onClick={handleSubmit}
+          >
+            Save
+          </Button>
+        </div>
       </DialogContent>
     </Dialog>
   );

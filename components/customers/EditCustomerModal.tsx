@@ -6,6 +6,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -35,16 +42,18 @@ export default function EditCustomerModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-[#3461ff] text-white font-semibold hover:bg-white hover:text-[#3461ff]">Edit</Button>
+        <Button className="bg-[#3461ff] text-white font-semibold hover:bg-white hover:text-[#3461ff]">
+          Edit
+        </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-w-[95vw] sm:max-w-[640px] md:max-w-[720px] lg:max-w-[800px]">
         <DialogHeader>
           <DialogTitle className="text-[#022f7e] font-bold text-2xl">
             Edit Customer
           </DialogTitle>
         </DialogHeader>
-        <div className="grid grid-cols-2 gap-4 space-y-3">
-          <div className="space-y-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
+          <div className="space-y-2">
             <Label className="text-[#022f7e] font-semibold">Name</Label>
             <Input
               placeholder="Name"
@@ -52,7 +61,7 @@ export default function EditCustomerModal({
               onChange={(e) => setForm({ ...form, name: e.target.value })}
             />
           </div>
-          <div className="space-y-4">
+          <div className="space-y-2">
             <Label className="text-[#022f7e] font-semibold">Phone</Label>
             <Input
               placeholder="Phone"
@@ -60,7 +69,7 @@ export default function EditCustomerModal({
               onChange={(e) => setForm({ ...form, phone: e.target.value })}
             />
           </div>
-          <div className="space-y-4">
+          <div className="space-y-2">
             <Label className="text-[#022f7e] font-semibold">Email</Label>
             <Input
               placeholder="Email"
@@ -68,7 +77,7 @@ export default function EditCustomerModal({
               onChange={(e) => setForm({ ...form, email: e.target.value })}
             />
           </div>
-          <div className="space-y-4">
+          <div className="space-y-2">
             <Label className="text-[#022f7e] font-semibold">Contact Name</Label>
             <Input
               placeholder="Name"
@@ -78,7 +87,7 @@ export default function EditCustomerModal({
               }
             />
           </div>
-          <div className="space-y-4">
+          <div className="space-y-2">
             <Label className="text-[#022f7e] font-semibold">
               Contact Phone
             </Label>
@@ -90,7 +99,7 @@ export default function EditCustomerModal({
               }
             />
           </div>
-          <div className="space-y-4">
+          <div className="space-y-2">
             <Label className="text-[#022f7e] font-semibold">
               Contact Email
             </Label>
@@ -102,28 +111,39 @@ export default function EditCustomerModal({
               }
             />
           </div>
-          <div className="space-y-4">
+          <div className="space-y-2">
             <Label className="text-[#022f7e] font-semibold">
               Delivery Method
             </Label>
-            <select
+            <Select
               value={form.deliveryMethod}
-              onChange={(e) =>
+              onValueChange={(value) =>
                 setForm({
                   ...form,
-                  deliveryMethod: e.target.value as Customer["deliveryMethod"],
+                  deliveryMethod: value as Customer["deliveryMethod"],
                 })
               }
             >
-              <option value="Air">Air</option>
-              <option value="Sea">Sea</option>
-              <option value="Land">Land</option>
-            </select>
+              <SelectTrigger className="w-full">
+                <SelectValue  />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Air">Air</SelectItem>
+                <SelectItem value="Sea">Sea</SelectItem>
+                <SelectItem value="Land">Land</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
-        <Button className="mt-2 bg-[#3461ff] text-white hover:bg-white hover:text-[#3461ff]" onClick={handleSubmit}>
-          Save
-        </Button>
+
+        <div className="mt-4 flex justify-end">
+          <Button
+            className="bg-[#3461ff] text-white hover:bg-white hover:text-[#3461ff]"
+            onClick={handleSubmit}
+          >
+            Save
+          </Button>
+        </div>
       </DialogContent>
     </Dialog>
   );

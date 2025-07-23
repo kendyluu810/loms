@@ -16,6 +16,12 @@ export interface IRoute extends Document {
   warehouseSchedule: Date;
   date: Date;
   time: Date;
+  timeline?: {
+    step: string;
+    location: string;
+    time: Date;
+    status: "done" | "in-progress" | "pending";
+  }[];
 }
 
 const RouteSchema = new mongoose.Schema(
@@ -30,11 +36,23 @@ const RouteSchema = new mongoose.Schema(
     receiverSchedule: { type: Date, required: true },
     deliveryTime: { type: Date, required: true },
     deliveryDate: { type: Date, required: true },
-    additionalStop: { type: String, required: true },
+    additionalStop: { type: String },
     warehouseNumber: { type: String, required: true },
     warehouseSchedule: { type: Date, required: true },
     date: { type: Date, required: true },
     time: { type: Date, required: true },
+    timeline: [
+      {
+        step: { type: String, required: true },
+        location: { type: String, required: true },
+        time: { type: Date, required: true },
+        status: {
+          type: String,
+          enum: ["done", "in-progress", "pending"],
+          default: "pending",
+        },
+      },
+    ],
   },
   {
     timestamps: true,

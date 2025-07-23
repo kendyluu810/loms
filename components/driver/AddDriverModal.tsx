@@ -5,7 +5,6 @@ import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -79,20 +78,23 @@ export default function AddDriverModal({ onAdded }: { onAdded: () => void }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-[#3461ff] text-white hover:bg-white hover:text-[#3461ff]">Add Driver</Button>
+        <Button className="bg-[#3461ff] text-white hover:bg-white hover:text-[#3461ff]">
+          Add Driver
+        </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-h-[90vh] overflow-y-auto px-4">
         <DialogHeader>
-          <DialogTitle className="text-[#022f7e] font-bold text-2xl">Add New Driver</DialogTitle>
+          <DialogTitle className="text-[#022f7e] font-bold text-2xl">
+            Add New Driver
+          </DialogTitle>
         </DialogHeader>
-
-        <div className="grid grid-cols-2 gap-4 space-y-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 space-y-3 md:space-y-0">
           <div className="space-x-4 space-y-4">
             <Label className="text-[#022f7e] font-semibold">
               Select Employee
             </Label>
             <Select onValueChange={handleSelect}>
-              <SelectTrigger>
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder={`e.g. ${form.Eid}`} />
               </SelectTrigger>
               <SelectContent>
@@ -167,9 +169,15 @@ export default function AddDriverModal({ onAdded }: { onAdded: () => void }) {
             />
           </div>
         </div>
-        <Button className="mt-2 bg-[#3461ff] text-white" onClick={handleSubmit}>
-          Add
-        </Button>
+
+        <div className="mt-4 flex justify-end">
+          <Button
+            className="bg-[#3461ff] text-white hover:bg-white hover:text-[#3461ff]"
+            onClick={handleSubmit}
+          >
+            Add
+          </Button>
+        </div>
       </DialogContent>
     </Dialog>
   );

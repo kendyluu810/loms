@@ -40,67 +40,90 @@ const DriverPage = () => {
   }, [search, page, pageSize]);
 
   return (
-    <div className="flex flex-col h-screen p-4 space-y-4">
+    <div className="flex flex-col min-h-screen p-4 space-y-4">
       <h2 className="font-bold text-2xl text-[#022f7e]">List of Drivers</h2>
-      <div className="flex justify-between space-x-4 space-y-4">
+      <div className="flex flex-col md:flex-row justify-between gap-4">
         <Input
           type="text"
           placeholder="Search drivers..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
+          className="w-full md:max-w-sm"
         />
         <AddDriverModal onAdded={fetchDrivers} />
       </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Phone</TableHead>
-            <TableHead>Drive License</TableHead>
-            <TableHead>License Type</TableHead>
-            <TableHead>License Expiry</TableHead>
-            <TableHead>Vehicle ID</TableHead>
-            <TableHead>Vehicle Type</TableHead>
-            <TableHead>Vehicle Number</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {drivers.map((driver) => (
-            <TableRow key={driver._id}>
-              <TableCell>{driver.employee?.name}</TableCell>
-              <TableCell>{driver.employee?.email}</TableCell>
-              <TableCell>{driver.employee?.phone}</TableCell>
-              <TableCell>{driver.driverlicense}</TableCell>
-              <TableCell>{driver.licensetype}</TableCell>
-              <TableCell>{driver.licenseexpiry}</TableCell>
-              <TableCell>{driver.vehicleid}</TableCell>
-              <TableCell>{driver.vehicleType}</TableCell>
-              <TableCell>{driver.vehicleNumber}</TableCell>
-              <TableCell className="flex space-x-2">
-                <EditDriverModal driver={driver} onEdit={fetchDrivers} />
-                <Button
-                  variant="destructive"
-                  onClick={async () => {
-                    await fetch(`/api/drivers/${driver._id}`, {
-                      method: "DELETE",
-                    });
-                    fetchDrivers();
-                  }}
-                >
-                  Delete
-                </Button>
-              </TableCell>
+      {/* Driver Table */}
+      <div className="overflow-x-auto bg-white rounded-lg shadow">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead className="hidden lg:table-cell">Email</TableHead>
+              <TableHead>Phone</TableHead>
+              <TableHead className="hidden md:table-cell">License</TableHead>
+              <TableHead className="hidden md:table-cell">Type</TableHead>
+              <TableHead className="hidden md:table-cell">Expiry</TableHead>
+              <TableHead className="hidden lg:table-cell">Vehicle ID</TableHead>
+              <TableHead className="hidden lg:table-cell">
+                Vehicle Type
+              </TableHead>
+              <TableHead className="hidden lg:table-cell">
+                Vehicle No.
+              </TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-
-      <div className="flex justify-between items-center mt-4">
+          </TableHeader>
+          <TableBody>
+            {drivers.map((driver) => (
+              <TableRow key={driver._id}>
+                <TableCell>{driver.employee?.name}</TableCell>
+                <TableCell className="hidden lg:table-cell">
+                  {driver.employee?.email}
+                </TableCell>
+                <TableCell>{driver.employee?.phone}</TableCell>
+                <TableCell className="hidden md:table-cell">
+                  {driver.driverlicense}
+                </TableCell>
+                <TableCell className="hidden md:table-cell">
+                  {driver.licensetype}
+                </TableCell>
+                <TableCell className="hidden md:table-cell">
+                  {driver.licenseexpiry}
+                </TableCell>
+                <TableCell className="hidden lg:table-cell">
+                  {driver.vehicleid}
+                </TableCell>
+                <TableCell className="hidden lg:table-cell">
+                  {driver.vehicleType}
+                </TableCell>
+                <TableCell className="hidden lg:table-cell">
+                  {driver.vehicleNumber}
+                </TableCell>
+                <TableCell className="flex flex-col md:flex-row gap-2">
+                  <EditDriverModal driver={driver} onEdit={fetchDrivers} />
+                  <Button
+                    variant="destructive"
+                    onClick={async () => {
+                      await fetch(`/api/drivers/${driver._id}`, {
+                        method: "DELETE",
+                      });
+                      fetchDrivers();
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+      {/* Pagination Controls */}
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4 mt-4">
         <select
           value={pageSize}
           onChange={(e) => setPageSize(Number(e.target.value))}
+          className="border rounded px-2 py-1"
         >
           {[5, 10, 20, 50].map((size) => (
             <option key={size} value={size}>
@@ -108,11 +131,11 @@ const DriverPage = () => {
             </option>
           ))}
         </select>
-        <div>
+        <div className="flex items-center space-x-2">
           <Button disabled={page === 1} onClick={() => setPage(page - 1)}>
             Prev
           </Button>
-          <span className="px-2">Page {page}</span>
+          <span className="text-sm">Page {page}</span>
           <Button
             disabled={page * pageSize >= total}
             onClick={() => setPage(page + 1)}

@@ -76,15 +76,15 @@ export default function EditDriverModal({
           Edit
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-h-[90vh] overflow-y-auto px-4">
         <DialogHeader>
           <DialogTitle className="text-[#022f7e] font-bold text-2xl">
             Edit Driver
           </DialogTitle>
         </DialogHeader>
 
-        <div className="grid grid-cols-2 gap-4 space-y-3">
-          <div className="space-x-4 space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2">
             <Label className="text-[#022f7e] font-semibold">
               Driver License
             </Label>
@@ -95,7 +95,7 @@ export default function EditDriverModal({
               onChange={handleChange}
             />
           </div>
-          <div className="space-x-4 space-y-4">
+          <div className="space-y-2">
             <Label className="text-[#022f7e] font-semibold">License Type</Label>
             <Input
               name="licensetype"
@@ -104,7 +104,7 @@ export default function EditDriverModal({
               onChange={handleChange}
             />
           </div>
-          <div className="space-x-4 space-y-4">
+          <div className="space-y-2">
             <Label className="text-[#022f7e] font-semibold">
               License Expiry
             </Label>
@@ -116,7 +116,7 @@ export default function EditDriverModal({
               onChange={handleChange}
             />
           </div>
-          <div className="space-x-4 space-y-4">
+          <div className="space-y-2">
             <Label className="text-[#022f7e] font-semibold">Vehicle ID</Label>
             <Input
               name="vehicleid"
@@ -125,7 +125,7 @@ export default function EditDriverModal({
               onChange={handleChange}
             />
           </div>
-          <div className="space-x-4 space-y-4">
+          <div className="space-y-2">
             <Label className="text-[#022f7e] font-semibold">Vehicle Type</Label>
             <Input
               name="vehicleType"
@@ -134,7 +134,7 @@ export default function EditDriverModal({
               onChange={handleChange}
             />
           </div>
-          <div className="space-x-4 space-y-4">
+          <div className="space-y-2">
             <Label className="text-[#022f7e] font-semibold">
               Vehicle Number
             </Label>
@@ -147,9 +147,14 @@ export default function EditDriverModal({
           </div>
         </div>
 
-        <Button className="mt-2 bg-[#3461ff] text-white hover:bg-white hover:text-[#3461ff]" onClick={handleSubmit}>
-          Update
-        </Button>
+        <div className="mt-4 flex justify-end">
+          <Button
+            className="bg-[#3461ff] text-white hover:bg-white hover:text-[#3461ff]"
+            onClick={handleSubmit}
+          >
+            Save
+          </Button>
+        </div>
       </DialogContent>
     </Dialog>
   );

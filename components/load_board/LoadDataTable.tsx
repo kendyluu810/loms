@@ -40,16 +40,14 @@ export default function LoadDataTable({ data }: { data: Load[] }) {
 
   return (
     <div className="flex flex-col space-y-6 bg-[#fafcff] p-6 rounded-lg shadow">
-      <div className="flex justify-between items-center">
-        <div className=" flex items-center space-x-4">
-          <h2 className="font-bold text-xl text-[#022f7e]">Available Loads</h2>
-        </div>
-        <div className="flex space-x-4">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+        <h2 className="font-bold text-xl text-[#022f7e]">Available Loads</h2>
+        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
           <Select
             onValueChange={(value) => setSortBy(value as "date" | "name" | "")}
           >
-            <SelectTrigger className="w-[300px]">
-              <SelectValue placeholder="Sort by date" />
+            <SelectTrigger className="w-full sm:w-[200px] md:w-[250px] lg:w-[300px]">
+              <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="date">Date</SelectItem>
@@ -59,14 +57,14 @@ export default function LoadDataTable({ data }: { data: Load[] }) {
           <Button
             type="button"
             onClick={goToForm}
-            className="text-[#022f7e] bg-[#fafcff] hover:bg-[#022f7e] hover:text-[#fafcff]"
+            className="w-full sm:w-auto text-[#022f7e] bg-[#fafcff] hover:bg-[#022f7e] hover:text-[#fafcff]"
           >
             Create Load
           </Button>
         </div>
       </div>
 
-      <div className="w-full">
+      <div className="w-full overflow-x-auto">
         <DataTable columns={columns} data={sortedData} />
       </div>
     </div>

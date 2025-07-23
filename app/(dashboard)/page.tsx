@@ -2,9 +2,7 @@
 import {
   Bar,
   BarChart,
-  CartesianGrid,
   Cell,
-  Legend,
   Line,
   LineChart,
   Pie,
@@ -15,232 +13,179 @@ import {
   YAxis,
 } from "recharts";
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { ChartPie, Package, Truck } from "lucide-react";
-
-const ShipmentData = [
-  { day: 10, shipment: 12, delivery: 8 },
-  { day: 11, shipment: 14, delivery: 9 },
-  { day: 12, shipment: 11, delivery: 6 },
-  { day: 13, shipment: 13, delivery: 7 },
-  { day: 14, shipment: 10, delivery: 6 },
-  { day: 15, shipment: 9, delivery: 5 },
-  { day: 16, shipment: 11, delivery: 7 },
-  { day: 17, shipment: 12, delivery: 8 },
-  { day: 18, shipment: 13, delivery: 9 },
+import { Card, CardContent } from "@/components/ui/card";
+const lineChartData = [
+  { name: "Mon", shipment: 10, delivery: 5 },
+  { name: "Tue", shipment: 20, delivery: 10 },
+  { name: "Wed", shipment: 15, delivery: 12 },
+  { name: "Thu", shipment: 25, delivery: 18 },
+  { name: "Fri", shipment: 30, delivery: 22 },
 ];
 
-const revenueData = [
-  { day: "Mon", total: 4000, profit: 2400 },
-  { day: "Tue", total: 3000, profit: 1398 },
-  { day: "Wed", total: 5000, profit: 4000 },
-  { day: "Thu", total: 2780, profit: 3908 },
-  { day: "Fri", total: 1890, profit: 4800 },
-  { day: "Sat", total: 2390, profit: 3800 },
-  { day: "Sun", total: 3490, profit: 4300 },
+const pieData = [
+  { name: "In Transit", value: 40 },
+  { name: "Delivered", value: 30 },
+  { name: "Delayed", value: 20 },
+  { name: "Cancelled", value: 10 },
 ];
 
-const activeShipments = [
-  { name: "Pending", value: 3, color: "#40bf60" },
-  { name: "In Delivery", value: 1, color: "#69a1fe" },
-  { name: "Issue", value: 1, color: "#eedc36" },
-  { name: "Late", value: 1, color: "#dd4040" },
+const barData = [
+  { name: "Jan", revenue: 4000 },
+  { name: "Feb", revenue: 3000 },
+  { name: "Mar", revenue: 2000 },
+  { name: "Apr", revenue: 2780 },
+  { name: "May", revenue: 1890 },
+  { name: "Jun", revenue: 2390 },
 ];
 
-const loadsAnalysis = [
-  { state: "Alabama", percent: 28 },
-  { state: "Arizona", percent: 18 },
-  { state: "California", percent: 14 },
-  { state: "Indiana", percent: 9 },
-  { state: "Louisiana", percent: 5 },
-];
-
-const transactions = [
-  {
-    id: "#951159739",
-    driver: "Sam Smith",
-    date: "14 Apr 2022",
-    type: "Detention",
-    amount: "$480",
-  },
-  {
-    id: "#951159739",
-    driver: "Rasmus Andersson",
-    date: "13 Apr 2022",
-    type: "Incentive",
-    amount: "$300",
-  },
-  {
-    id: "#951159739",
-    driver: "Philip Aminoff",
-    date: "12 Apr 2022",
-    type: "Surcharge",
-    amount: "$150",
-  },
-  {
-    id: "#951159739",
-    driver: "Lincoln Rosser",
-    date: "10 Apr 2022",
-    type: "Detention",
-    amount: "$80",
-  },
-  {
-    id: "#951159739",
-    driver: "Terry Herwitz",
-    date: "10 Apr 2022",
-    type: "Detention",
-    amount: "$100",
-  },
-];
-
+const COLORS = ["#3461FF", "#40BF60", "#FFA500", "#FF5A5F"];
 const DashboardPage = () => {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 p-4 bg-[#F7F8FA]">
-      {/* Shipments Metrics */}
-      <div className="bg-white rounded-xl p-4 shadow col-span-2 max-w-2xl">
-        <div className="flex justify-between mb-2">
-          <h2 className="font-semibold">Shipments Metrics</h2>
-          <Select defaultValue="lastMonth">
-            <SelectTrigger className="w-[120px] text-sm">
-              <SelectValue placeholder="Select month" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="last3month">Last 3 Month</SelectItem>
-              <SelectItem value="last6month">Last 6 Month</SelectItem>
-              <SelectItem value="lastyear">Last Year</SelectItem>
-              <SelectItem value="lastMonth">Last Month</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <ResponsiveContainer width="100%" height={200}>
-          <LineChart data={ShipmentData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="day" />
-            <YAxis />
-            <Tooltip />
-            <Line type="monotone" dataKey="shipment" stroke="#8884d8" />
-            <Line type="monotone" dataKey="delivery" stroke="#82ca9d" />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
+    <div className="p-4 grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-4 auto-rows-max">
+      {/* Metrics Cards */}
+      <Card className="w-full shadow-sm hover:shadow-md transition-shadow">
+        <CardContent className="p-4">
+          <h3 className="font-semibold text-gray-700">Total Shipments</h3>
+          <p className="text-2xl font-bold text-[#3461FF]">120</p>
+        </CardContent>
+      </Card>
 
-      {/* Total Shipments Cards */}
-      <div className="bg-white rounded-xl p-4 shadow flex flex-col gap-2 max-w-xs text-[#142b52]">
-        <div className="">
-          <h3 className="text-2xl font-medium ">Total Shipments</h3>
-          <div className="flex items-center gap-4">
-            <ChartPie width={24} height={24} />
-            <p className="text-xl font-normal">16</p>
-          </div>
-        </div>
-        <div>
-          <h3 className="text-2xl font-medium ">Pending Package</h3>
-          <div className="flex items-center gap-4">
-            <Package width={24} height={24} />
-            <p className="text-xl font-normal">10</p>
-          </div>
-        </div>
-        <div>
-          <h3 className="text-2xl font-medium ">Delivery Shipments</h3>
-          <div className="flex items-center gap-4">
-            <Truck width={24} height={24} />
-            <p className="text-xl font-normal">6</p>
-          </div>
-        </div>
-      </div>
+      <Card className="w-full shadow-sm hover:shadow-md transition-shadow">
+        <CardContent className="p-4">
+          <h3 className="font-semibold text-gray-700">Pending Orders</h3>
+          <p className="text-2xl font-bold text-[#FFA500]">18</p>
+        </CardContent>
+      </Card>
 
-      {/* Active Shipments */}
-      <div className="bg-white rounded-xl p-4 shadow">
-        <h2 className="font-semibold mb-2">Active Shipments</h2>
-        <ResponsiveContainer width="100%" height={200}>
-          <PieChart>
-            <Pie
-              data={activeShipments}
-              dataKey="value"
-              nameKey="name"
-              innerRadius={40}
-              outerRadius={60}
-            >
-              {activeShipments.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color} />
+      <Card className="w-full shadow-sm hover:shadow-md transition-shadow">
+        <CardContent className="p-4">
+          <h3 className="font-semibold text-gray-700">Active Drivers</h3>
+          <p className="text-2xl font-bold text-[#40BF60]">24</p>
+        </CardContent>
+      </Card>
+
+      <Card className="w-full shadow-sm hover:shadow-md transition-shadow">
+        <CardContent className="p-4">
+          <h3 className="font-semibold text-gray-700">Revenue Today</h3>
+          <p className="text-2xl font-bold text-[#FF5A5F]">$4,800</p>
+        </CardContent>
+      </Card>
+
+      {/* Line Chart */}
+      <Card className="col-span-1 md:col-span-2 shadow-sm hover:shadow-md transition-shadow">
+        <CardContent className="p-4">
+          <h3 className="font-semibold mb-2">Shipments Over Time</h3>
+          <div className="h-[220px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={lineChartData}>
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Line
+                  type="monotone"
+                  dataKey="shipment"
+                  stroke="#3461FF"
+                  strokeWidth={2}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="delivery"
+                  stroke="#40BF60"
+                  strokeWidth={2}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Pie Chart */}
+      <Card className="col-span-1 shadow-sm hover:shadow-md transition-shadow">
+        <CardContent className="p-4">
+          <h3 className="font-semibold mb-2">Active Shipments</h3>
+          <div className="h-[220px]">
+            <ResponsiveContainer>
+              <PieChart>
+                <Pie
+                  data={pieData}
+                  dataKey="value"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={70}
+                  label
+                >
+                  {pieData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+            <ul className="mt-4 text-xs grid grid-cols-2 gap-2">
+              {pieData.map((item, index) => (
+                <li key={index} className="flex items-center gap-2">
+                  <div
+                    className="w-3 h-3 rounded-full"
+                    style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                  ></div>
+                  {item.name}
+                </li>
               ))}
-            </Pie>
-          </PieChart>
-        </ResponsiveContainer>
-        <ul className="flex flex-nowrap mt-4 text-xs">
-          {activeShipments.map((item) => (
-            <li key={item.name}>
-              <span style={{ color: item.color }}>■</span> {item.name} (
-              {item.value})
-            </li>
-          ))}
-        </ul>
-      </div>
+            </ul>
+          </div>
+        </CardContent>
+      </Card>
 
-      {/* Loads Analysis */}
-      <div className="bg-white rounded-xl p-4 shadow">
-        <h2 className="font-semibold mb-2">Loads Analysis</h2>
-        <ul className="text-xs space-y-1">
-          {loadsAnalysis.map((item) => (
-            <li key={item.state} className="flex justify-between">
-              <span>{item.state}</span>
-              <span>{item.percent}%</span>
-            </li>
-          ))}
-        </ul>
-      </div>
+      {/* Bar Chart */}
+      <Card className="col-span-1 shadow-sm hover:shadow-md transition-shadow">
+        <CardContent className="p-4">
+          <h3 className="font-semibold mb-2">Revenue Overview</h3>
+          <div className="h-[220px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={barData}>
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="revenue" fill="#3461FF" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </CardContent>
+      </Card>
 
-      {/* Revenue Overview */}
-      <div className="bg-white rounded-xl p-4 shadow col-span-2">
-        <div className="flex justify-between mb-2">
-          <h2 className="font-semibold">Revenue Overview</h2>
-          <span className="text-sm text-gray-500">Last Week</span>
-        </div>
-        <ResponsiveContainer width="100%" height={200}>
-          <BarChart data={revenueData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="day" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="total" fill="#69a1fe" />
-            <Bar dataKey="profit" fill="#40bf60" />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-
-      {/* Transaction History */}
-      <div className="bg-white rounded-xl p-4 shadow col-span-1">
-        <h2 className="font-semibold mb-2">Transaction History</h2>
-        <table className="w-full text-xs">
-          <thead>
-            <tr className="text-left border-b">
-              <th>Load#</th>
-              <th>Driver</th>
-              <th>Date</th>
-              <th>Type</th>
-              <th>Amount</th>
-            </tr>
-          </thead>
-          <tbody>
-            {transactions.map((tx, idx) => (
-              <tr key={idx} className="border-b">
-                <td>{tx.id}</td>
-                <td>{tx.driver}</td>
-                <td>{tx.date}</td>
-                <td>{tx.type}</td>
-                <td>{tx.amount}</td>
+      {/* Transaction Table */}
+      <Card className="col-span-full shadow-sm hover:shadow-md transition-shadow overflow-x-auto">
+        <CardContent className="p-4">
+          <h3 className="font-semibold mb-4">Transaction History</h3>
+          <table className="min-w-[600px] text-sm w-full">
+            <thead>
+              <tr className="text-left border-b">
+                <th className="py-2">Date</th>
+                <th className="py-2">Customer</th>
+                <th className="py-2">Amount</th>
+                <th className="py-2">Status</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              <tr className="border-b">
+                <td className="py-2">2025-07-22</td>
+                <td className="py-2">Acme Corp</td>
+                <td className="py-2">$2,000</td>
+                <td className="py-2 text-green-600">Completed</td>
+              </tr>
+              <tr className="border-b">
+                <td className="py-2">2025-07-21</td>
+                <td className="py-2">Global Freight</td>
+                <td className="py-2">$1,200</td>
+                <td className="py-2 text-yellow-600">Pending</td>
+              </tr>
+            </tbody>
+          </table>
+        </CardContent>
+      </Card>
     </div>
   );
 };

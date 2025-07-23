@@ -27,19 +27,12 @@ export default function Step2Shipments() {
             <Label className="text-[#022f7e] font-semibold">
               Item Category
             </Label>
-            <Select
+            <Input
+              type="text"
+              placeholder="Enter Item Category"
               value={shipment.itemCategory}
-              onValueChange={(value) => updateShipment({ itemCategory: value })}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select Item Category" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Electronics">Electronics</SelectItem>
-                <SelectItem value="Furniture">Furniture</SelectItem>
-                <SelectItem value="Clothing">Clothing</SelectItem>
-              </SelectContent>
-            </Select>
+              onChange={(e) => updateShipment({ itemCategory: e.target.value })}
+            />
           </div>
 
           <div className="space-y-3">
@@ -68,21 +61,14 @@ export default function Step2Shipments() {
             <Label className="text-[#022f7e] font-semibold">
               Length (Foot)
             </Label>
-            <Select
-              value={shipment?.length?.toString()}
-              onValueChange={(value) =>
-                updateShipment({ length: parseFloat(value) || 0 })
+            <Input
+              type="number"
+              placeholder="Enter Length"
+              value={shipment.length}
+              onChange={(e) =>
+                updateShipment({ length: parseFloat(e.target.value) || 0 })
               }
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select Length" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="53">53 Ft</SelectItem>
-                <SelectItem value="48">48 Ft</SelectItem>
-                <SelectItem value="40">40 Ft</SelectItem>
-              </SelectContent>
-            </Select>
+            />
           </div>
 
           <div className="space-y-3">
@@ -119,39 +105,26 @@ export default function Step2Shipments() {
             <Label className="text-[#022f7e] font-semibold">
               Equipment Type
             </Label>
-            <Select
+            <Input
+              type="text"
+              placeholder="Enter Equipment Type"
               value={shipment.equipmentType}
-              onValueChange={(value) =>
-                updateShipment({ equipmentType: value })
+              onChange={(e) =>
+                updateShipment({ equipmentType: e.target.value })
               }
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select Equipment Type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="van">Van</SelectItem>
-                <SelectItem value="truck">Truck</SelectItem>
-                <SelectItem value="container">Container</SelectItem>
-              </SelectContent>
-            </Select>
+            />
           </div>
 
           <div className="space-y-3">
             <Label className="text-[#022f7e] font-semibold">
               Truck Load (F/P)
             </Label>
-            <Select
+            <Input
+              type="text"
+              placeholder="Enter Truck Load"
               value={shipment.truckLoad}
-              onValueChange={(value) => updateShipment({ truckLoad: value })}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select Truck Load" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="full">Full</SelectItem>
-                <SelectItem value="partial">Partial</SelectItem>
-              </SelectContent>
-            </Select>
+              onChange={(e) => updateShipment({ truckLoad: e.target.value })}
+            />
           </div>
 
           <div className="space-y-3">
@@ -176,19 +149,12 @@ export default function Step2Shipments() {
 
           <div className="space-y-3">
             <Label className="text-[#022f7e] font-semibold">Danger Type</Label>
-            <Select
+            <Input
+              type="text"
+              placeholder="Enter Danger Type"
               value={shipment.dangerType}
-              onValueChange={(value) => updateShipment({ dangerType: value })}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select Danger Type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="explosive">Explosive</SelectItem>
-                <SelectItem value="flammable">Flammable</SelectItem>
-                <SelectItem value="toxic">Toxic</SelectItem>
-              </SelectContent>
-            </Select>
+              onChange={(e) => updateShipment({ dangerType: e.target.value })}
+            />
           </div>
         </div>
       </div>
