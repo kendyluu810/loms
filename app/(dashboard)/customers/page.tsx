@@ -62,7 +62,7 @@ export default function CustomersPage() {
               <TableHead>Contact Name</TableHead>
               <TableHead>Contact Email</TableHead>
               <TableHead>Contact Phone</TableHead>
-              <TableHead>Delivery Method</TableHead>
+              <TableHead>Customer Type</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -76,7 +76,7 @@ export default function CustomersPage() {
                 <TableCell>{customer.contactName}</TableCell>
                 <TableCell>{customer.contactEmail}</TableCell>
                 <TableCell>{customer.contactPhone}</TableCell>
-                <TableCell>{customer.deliveryMethod}</TableCell>
+                <TableCell>{customer.customerType}</TableCell>
                 <TableCell>
                   <div className="flex flex-wrap gap-2">
                     <EditCustomerModal

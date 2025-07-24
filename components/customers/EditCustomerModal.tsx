@@ -113,24 +113,23 @@ export default function EditCustomerModal({
           </div>
           <div className="space-y-2">
             <Label className="text-[#022f7e] font-semibold">
-              Delivery Method
+              Customer Type
             </Label>
             <Select
-              value={form.deliveryMethod}
+              value={form.customerType}
               onValueChange={(value) =>
                 setForm({
                   ...form,
-                  deliveryMethod: value as Customer["deliveryMethod"],
+                  customerType: value as Customer["customerType"],
                 })
               }
             >
               <SelectTrigger className="w-full">
-                <SelectValue  />
+                <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Air">Air</SelectItem>
-                <SelectItem value="Sea">Sea</SelectItem>
-                <SelectItem value="Land">Land</SelectItem>
+                <SelectItem value="Shipper">Shipper</SelectItem>
+                <SelectItem value="Receiver">Receiver</SelectItem>
               </SelectContent>
             </Select>
           </div>

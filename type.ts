@@ -16,7 +16,7 @@ export type Customer = {
   contactName?: string; // Contact Person Name
   contactEmail?: string; // Contact Person Email
   contactPhone?: string; // Contact Person Phone
-  deliveryMethod: "Air" | "Sea" | "Land";
+  customerType?: "Shipper" | "Receiver";
 };
 
 export type Driver = {

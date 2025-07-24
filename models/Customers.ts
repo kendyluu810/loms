@@ -8,7 +8,7 @@ export interface ICustomer extends Document {
   contactName: string; // Contact Person Name
   contactEmail: string; // Contact Person Email
   contactPhone: string; // Contact Person Phone
-  deliveryMethod: string;
+  customerType: "Shipper" | "Receiver";
 }
 
 const CustomerSchema: Schema = new Schema(
@@ -20,9 +20,9 @@ const CustomerSchema: Schema = new Schema(
     contactName: { type: String, required: true }, // Contact Person Name
     contactEmail: { type: String, required: true }, // Contact Person Email
     contactPhone: { type: String, required: true }, // Contact Person Phone
-    deliveryMethod: {
+    customerType: {
       type: String,
-      enum: ["Air", "Sea", "Land"],
+      enum: ["Shipper", "Receiver"],
       required: true,
     },
   },

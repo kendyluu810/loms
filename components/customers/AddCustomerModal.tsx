@@ -28,7 +28,7 @@ export default function AddCustomerModal({ onAdded }: { onAdded: () => void }) {
     contactName: "",
     contactEmail: "",
     contactPhone: "",
-    deliveryMethod: "Air",
+    customerType: "Shipper" ,
   });
 
   const handleSubmit = async () => {
@@ -45,7 +45,7 @@ export default function AddCustomerModal({ onAdded }: { onAdded: () => void }) {
       contactName: "",
       contactEmail: "",
       contactPhone: "",
-      deliveryMethod: "Air",
+      customerType: "Shipper",
     });
     onAdded();
   };
@@ -124,21 +124,20 @@ export default function AddCustomerModal({ onAdded }: { onAdded: () => void }) {
           </div>
           <div className="space-y-4">
             <Label className="text-[#022f7e] font-semibold">
-              Delivery Method
+              Customer Type
             </Label>
             <Select
-              value={form.deliveryMethod}
+              value={form.customerType}
               onValueChange={(value) =>
-                setForm({ ...form, deliveryMethod: value })
+                setForm({ ...form, customerType: value })
               }
             >
               <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select delivery method" />
+                <SelectValue placeholder="Select customer type" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Air">Air</SelectItem>
-                <SelectItem value="Sea">Sea</SelectItem>
-                <SelectItem value="Land">Land</SelectItem>
+                <SelectItem value="Shipper">Shipper</SelectItem>
+                <SelectItem value="Receiver">Receiver</SelectItem>
               </SelectContent>
             </Select>
           </div>

@@ -15,7 +15,7 @@ export const useLoadStore = create<LoadState>((set, get) => ({
   route: {},
   shipment: {},
   owner: {
-    deliveryMethod: "Air"
+    customerType: "Shipper", // Default value
   },
   updateRoute: (route) =>
     set((state) => ({
@@ -34,7 +34,7 @@ export const useLoadStore = create<LoadState>((set, get) => ({
       route: {},
       shipment: {},
       owner: {
-        deliveryMethod: "Air"
+        customerType: "Shipper", // Reset to default value
       },
     }),
 }));

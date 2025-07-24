@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
       { contactName: { $regex: search, $options: "i" } },
       { contactEmail: { $regex: search, $options: "i" } },
       { contactPhone: { $regex: search, $options: "i" } },
-      { deliveryMethod: { $regex: search, $options: "i" } },
+      { customerType: { $regex: search, $options: "i" } },
     ],
   };
 
