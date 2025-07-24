@@ -33,7 +33,7 @@ export async function fetchLoads(): Promise<Load[]> {
   const rawData = await res.json();
 
   const formatted: Load[] = rawData.map((item: any) => ({
-    id: item.loadNumber || item._id,
+    loadNumber: item.loadNumber || item._id,
     age: calculateAge(item.createdAt),
     customer: item.customer?.name || "Unknown",
     contact: `${item.customer?.contactName} (${item.customer?.contactPhone})`,
@@ -45,7 +45,7 @@ export async function fetchLoads(): Promise<Load[]> {
     deliveryTime: formatTime(item.route?.deliveryTime),
     deliveryDate: formatDate(item.route?.deliveryDate),
     equipment: item.shipment?.equipmentType || "",
-    weight: item.shipment?.weight || "",
+    weight: item.shipment?.weight ? `${item.shipment.weight} lbs` : "N/A",
     rate: item.shipment?.rate || "",
     stop: item.stop || "",
     state: item.status || "Posted",

@@ -1,9 +1,10 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "../ui/checkbox";
 import { Badge } from "../ui/badge";
+import { useRouter } from "next/navigation";
 
 export type Load = {
-  id: string;
+  loadNumber: string;
   age: string;
   customer: string;
   contact: string;
@@ -38,13 +39,20 @@ export const columns: ColumnDef<Load>[] = [
     ),
   },
   {
-    accessorKey: "id",
+    accessorKey: "loadNumber",
     header: "Load#",
-    cell: ({ row }) => (
-      <div className="text-blue-600 underline cursor-pointer">
-        {row.getValue("id")}
-      </div>
-    ),
+    cell: ({ row }) => {
+      const loadNumber = row.getValue("loadNumber") as string;
+      const router = useRouter();
+      return (
+        <div
+          className="text-blue-600 underline cursor-pointer"
+          onClick={() => router.push(`/load_board/${loadNumber}`)}
+        >
+          {loadNumber}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "age",
@@ -97,9 +105,7 @@ export const columns: ColumnDef<Load>[] = [
   {
     accessorKey: "equipment",
     header: "Equipment",
-    cell: ({ row }) => (
-      <div>{row.getValue("equipment") || "N/A"}</div> 
-    ),
+    cell: ({ row }) => <div>{row.getValue("equipment") || "N/A"}</div>,
   },
   {
     accessorKey: "weight",
