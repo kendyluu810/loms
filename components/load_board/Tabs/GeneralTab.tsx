@@ -1,8 +1,12 @@
+"use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { MoreVertical, Pen } from "lucide-react";
+import { useState } from "react";
 
 export default function GeneralTabs() {
+  const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState({});
   return (
     <div>
       <Card className="border rounded-lg shadow-sm">

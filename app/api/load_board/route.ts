@@ -19,15 +19,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    const {
-      loadNumber,
-      customer, // this must be a valid ObjectId string from Customer collection
-      route,
-      shipment,
-      miles,
-      stop,
-      status,
-    } = body;
+    const { loadNumber, customer, route, shipment, miles, stop, status } = body;
 
     // Convert time strings (e.g., "14:00") into Date format using a base date
     const parseTime = (timeStr: string): Date => {
