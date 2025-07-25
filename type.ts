@@ -34,6 +34,8 @@ export type RouteData = {
   origin?: string;
   pickupNumber?: string;
   shipperSchedule?: string;
+  addressPickup?: string;
+  addressDelivery?: string;
   pickupTime?: string;
   pickupDate?: string;
   destination?: string;

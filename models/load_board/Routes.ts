@@ -4,6 +4,8 @@ export interface IRoute extends Document {
   origin: string;
   pickupNumber: string;
   shipperSchedule: Date;
+  addressPickup: string;
+  addressDelivery: string;
   pickupTime: Date;
   pickupDate: Date;
   destination: string;
@@ -29,11 +31,13 @@ const RouteSchema = new mongoose.Schema(
     origin: { type: String, required: true },
     pickupNumber: { type: String, required: true },
     shipperSchedule: { type: Date, required: true },
+    addressPickup: { type: String, required: true },
     pickupTime: { type: Date, required: true },
     pickupDate: { type: Date, required: true },
     destination: { type: String, required: true },
     deliveryNumber: { type: String, required: true },
     receiverSchedule: { type: Date, required: true },
+    addressDelivery: { type: String, required: true },
     deliveryTime: { type: Date, required: true },
     deliveryDate: { type: Date, required: true },
     additionalStop: { type: String },

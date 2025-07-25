@@ -9,7 +9,7 @@ export interface ILoad extends Document {
   createdAt: Date;
   miles?: string;
   stop?: string;
-  status?:string;
+  status?: string;
 }
 
 const LoadBoardSchema: Schema = new Schema(

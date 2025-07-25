@@ -10,9 +10,19 @@ import {
 } from "../ui/select";
 import { Button } from "../ui/button";
 import { useLoadStore } from "@/store/useLoadStore";
+import { ItemCategorySelect } from "./ItemCategorySelect";
+import { EquipmentTypeSelect } from "./EquipmentTypeSelect";
+import { TruckLoadSelect } from "./TruckLoadSelect";
+import { DangerTypeSelect } from "./DangerTypeSelect";
+import { useShipmentOptions } from "@/store/useShipmentOptions";
+import { useEffect } from "react";
 
 export default function Step2Shipments() {
   const { shipment, updateShipment } = useLoadStore();
+  const fetchOptions = useShipmentOptions((s) => s.fetchOptions);
+  useEffect(() => {
+    fetchOptions();
+  }, [fetchOptions]);
 
   return (
     <div className="max-w-7xl mx-auto space-y-6 mt-10 border p-6 rounded-lg shadow-md">
@@ -27,11 +37,9 @@ export default function Step2Shipments() {
             <Label className="text-[#022f7e] font-semibold">
               Item Category
             </Label>
-            <Input
-              type="text"
-              placeholder="Enter Item Category"
-              value={shipment.itemCategory}
-              onChange={(e) => updateShipment({ itemCategory: e.target.value })}
+            <ItemCategorySelect
+              value={shipment.itemCategory || ""}
+              onChange={(value) => updateShipment({ itemCategory: value })}
             />
           </div>
 
@@ -76,7 +84,7 @@ export default function Step2Shipments() {
             <div className="flex space-x-2">
               <Input
                 type="number"
-                placeholder="3,500"
+                placeholder="Enter Rate"
                 value={shipment.rate}
                 onChange={(e) =>
                   updateShipment({ rate: parseFloat(e.target.value) || 0 })
@@ -87,12 +95,12 @@ export default function Step2Shipments() {
                 onValueChange={(value) => updateShipment({ rateUnit: value })}
               >
                 <SelectTrigger className="w-fit">
-                  <SelectValue placeholder="USD" />
+                  <SelectValue defaultValue="USD " placeholder="USD" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="usd">USD</SelectItem>
-                  <SelectItem value="eur">EUR</SelectItem>
-                  <SelectItem value="vnd">VND</SelectItem>
+                  <SelectItem value="USD">USD</SelectItem>
+                  <SelectItem value="EUR">EUR</SelectItem>
+                  <SelectItem value="VND">VND</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -105,13 +113,9 @@ export default function Step2Shipments() {
             <Label className="text-[#022f7e] font-semibold">
               Equipment Type
             </Label>
-            <Input
-              type="text"
-              placeholder="Enter Equipment Type"
-              value={shipment.equipmentType}
-              onChange={(e) =>
-                updateShipment({ equipmentType: e.target.value })
-              }
+            <EquipmentTypeSelect
+              value={shipment.equipmentType || ""}
+              onChange={(value) => updateShipment({ equipmentType: value })}
             />
           </div>
 
@@ -119,11 +123,9 @@ export default function Step2Shipments() {
             <Label className="text-[#022f7e] font-semibold">
               Truck Load (F/P)
             </Label>
-            <Input
-              type="text"
-              placeholder="Enter Truck Load"
-              value={shipment.truckLoad}
-              onChange={(e) => updateShipment({ truckLoad: e.target.value })}
+            <TruckLoadSelect
+              value={shipment.truckLoad || ""}
+              onChange={(value) => updateShipment({ truckLoad: value })}
             />
           </div>
 
@@ -137,7 +139,7 @@ export default function Step2Shipments() {
                 updateShipment({ dangerousGoods: value === "yes" })
               }
             >
-              <SelectTrigger>
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select Dangerous Goods" />
               </SelectTrigger>
               <SelectContent>
@@ -149,11 +151,9 @@ export default function Step2Shipments() {
 
           <div className="space-y-3">
             <Label className="text-[#022f7e] font-semibold">Danger Type</Label>
-            <Input
-              type="text"
-              placeholder="Enter Danger Type"
-              value={shipment.dangerType}
-              onChange={(e) => updateShipment({ dangerType: e.target.value })}
+            <DangerTypeSelect
+              value={shipment.dangerType || ""}
+              onChange={(value) => updateShipment({ dangerType: value })}
             />
           </div>
         </div>

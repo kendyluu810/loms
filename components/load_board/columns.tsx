@@ -18,6 +18,7 @@ export type Load = {
   equipment: string;
   weight: string;
   rate: string;
+  rateUnit: string;
   stop: string;
   state: string;
 };
@@ -114,19 +115,25 @@ export const columns: ColumnDef<Load>[] = [
   {
     accessorKey: "rate",
     header: "Rate",
+    cell: ({ row }) => (
+      <div>
+        <div>{row.getValue("rate")}</div>
+        <div className="text-sm">{row.original.rateUnit}</div>
+      </div>
+    ),
   },
   {
     accessorKey: "stop",
     header: "Stop",
   },
   {
-    accessorKey: "state",
-    header: "State",
+    accessorKey: "status",
+    header: "Status",
     cell: ({ row }) => (
       <Badge
-        variant={row.getValue("state") === "Posted" ? "default" : "destructive"}
+        variant={row.getValue("status") === "Posted" ? "secondary" : "destructive"}
       >
-        {row.getValue("state")}
+        {row.getValue("status")}
       </Badge>
     ),
   },

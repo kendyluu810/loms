@@ -33,14 +33,14 @@ export default function Step1Route() {
       </div>
       <div className="space-y-3">
         {/* 1st row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 border rounded-md p-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 border rounded-md p-4">
           <div className="space-y-3">
             <Label className="text-[#022f7e] font-semibold">Origin</Label>
             <Select
               onValueChange={(value) => updateRoute({ origin: value })}
               value={route.origin}
             >
-              <SelectTrigger>
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select Location" />
               </SelectTrigger>
               <SelectContent>
@@ -61,6 +61,17 @@ export default function Step1Route() {
               placeholder="#123456789"
               value={route.pickupNumber || ""}
               onChange={(e) => updateRoute({ pickupNumber: e.target.value })}
+            />
+          </div>
+
+          <div className="space-y-3">
+            <Label className="text-[#022f7e] font-semibold">
+              Pickup Address
+            </Label>
+            <Input
+              placeholder="Enter pickup address"
+              value={route.addressPickup || ""}
+              onChange={(e) => updateRoute({ addressPickup: e.target.value })}
             />
           </div>
 
@@ -116,14 +127,14 @@ export default function Step1Route() {
           </div>
         </div>
         {/* 2nd row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 border rounded-md p-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 border rounded-md p-4">
           <div className="space-y-3">
             <Label className="text-[#022f7e] font-semibold">Destination</Label>
             <Select
               onValueChange={(value) => updateRoute({ destination: value })}
               value={route.destination}
             >
-              <SelectTrigger>
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select Location" />
               </SelectTrigger>
               <SelectContent>
@@ -144,6 +155,17 @@ export default function Step1Route() {
               placeholder="#123456789"
               value={route.deliveryNumber || ""}
               onChange={(e) => updateRoute({ deliveryNumber: e.target.value })}
+            />
+          </div>
+      
+          <div className="space-y-3">
+            <Label className="text-[#022f7e] font-semibold">
+              Delivery Address
+            </Label>
+            <Input
+              placeholder="Enter Address here"
+              value={route.addressDelivery || ""}
+              onChange={(e) => updateRoute({ addressDelivery: e.target.value })}
             />
           </div>
 
@@ -214,7 +236,7 @@ export default function Step1Route() {
               onValueChange={(value) => updateRoute({ additionalStop: value })}
               value={route.additionalStop}
             >
-              <SelectTrigger>
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select Location" />
               </SelectTrigger>
               <SelectContent>

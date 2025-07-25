@@ -47,8 +47,9 @@ export async function fetchLoads(): Promise<Load[]> {
     equipment: item.shipment?.equipmentType || "",
     weight: item.shipment?.weight ? `${item.shipment.weight} lbs` : "N/A",
     rate: item.shipment?.rate || "",
+    rateUnit: item.shipment?.rateUnit || "USD",
     stop: item.stop || "",
-    state: item.status || "Posted",
+    status: item.status || "Posted",
   }));
 
   return formatted;

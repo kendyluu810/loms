@@ -18,7 +18,11 @@ const ShipmentSchema = new mongoose.Schema(
     weight: { type: Number, required: true },
     length: { type: Number, required: true },
     rate: { type: Number, required: true },
-    rateUnit: { type: String },
+    rateUnit: {
+      type: String,
+      required: true,
+      enum: ["USD", "EUR", "VND"], // Example units, adjust as necessary
+    },
     equipmentType: { type: String, required: true },
     truckLoad: { type: String, required: true },
     dangerousGoods: { type: Boolean, default: false },
