@@ -223,7 +223,11 @@ export default function EnterInformation_Form() {
               <SelectValue placeholder="Select Destination" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Joliet">Joliet</SelectItem>
+              {countryOptions.map((country) => (
+                <SelectItem key={country.value} value={country.label}>
+                  {country.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>

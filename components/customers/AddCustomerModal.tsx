@@ -18,17 +18,19 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Label } from "../ui/label";
+import { toast } from "sonner";
+import { CustomerTypeSelect } from "./CustomerTypeSelect";
 
 export default function AddCustomerModal({ onAdded }: { onAdded: () => void }) {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({
-    name: "",
-    phone: "",
-    email: "",
-    contactName: "",
-    contactEmail: "",
+    companyName: "",
+    customerType: "shipper",
+    companyEmail: "",
+    companyPhone: "",
+    contactPerson: "",
     contactPhone: "",
-    customerType: "Shipper" ,
+    contactEmail: "",
   });
 
   const handleSubmit = async () => {
@@ -39,15 +41,16 @@ export default function AddCustomerModal({ onAdded }: { onAdded: () => void }) {
     });
     setOpen(false);
     setForm({
-      name: "",
-      phone: "",
-      email: "",
-      contactName: "",
-      contactEmail: "",
+      companyName: "",
+      customerType: "shipper",
+      companyEmail: "",
+      companyPhone: "",
+      contactPerson: "",
       contactPhone: "",
-      customerType: "Shipper",
+      contactEmail: "",
     });
     onAdded();
+    toast.success("Customer added successfully");
   };
 
   return (
@@ -65,36 +68,46 @@ export default function AddCustomerModal({ onAdded }: { onAdded: () => void }) {
         </DialogHeader>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
           <div className="space-y-4">
-            <Label className="text-[#022f7e] font-semibold">Name</Label>
+            <Label className="text-[#022f7e] font-semibold">Company Name</Label>
             <Input
-              placeholder="Name"
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              placeholder="Company Name"
+              value={form.companyName}
+              onChange={(e) =>
+                setForm({ ...form, companyName: e.target.value })
+              }
             />
           </div>
           <div className="space-y-4">
-            <Label className="text-[#022f7e] font-semibold">Phone</Label>
+            <Label className="text-[#022f7e] font-semibold">
+              Company Phone
+            </Label>
             <Input
-              placeholder="Phone"
-              value={form.phone}
-              onChange={(e) => setForm({ ...form, phone: e.target.value })}
+              placeholder="Company Phone"
+              value={form.companyPhone}
+              onChange={(e) =>
+                setForm({ ...form, companyPhone: e.target.value })
+              }
             />
           </div>
           <div className="space-y-4">
-            <Label className="text-[#022f7e] font-semibold">Email</Label>
+            <Label className="text-[#022f7e] font-semibold">
+              Company Email
+            </Label>
             <Input
-              placeholder="Email"
-              value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              placeholder="Company Email"
+              value={form.companyEmail}
+              onChange={(e) =>
+                setForm({ ...form, companyEmail: e.target.value })
+              }
             />
           </div>
           <div className="space-y-4">
             <Label className="text-[#022f7e] font-semibold">Contact Name</Label>
             <Input
               placeholder="Name"
-              value={form.contactName}
+              value={form.contactPerson}
               onChange={(e) =>
-                setForm({ ...form, contactName: e.target.value })
+                setForm({ ...form, contactPerson: e.target.value })
               }
             />
           </div>
@@ -126,20 +139,10 @@ export default function AddCustomerModal({ onAdded }: { onAdded: () => void }) {
             <Label className="text-[#022f7e] font-semibold">
               Customer Type
             </Label>
-            <Select
+            <CustomerTypeSelect
               value={form.customerType}
-              onValueChange={(value) =>
-                setForm({ ...form, customerType: value })
-              }
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select customer type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Shipper">Shipper</SelectItem>
-                <SelectItem value="Receiver">Receiver</SelectItem>
-              </SelectContent>
-            </Select>
+              onChange={(value) => setForm({ ...form, customerType: value })}
+            />
           </div>
         </div>
 

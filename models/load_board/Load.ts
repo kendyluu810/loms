@@ -1,4 +1,8 @@
 import mongoose, { Document, Schema } from "mongoose";
+import "../customer/Customers"
+import "./Routes";
+import "./Shipment";
+import "./Shipment";
 
 export interface ILoad extends Document {
   loadNumber: string;

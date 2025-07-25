@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/table";
 import { Employee } from "@/type";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function EmployeePage() {
   const [employees, setEmployees] = useState<Employee[]>([]);
@@ -63,34 +64,43 @@ export default function EmployeePage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {employees.map((employee) => (
-              <TableRow key={employee._id}>
-                <TableCell>{employee.Eid}</TableCell>
-                <TableCell>{employee.name}</TableCell>
-                <TableCell>{employee.email}</TableCell>
-                <TableCell>{employee.phone}</TableCell>
-                <TableCell>{employee.position}</TableCell>
-                <TableCell>
-                  <div className="flex flex-col sm:flex-row gap-2">
-                    <EditEmployeeModal
-                      employee={employee}
-                      onUpdated={fecthEmployees}
-                    />
-                    <Button
-                      variant="destructive"
-                      onClick={async () => {
-                        await fetch(`/api/employees/${employee._id}`, {
-                          method: "DELETE",
-                        });
-                        fecthEmployees();
-                      }}
-                    >
-                      Delete
-                    </Button>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
+            {employees && employees.length > 0 ? (
+              employees.map((employee) => (
+                <TableRow key={employee._id}>
+                  <TableCell>{employee.Eid}</TableCell>
+                  <TableCell>{employee.name}</TableCell>
+                  <TableCell>{employee.email}</TableCell>
+                  <TableCell>{employee.phone}</TableCell>
+                  <TableCell>{employee.position}</TableCell>
+                  <TableCell>
+                    <div className="flex flex-col sm:flex-row gap-2">
+                      <EditEmployeeModal
+                        employee={employee}
+                        onUpdated={fecthEmployees}
+                      />
+                      <Button
+                        variant="destructive"
+                        onClick={async () => {
+                          await fetch(`/api/employees/${employee._id}`, {
+                            method: "DELETE",
+                          });
+                          fecthEmployees();
+                          toast.success(
+                            `Employee ${employee.name} deleted successfully`
+                          );
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <div className="text-xl text-gray-500 font-bold space-y-4 gap-4 text-center">
+                No employees found
+              </div>
+            )}
           </TableBody>
         </Table>
       </div>

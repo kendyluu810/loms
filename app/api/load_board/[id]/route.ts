@@ -9,10 +9,14 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   await dbConnect();
-  const load = await Load.findById(params.id)
-    .populate("route")
-    .populate("shipment")
-    .populate("customer");
+  const id = params.id;
+  const load =
+    (await Load.findOne({ loadNumber: id })) ||
+    (await Load.findById(id)
+      .populate("customer")
+      .populate("route")
+      .populate("shipment")
+      .populate("customer"));
   if (!load)
     return NextResponse.json({ message: "Load not found" }, { status: 404 });
   return NextResponse.json(load);
@@ -27,7 +31,9 @@ export async function PUT(
     const body = await req.json();
     const { route, shipment } = body;
 
-    const load = await Load.findById(params.id);
+    const id = params.id;
+    const load =
+      (await Load.findOne({ loadNumber: id })) || (await Load.findById(id));
     if (!load)
       return NextResponse.json({ message: "Load not found" }, { status: 404 });
 
@@ -55,7 +61,9 @@ export async function DELETE(
 ) {
   await dbConnect();
   try {
-    const load = await Load.findById(params.id);
+    const id = params.id;
+    const load =
+      (await Load.findOne({ loadNumber: id })) || (await Load.findById(id));
     if (!load)
       return NextResponse.json({ message: "Load not found" }, { status: 404 });
 

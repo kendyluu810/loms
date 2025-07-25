@@ -10,6 +10,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Label } from "../ui/label";
+import { toast } from "sonner";
+import { PositionSelect } from "./PositionsSelect";
+import { SimplePositionSelect } from "./SimplePositionSelect";
 
 type Employee = {
   _id: string;
@@ -37,6 +40,7 @@ export default function EditEmployeeModal({
     });
     setOpen(false);
     onUpdated();
+    toast.success(`Employee ${employee.name} updated successfully`);
   };
 
   return (
@@ -79,10 +83,9 @@ export default function EditEmployeeModal({
           </div>
           <div className="space-y-4">
             <Label>Position</Label>
-            <Input
-              placeholder="Position"
+            <SimplePositionSelect
               value={form.position}
-              onChange={(e) => setForm({ ...form, position: e.target.value })}
+              onChange={(value) => setForm({ ...form, position: value })}
             />
           </div>
         </div>

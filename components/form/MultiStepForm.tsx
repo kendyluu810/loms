@@ -9,6 +9,7 @@ import Step4Review from "./Step4Review";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLoadStore } from "@/store/useLoadStore";
+import { toast } from "sonner";
 
 const MultiStepForm = () => {
   const [step, setStep] = useState(1);
@@ -33,8 +34,9 @@ const MultiStepForm = () => {
     if (res.ok) {
       reset();
       router.push("/load_board");
+      toast.success("Load created successfully");
     } else {
-      alert("Failed to submit load data");
+      toast.error("Failed to submit load data");
     }
   };
 

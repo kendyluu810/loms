@@ -4,7 +4,7 @@ import dbConnect from "@/lib/mongodb";
 import Load from "@/models/load_board/Load";
 import Route from "@/models/load_board/Routes";
 import Shipment from "@/models/load_board/Shipment";
-import "@/models/Customers";
+import "@/models/customer/Customers";
 
 function generateLoadNumber() {
   const now = new Date();
@@ -48,14 +48,14 @@ export async function POST(req: NextRequest) {
     // Create Load with references to route and shipment
     const newLoad = await Load.create({
       loadNumber: loadNumber || generateLoadNumber(),
-      customer: body.customer, // must be valid ObjectId
+      customer, // must be valid ObjectId
       route: newRoute._id,
       shipment: newShipment._id,
       miles,
       stop,
       status,
     });
-
+    console.log("Post: ",newLoad); // ✅ Kiểm tra dữ liệu
     return NextResponse.json(newLoad, { status: 201 });
   } catch (error: any) {
     console.error("Create load error:", error);
@@ -74,11 +74,11 @@ export async function GET(req: NextRequest) {
     await dbConnect();
 
     const loads = await Load.find()
-      .populate("customer")
+      .populate({ path: "customer", select: "name contactName contactPhone" })
       .populate("route")
       .populate("shipment")
       .sort({ createdAt: -1 }); // sắp xếp mới nhất trước
-
+    console.log("Sample Load Data:", loads[0].customer); // ✅ Kiểm tra dữ liệu
     return NextResponse.json(loads, { status: 200 });
   } catch (error: any) {
     console.error("Fetch load error:", error);

@@ -19,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { toast } from "sonner";
 
 export default function AddDriverModal({ onAdded }: { onAdded: () => void }) {
   const [open, setOpen] = useState(false);
@@ -74,6 +75,7 @@ export default function AddDriverModal({ onAdded }: { onAdded: () => void }) {
       vehicleNumber: "",
     });
     onAdded();
+    toast.success("Driver added successfully");
   };
   return (
     <Dialog open={open} onOpenChange={setOpen}>

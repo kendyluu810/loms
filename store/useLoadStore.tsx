@@ -1,12 +1,12 @@
-import { Customer, RouteData, ShipmentData } from "@/type";
+import { Customer, Route, Shipment } from "@/type";
 import { create } from "zustand";
 
 interface LoadState {
-  route: RouteData;
-  shipment: ShipmentData;
-  owner: Customer;
-  updateRoute: (route: Partial<RouteData>) => void;
-  updateShipment: (shipment: Partial<ShipmentData>) => void;
+  route: Partial<Route>;
+  shipment: Partial<Shipment>;
+  owner: Partial<Customer>;
+  updateRoute: (route: Partial<Route>) => void;
+  updateShipment: (shipment: Partial<Shipment>) => void;
   updateOwner: (owner: Partial<Customer>) => void;
   reset: () => void;
 }

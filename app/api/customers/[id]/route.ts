@@ -1,20 +1,58 @@
-import dbConnect from "@/lib/mongodb";
-import Customers from "@/models/Customers";
 import { NextRequest, NextResponse } from "next/server";
+import dbConnect from "@/lib/mongodb";
+import Customers from "@/models/customer/Customers";
 
-export async function PUT(req: NextRequest, { params }: any) {
-  await dbConnect();
-  const { id } = params;
-  const body = await req.json();
+// Update Customer
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    await dbConnect();
+    const data = await req.json();
+    const updated = await Customers.findByIdAndUpdate(params.id, data, {
+      new: true,
+    });
 
-  const updated = await Customers.findByIdAndUpdate(id, body, { new: true });
-  return NextResponse.json(updated);
+    if (!updated) {
+      return NextResponse.json(
+        { message: "Customer not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(updated);
+  } catch (error) {
+    console.error("PUT Customer Error:", error);
+    return NextResponse.json(
+      { message: "Failed to update customer" },
+      { status: 500 }
+    );
+  }
 }
 
-export async function DELETE(req: NextRequest, { params }: any) {
-  await dbConnect();
-  const { id } = params;
+//  Delete Customer
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    await dbConnect();
+    const deleted = await Customers.findByIdAndDelete(params.id);
 
-  await Customers.findByIdAndDelete(id);
-  return NextResponse.json({ message: "Deleted" });
+    if (!deleted) {
+      return NextResponse.json(
+        { message: "Customer not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({ message: "Customer deleted successfully" });
+  } catch (error) {
+    console.error("DELETE Customer Error:", error);
+    return NextResponse.json(
+      { message: "Failed to delete customer" },
+      { status: 500 }
+    );
+  }
 }

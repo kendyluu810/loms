@@ -21,71 +21,7 @@ export default function GeneralTabs() {
             </div>
           </div>
         </CardHeader>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
-          <CardContent className="space-y-3 p-4">
-            <div className="flex justify-between">
-              <Label className="text-[#022f7e] font-semibold">Origin</Label>
-              <span></span>
-            </div>
-            <div className="flex justify-between">
-              <Label className="text-[#022f7e] font-semibold">
-                Pickup Number
-              </Label>
-              <span></span>
-            </div>
-            <div className="flex justify-between">
-              <Label className="text-[#022f7e] font-semibold">
-                Shipper Schedule
-              </Label>
-              <span></span>
-            </div>
-            <div className="flex justify-between">
-              <Label className="text-[#022f7e] font-semibold">
-                Pickup Date
-              </Label>
-              <span></span>
-            </div>
-            <div className="flex justify-between">
-              <Label className="text-[#022f7e] font-semibold">
-                Pickup Time
-              </Label>
-              <span></span>
-            </div>
-          </CardContent>
 
-          <CardContent className="space-y-3 p-4">
-            <div className="flex justify-between">
-              <Label className="text-[#022f7e] font-semibold">
-                Destination
-              </Label>
-              <span></span>
-            </div>
-            <div className="flex justify-between">
-              <Label className="text-[#022f7e] font-semibold">
-                Delivery Number
-              </Label>
-              <span></span>
-            </div>
-            <div className="flex justify-between">
-              <Label className="text-[#022f7e] font-semibold">
-                Receiver Schedule
-              </Label>
-              <span></span>
-            </div>
-            <div className="flex justify-between">
-              <Label className="text-[#022f7e] font-semibold">
-                Delivery Date
-              </Label>
-              <span></span>
-            </div>
-            <div className="flex justify-between">
-              <Label className="text-[#022f7e] font-semibold">
-                Delivery Time
-              </Label>
-              <span></span>
-            </div>
-          </CardContent>
-        </div>
       </Card>
     </div>
   );

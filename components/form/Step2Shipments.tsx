@@ -92,7 +92,7 @@ export default function Step2Shipments() {
               />
               <Select
                 value={shipment.rateUnit}
-                onValueChange={(value) => updateShipment({ rateUnit: value })}
+                onValueChange={(value) => updateShipment({ rateUnit: value as "USD" | "EUR" | "VND" })}
               >
                 <SelectTrigger className="w-fit">
                   <SelectValue defaultValue="USD " placeholder="USD" />

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
-import Employees from "@/models/Employees";
+import Employees from "@/models/employees/Employees";
 
 export async function PUT(req: NextRequest, { params }: any) {
   await dbConnect();

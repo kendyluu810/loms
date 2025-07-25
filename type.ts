@@ -1,78 +1,98 @@
+export type CustomerType =
+  | "Shipper"
+  | "Receiver"
+  | "Broker"
+  | "Partner"
+  | "Other";
+
+export interface Customer {
+  _id?: string;
+  cusID?: string;
+  companyName: string;
+  customerType: CustomerType;
+  companyEmail: string;
+  companyPhone: string;
+  contactPerson?: string;
+  contactPhone?: string;
+  contactEmail?: string;
+}
+
+export type RouteTimelineStep = {
+  step: string;
+  location: string;
+  time: string; // ISO date
+  status: "done" | "in-progress" | "pending";
+};
+
+export type Route = {
+  _id: string;
+  origin: string;
+  pickupNumber: string;
+  shipperSchedule: string;
+  addressPickup: string;
+  pickupTime: string;
+  pickupDate: string;
+  destination: string;
+  deliveryNumber: string;
+  receiverSchedule: string;
+  addressDelivery: string;
+  deliveryTime: string;
+  deliveryDate: string;
+  additionalStop: string;
+  warehouseNumber: string;
+  warehouseSchedule: string;
+  date: string;
+  time: string;
+  timeline?: RouteTimelineStep[];
+};
+
+export type Shipment = {
+  _id: string;
+  itemCategory: string;
+  weight: number;
+  length: number;
+  rate: number;
+  rateUnit: "USD" | "EUR" | "VND";
+  equipmentType: string;
+  truckLoad: string;
+  dangerousGoods: boolean;
+  dangerType: string;
+};
+
 export type Employee = {
   _id: string;
   Eid: string;
   name: string;
-  email: string;
   phone: string;
-  position: "Manager" | "Driver" | "Staff";
-};
-
-export type Customer = {
-  _id?: string;
-  Cid?: string;
-  name?: string;
-  email?: string;
-  phone?: string;
-  contactName?: string; // Contact Person Name
-  contactEmail?: string; // Contact Person Email
-  contactPhone?: string; // Contact Person Phone
-  customerType?: "Shipper" | "Receiver";
+  email: string;
+  position: string;
 };
 
 export type Driver = {
   _id: string;
-  employee: Employee; // populated employee document
+  employee: Employee;
   driverlicense: string;
   licensetype: string;
-  licenseexpiry: string; // Date string
+  licenseexpiry: string;
   vehicleid: string;
   vehicleType: string;
   vehicleNumber: string;
 };
 
-export type RouteData = {
-  origin?: string;
-  pickupNumber?: string;
-  shipperSchedule?: string;
-  addressPickup?: string;
-  addressDelivery?: string;
-  pickupTime?: string;
-  pickupDate?: string;
-  destination?: string;
-  deliveryNumber?: string;
-  receiverSchedule?: string;
-  deliveryTime?: string;
-  deliveryDate?: string;
-  additionalStop?: string;
-  warehouseNumber?: string;
-  warehouseSchedule?: string;
-  date?: string;
-  time?: string;
+export type Load = {
+  _id: string;
+  loadNumber: string;
+  customer: {
+    name: string;
+    contactName: string;
+    contactPhone: string;
+  };
+  route?: Route;
+  shipment?: Shipment;
+  driver?: Driver;
+  miles?: string;
+  stop?: string;
+  status?: "Posted" | "Assigned" | "In Transit" | "Delivered";
+  createdAt: string;
+  updatedAt: string;
 };
-
-export type ShipmentData = {
-  itemCategory?: string;
-  weight?: number;
-  length?: number;
-  rate?: number;
-  rateUnit?: string;
-  equipmentType?: string;
-  truckLoad?: string;
-  dangerousGoods?: boolean;
-  dangerType?: string;
-};
-
-export interface TrackingItem {
-  id: string;
-  pickup: string;
-  delivery: string;
-  status: "In Delivery" | "Previous" | "Late";
-  driver: string;
-}
-
-export interface RouteCheckpoint {
-  label: string;
-  location: string;
-  time?: string;
-  done?: boolean;
-}

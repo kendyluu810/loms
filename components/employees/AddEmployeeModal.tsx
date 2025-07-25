@@ -10,13 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Label } from "../ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import { toast } from "sonner";
+import { PositionSelect } from "./PositionsSelect";
 
 export default function AddEmployeeModal({ onAdded }: { onAdded: () => void }) {
   const [open, setOpen] = useState(false);
@@ -24,7 +19,7 @@ export default function AddEmployeeModal({ onAdded }: { onAdded: () => void }) {
     name: "",
     phone: "",
     email: "",
-    position: "Driver",
+    position: "",
   });
 
   const handleSubmit = async () => {
@@ -36,6 +31,7 @@ export default function AddEmployeeModal({ onAdded }: { onAdded: () => void }) {
     setOpen(false);
     setForm({ name: "", phone: "", email: "", position: "" });
     onAdded();
+    toast.success("Employee added successfully");
   };
 
   return (
@@ -78,10 +74,9 @@ export default function AddEmployeeModal({ onAdded }: { onAdded: () => void }) {
           </div>
           <div className="space-y-4">
             <Label>Position</Label>
-            <Input
-              placeholder="Position"
+            <PositionSelect
               value={form.position}
-              onChange={(e) => setForm({ ...form, position: e.target.value })}
+              onChange={(value) => setForm({ ...form, position: value })}
             />
           </div>
         </div>

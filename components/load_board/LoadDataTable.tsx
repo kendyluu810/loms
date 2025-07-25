@@ -11,10 +11,17 @@ import {
 } from "../ui/select";
 
 import { useRouter } from "next/navigation";
-import { columns, Load } from "../load_board/columns";
+import { columns } from "../load_board/columns";
 import { useState } from "react";
+import { Load } from "@/type";
 
-export default function LoadDataTable({ data }: { data: Load[] }) {
+type Props = {
+  data: Load[];
+  onDelete: (loadNumber: string) => void;
+};
+
+export default function LoadDataTable({ data, onDelete }: Props) {
+
   const [sortBy, setSortBy] = useState<"date" | "name" | "">("");
 
   const router = useRouter();
@@ -25,15 +32,20 @@ export default function LoadDataTable({ data }: { data: Load[] }) {
 
   const sortedData = [...data].sort((a, b) => {
     if (sortBy === "date") {
-      const parseDate = (dateStr: string) => {
+      const parseDate = (dateStr?: string) => {
+        if (!dateStr) return new Date(0);
         const [day, month, year] = dateStr.split("/");
         return new Date(+`20${year}`, +month - 1, +day);
       };
+
       return (
-        parseDate(a.pickupDate).getTime() - parseDate(b.pickupDate).getTime()
+        parseDate(a.route?.pickupDate).getTime() -
+        parseDate(b.route?.pickupDate).getTime()
       );
     } else if (sortBy === "name") {
-      return a.customer.localeCompare(b.customer);
+      const nameA = a.customer?.name || "";
+      const nameB = b.customer?.name || "";
+      return nameA.localeCompare(nameB);
     }
     return 0; // No sorting
   });
@@ -65,7 +77,7 @@ export default function LoadDataTable({ data }: { data: Load[] }) {
       </div>
 
       <div className="w-full overflow-x-auto">
-        <DataTable columns={columns} data={sortedData} />
+        {/* <DataTable columns={columns(onDelete)} data={sortedData} /> */}
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "../ui/checkbox";
 import { Badge } from "../ui/badge";
 import { useRouter } from "next/navigation";
-
+import { ConfirmDeleteDialog } from "../dialogs/ConfirmDeleteDialog";
 export type Load = {
   loadNumber: string;
   age: string;
@@ -23,7 +23,7 @@ export type Load = {
   state: string;
 };
 
-export const columns: ColumnDef<Load>[] = [
+export const columns = (onDelete: (id: string) => void): ColumnDef<Load>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -43,14 +43,14 @@ export const columns: ColumnDef<Load>[] = [
     accessorKey: "loadNumber",
     header: "Load#",
     cell: ({ row }) => {
-      const loadNumber = row.getValue("loadNumber") as string;
       const router = useRouter();
+      const load = row.original;
       return (
         <div
           className="text-blue-600 underline cursor-pointer"
-          onClick={() => router.push(`/load_board/${loadNumber}`)}
+          onClick={() => router.push(`/load_board/${load.loadNumber}`)}
         >
-          {loadNumber}
+          {load.loadNumber}
         </div>
       );
     },
@@ -131,10 +131,26 @@ export const columns: ColumnDef<Load>[] = [
     header: "Status",
     cell: ({ row }) => (
       <Badge
-        variant={row.getValue("status") === "Posted" ? "secondary" : "destructive"}
+        variant={
+          row.getValue("status") === "Posted" ? "secondary" : "destructive"
+        }
       >
         {row.getValue("status")}
       </Badge>
     ),
+  },
+  {
+    id: "actions",
+    header: "Actions",
+    cell: ({ row }) => {
+      const load = row.original;
+
+      return (
+        <ConfirmDeleteDialog
+          onConfirm={() => onDelete(load.loadNumber)}
+          itemName={load.loadNumber}
+        />
+      );
+    },
   },
 ];

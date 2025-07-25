@@ -1,4 +1,4 @@
-import { Load } from "@/components/load_board/columns";
+import { Load } from "@/type";
 
 function formatDate(dateStr?: string) {
   return dateStr ? dateStr.slice(0, 10) : "";

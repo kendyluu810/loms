@@ -2,6 +2,7 @@ import Menu from "@/components/Menu";
 import Navbar from "@/components/Navbar";
 import Image from "next/image";
 import Link from "next/link";
+import { Toaster } from "sonner";
 
 export default function DashboardLayout({
   children,
@@ -25,7 +26,10 @@ export default function DashboardLayout({
       {/* RIGHT */}
       <main className="flex-1 bg-[#F7F8FA] overflow-auto flex flex-col">
         <Navbar />
-        <div className="p-4 flex-1">{children}</div>
+        <div className="p-4 flex-1">
+          {children}
+          <Toaster richColors position="top-right" />
+        </div>
       </main>
     </div>
   );

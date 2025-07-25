@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Driver } from "@/type";
 import AddDriverModal from "@/components/driver/AddDriverModal";
 import EditDriverModal from "@/components/driver/EditDriverModal";
+import { toast } from "sonner";
 
 const DriverPage = () => {
   const [drivers, setDrivers] = useState<Driver[]>([]);
@@ -74,47 +75,56 @@ const DriverPage = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {drivers.map((driver) => (
-              <TableRow key={driver._id}>
-                <TableCell>{driver.employee?.name}</TableCell>
-                <TableCell className="hidden lg:table-cell">
-                  {driver.employee?.email}
-                </TableCell>
-                <TableCell>{driver.employee?.phone}</TableCell>
-                <TableCell className="hidden md:table-cell">
-                  {driver.driverlicense}
-                </TableCell>
-                <TableCell className="hidden md:table-cell">
-                  {driver.licensetype}
-                </TableCell>
-                <TableCell className="hidden md:table-cell">
-                  {driver.licenseexpiry}
-                </TableCell>
-                <TableCell className="hidden lg:table-cell">
-                  {driver.vehicleid}
-                </TableCell>
-                <TableCell className="hidden lg:table-cell">
-                  {driver.vehicleType}
-                </TableCell>
-                <TableCell className="hidden lg:table-cell">
-                  {driver.vehicleNumber}
-                </TableCell>
-                <TableCell className="flex flex-col md:flex-row gap-2">
-                  <EditDriverModal driver={driver} onEdit={fetchDrivers} />
-                  <Button
-                    variant="destructive"
-                    onClick={async () => {
-                      await fetch(`/api/drivers/${driver._id}`, {
-                        method: "DELETE",
-                      });
-                      fetchDrivers();
-                    }}
-                  >
-                    Delete
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            {drivers && drivers.length > 0 ? (
+              drivers.map((driver) => (
+                <TableRow key={driver._id}>
+                  <TableCell>{driver.employee?.name}</TableCell>
+                  <TableCell className="hidden lg:table-cell">
+                    {driver.employee?.email}
+                  </TableCell>
+                  <TableCell>{driver.employee?.phone}</TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    {driver.driverlicense}
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    {driver.licensetype}
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    {driver.licenseexpiry}
+                  </TableCell>
+                  <TableCell className="hidden lg:table-cell">
+                    {driver.vehicleid}
+                  </TableCell>
+                  <TableCell className="hidden lg:table-cell">
+                    {driver.vehicleType}
+                  </TableCell>
+                  <TableCell className="hidden lg:table-cell">
+                    {driver.vehicleNumber}
+                  </TableCell>
+                  <TableCell className="flex flex-col md:flex-row gap-2">
+                    <EditDriverModal driver={driver} onEdit={fetchDrivers} />
+                    <Button
+                      variant="destructive"
+                      onClick={async () => {
+                        await fetch(`/api/drivers/${driver._id}`, {
+                          method: "DELETE",
+                        });
+                        fetchDrivers();
+                        toast.success(
+                          `Driver ${driver.employee?.name} deleted successfully`
+                        );
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <div className="text-xl text-gray-500 font-bold space-y-4 gap-4 text-center">
+                No drivers found
+              </div>
+            )}
           </TableBody>
         </Table>
       </div>

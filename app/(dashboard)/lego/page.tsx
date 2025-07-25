@@ -1,5 +1,5 @@
 "use client";
-import { columns, Load } from "@/components/load_board/columns";
+import { columns } from "@/components/load_board/columns";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -26,6 +26,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Load } from "@/type";
 import { fetchLoads } from "@/utils/fetchLoads";
 import {
   ColumnFiltersState,
@@ -39,6 +40,7 @@ import {
 } from "@tanstack/react-table";
 import { Plus, Search } from "lucide-react";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const LegoPage = () => {
   const [search, setSearch] = useState("");
@@ -50,23 +52,36 @@ const LegoPage = () => {
   const [loads, setLoads] = useState<Load[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const fetched = await fetchLoads();
-        setLoads(fetched);
-      } catch (err) {
-        console.error("Error fetching loads:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const handleDelete = async (loadNumber: string) => {
+    try {
+      await fetch(`/api/load_board/${loadNumber}`, { method: "DELETE" });
+      toast.success(`Load ${loadNumber} deleted successfully`);
+      await loadData(); // Refresh data after delete
+    } catch (error: any) {
+      toast.error(`Failed to delete load: ${error.message}`);
+    }
+  };
 
+  const loadData = async () => {
+    try {
+      const fetched = await fetchLoads();
+      setLoads(fetched);
+    } catch (err: any) {
+      toast.error(`Error fetching loads: ${err.message}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
     loadData();
   }, []);
+
+  const currentColumns = columns(handleDelete);
+
   const table = useReactTable({
     data: loads,
-    columns,
+    columns: currentColumns,
     state: {
       sorting,
       columnFilters,

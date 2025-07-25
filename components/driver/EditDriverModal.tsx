@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/select";
 import { Driver, Employee } from "@/type";
 import { Label } from "../ui/label";
+import { toast } from "sonner";
 
 export default function EditDriverModal({
   driver,
@@ -67,6 +68,7 @@ export default function EditDriverModal({
     });
     setOpen(false);
     onEdit();
+    toast.success(`Driver ${driver.employee?.name} updated successfully`);
   };
 
   return (

@@ -15,9 +15,9 @@ import { usePathname } from "next/navigation";
 
 const menuItems = [
   { title: "Dashboard", href: "/", icon: LayoutDashboard },
-  { title: "Load Board", href: "/load_board", icon: Package },
-  { title: "Tracking", href: "/tracking", icon: Route },
-  { title: "Lego", href: "/lego", icon: Handshake },
+  // { title: "Load Board", href: "/load_board", icon: Package },
+  // { title: "Tracking", href: "/tracking", icon: Route },
+  // { title: "Lego", href: "/lego", icon: Handshake },
   { title: "Driver", href: "/drivers", icon: Truck },
   { title: "Customers", href: "/customers", icon: Users },
   { title: "Employees", href: "/employees", icon: IdCardLanyard },

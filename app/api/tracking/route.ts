@@ -4,8 +4,8 @@ import Load from "@/models/load_board/Load";
 import "@/models/load_board/Routes"; // Ensure Routes model is imported to populate correctly
 import "@/models/load_board/Shipment"; // Ensure Shipment model is imported to populate correctly
 import "@/models/Driver"; // Ensure Driver model is imported to populate correctly
-import "@/models/Customers"; // Ensure Customer model is imported to populate correctly
-import "@/models/Employees"; // Ensure Employee model is imported to populate correctly
+import "@/models/customer/Customers"; // Ensure Customer model is imported to populate correctly
+import "@/models/employees/Employees"; // Ensure Employee model is imported to populate correctly
 
 export async function GET() {
   await dbConnect();
