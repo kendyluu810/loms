@@ -1,25 +1,24 @@
-import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import Load from "@/models/load_board/Load";
-import Route from "@/models/load_board/Routes";
-import Shipment from "@/models/load_board/Shipment";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
-  _: NextRequest,
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   await dbConnect();
-  const id = params.id;
-  const load =
-    (await Load.findOne({ loadNumber: id })) ||
-    (await Load.findById(id)
-      .populate("customer")
+  try {
+    const load = await Load.findById(params.id)
       .populate("route")
       .populate("shipment")
-      .populate("customer"));
-  if (!load)
-    return NextResponse.json({ message: "Load not found" }, { status: 404 });
-  return NextResponse.json(load);
+      .populate("customer");
+    if (!load) {
+      return NextResponse.json({ message: "Not found" }, { status: 404 });
+    }
+    return NextResponse.json(load);
+  } catch (error) {
+    return NextResponse.json({ message: "Error" }, { status: 500 });
+  }
 }
 
 export async function PUT(
@@ -28,54 +27,25 @@ export async function PUT(
 ) {
   await dbConnect();
   try {
-    const body = await req.json();
-    const { route, shipment } = body;
-
-    const id = params.id;
-    const load =
-      (await Load.findOne({ loadNumber: id })) || (await Load.findById(id));
-    if (!load)
-      return NextResponse.json({ message: "Load not found" }, { status: 404 });
-
-    if (route) {
-      await Route.findByIdAndUpdate(load.route, route);
-    }
-
-    if (shipment) {
-      await Shipment.findByIdAndUpdate(load.shipment, shipment);
-    }
-
-    await load.save();
-    return NextResponse.json({ message: "Load updated successfully" });
-  } catch (error: any) {
-    return NextResponse.json(
-      { message: "Failed to update", details: error.message },
-      { status: 500 }
-    );
+    const data = await req.json();
+    const updated = await Load.findByIdAndUpdate(params.id, data, {
+      new: true,
+    });
+    return NextResponse.json(updated);
+  } catch (error) {
+    return NextResponse.json({ message: "Update failed" }, { status: 400 });
   }
 }
 
 export async function DELETE(
-  _: NextRequest,
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   await dbConnect();
   try {
-    const id = params.id;
-    const load =
-      (await Load.findOne({ loadNumber: id })) || (await Load.findById(id));
-    if (!load)
-      return NextResponse.json({ message: "Load not found" }, { status: 404 });
-
-    await Route.findByIdAndDelete(load.route);
-    await Shipment.findByIdAndDelete(load.shipment);
-    await load.deleteOne();
-
-    return NextResponse.json({ message: "Load deleted successfully" });
-  } catch (error: any) {
-    return NextResponse.json(
-      { message: "Failed to delete", details: error.message },
-      { status: 500 }
-    );
+    await Load.findByIdAndDelete(params.id);
+    return NextResponse.json({ message: "Deleted successfully" });
+  } catch (error) {
+    return NextResponse.json({ message: "Delete failed" }, { status: 400 });
   }
 }

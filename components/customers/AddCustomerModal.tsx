@@ -6,13 +6,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -60,7 +53,7 @@ export default function AddCustomerModal({ onAdded }: { onAdded: () => void }) {
           Add Customer
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-[95vw] sm:max-w-[600px]">
+      <DialogContent className="max-w-5xl h-fit">
         <DialogHeader>
           <DialogTitle className="text-[#022f7e] font-bold text-2xl">
             Add Customer

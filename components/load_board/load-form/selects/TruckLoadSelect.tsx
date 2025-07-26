@@ -87,7 +87,7 @@ export function TruckLoadSelect({
       </Select>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
+        <DialogContent className="max-w-sm h-fit">
           <DialogHeader>
             <DialogTitle>Add new truck load type</DialogTitle>
           </DialogHeader>

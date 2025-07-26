@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Label } from "../ui/label";
-import { Customer, CustomerType } from "@/type";
+import { Customer } from "@/type";
 import { toast } from "sonner";
 import { SimpleCustomerTypeSelect } from "./SimpleCustomerTypeSelect";
 
@@ -43,7 +43,7 @@ export default function EditCustomerModal({
           Edit
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-[95vw] sm:max-w-[640px] md:max-w-[720px] lg:max-w-[800px]">
+      <DialogContent className="max-w-5xl h-fit">
         <DialogHeader>
           <DialogTitle className="text-[#022f7e] font-bold text-2xl">
             Edit Customer
@@ -123,9 +123,9 @@ export default function EditCustomerModal({
               Customer Type
             </Label>
             <SimpleCustomerTypeSelect
-              value={form.customerType}
+              value={form.customerType ?? ""}
               onChange={(value) =>
-                setForm({ ...form, customerType: value as CustomerType })
+                setForm({ ...form, customerType: value as string })
               }
             />
           </div>

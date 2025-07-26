@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Label } from "../ui/label";
 import { toast } from "sonner";
-import { PositionSelect } from "./PositionsSelect";
 import { SimplePositionSelect } from "./SimplePositionSelect";
 
 type Employee = {
@@ -50,7 +49,7 @@ export default function EditEmployeeModal({
           Edit
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-h-[90vh] overflow-y-auto px-4">
+      <DialogContent className="max-w-5xl h-fit">
         <DialogHeader>
           <DialogTitle className="text-[#022f7e] font-bold text-2xl">
             Edit Employee

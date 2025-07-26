@@ -1,12 +1,11 @@
-import { EllipsisVertical, SquarePen } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Label } from "../ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
+import { Label } from "../../ui/label";
 import { useLoadStore } from "@/store/useLoadStore";
 
 export default function Step4Review() {
-  const { route, shipment, owner } = useLoadStore();
+  const { route, shipment, customer } = useLoadStore();
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-7xl mx-auto mt-10">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mx-auto mt-10">
       <div className="space-y-10">
         {/* Route */}
         <Card className="border rounded-lg shadow-sm">
@@ -15,7 +14,7 @@ export default function Step4Review() {
               Route
             </CardTitle>
           </CardHeader>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-0 w-full">
             <CardContent className="space-y-3 p-4">
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">Origin</Label>
@@ -31,13 +30,21 @@ export default function Step4Review() {
                 <Label className="text-[#022f7e] font-semibold">
                   Shipper Schedule
                 </Label>
-                <span>{route.shipperSchedule}</span>
+                <span>
+                  {route.shipperSchedule
+                    ? `${route.shipperSchedule.from} - ${route.shipperSchedule.to}`
+                    : ""}
+                </span>
               </div>
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">
                   Pickup Date
                 </Label>
-                <span>{route.pickupDate}</span>
+                <span>
+                  {route.pickupDate
+                    ? route.pickupDate.toLocaleDateString()
+                    : ""}
+                </span>
               </div>
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">
@@ -64,13 +71,21 @@ export default function Step4Review() {
                 <Label className="text-[#022f7e] font-semibold">
                   Receiver Schedule
                 </Label>
-                <span>{route.receiverSchedule}</span>
+                <span>
+                  {route.receiveSchedule
+                    ? `${route.receiveSchedule.from} - ${route.receiveSchedule.to}`
+                    : ""}
+                </span>
               </div>
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">
                   Delivery Date
                 </Label>
-                <span>{route.deliveryDate}</span>
+                <span>
+                  {route.deliveryDate
+                    ? route.deliveryDate.toLocaleDateString()
+                    : ""}
+                </span>
               </div>
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">
@@ -104,7 +119,11 @@ export default function Step4Review() {
                 <Label className="text-[#022f7e] font-semibold">
                   Warehouse Schedule
                 </Label>
-                <span>{route.warehouseSchedule}</span>
+                <span>
+                  {route.warehouseSchedule
+                    ? `${route.warehouseSchedule.from} - ${route.warehouseSchedule.to}`
+                    : ""}
+                </span>
               </div>
             </CardContent>
             <CardContent className="space-y-3 p-4">
@@ -116,7 +135,11 @@ export default function Step4Review() {
               </div>
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">Date</Label>
-                <span>{route.deliveryDate}</span>
+                <span>
+                  {route.deliveryDate
+                    ? route.deliveryDate.toLocaleDateString()
+                    : ""}
+                </span>
               </div>
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">Time</Label>
@@ -158,7 +181,7 @@ export default function Step4Review() {
                 <Label className="text-[#022f7e] font-semibold">
                   Dangerous Goods
                 </Label>
-                <span>{shipment.dangerousGoods ? "Yes" : "No"}</span>
+                <span>{shipment.dangerousGood ? "Yes" : "No"}</span>
               </div>
             </CardContent>
             <CardContent className="space-y-3 p-4">
@@ -195,20 +218,22 @@ export default function Step4Review() {
           <div className="grid grid-cols-1 md:grid-cols-2">
             <CardContent className="space-y-3 p-4">
               <div className="flex justify-between">
-                <Label className="text-[#022f7e] font-semibold">Customer</Label>
-                <span>{owner.name}</span>
+                <Label className="text-[#022f7e] font-semibold">
+                  Company Name
+                </Label>
+                <span>{customer.companyName}</span>
               </div>
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">
                   Company Email
                 </Label>
-                <span>{owner.email}</span>
+                <span>{customer.companyEmail}</span>
               </div>
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">
                   Company Phone
                 </Label>
-                <span>{owner.phone}</span>
+                <span>{customer.companyPhone}</span>
               </div>
               {/* <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">
@@ -222,23 +247,23 @@ export default function Step4Review() {
                 <Label className="text-[#022f7e] font-semibold">
                   Contact Person
                 </Label>
-                <span>{owner.contactName}</span>
+                <span>{customer.contactPerson}</span>
               </div>
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">
                   Contact Email
                 </Label>
-                <span>{owner.contactEmail}</span>
+                <span>{customer.contactEmail}</span>
               </div>
               <div className="flex justify-between">
                 <Label className="text-[#022f7e] font-semibold">
                   Contact Phone
                 </Label>
-                <span>{owner.contactPhone}</span>
+                <span>{customer.contactPhone}</span>
               </div>
             </CardContent>
           </div>
-        </Card>{" "}
+        </Card>
       </div>
     </div>
   );

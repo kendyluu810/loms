@@ -1,6 +1,5 @@
 "use client";
 
-import { DataTable } from "../ui/data-table";
 import { Button } from "../ui/button";
 import {
   Select,
@@ -9,46 +8,41 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { useEffect, useState } from "react";
+import CreateLoadModal from "./load-form/CreateLoadModal";
+import { DataTable } from "../ui/data-table";
+import { columns } from "./columns";
+import { LoadRow } from "@/type";
+import { mapLoadToRow } from "@/lib/loadBoardUtils";
 
-import { useRouter } from "next/navigation";
-import { columns } from "../load_board/columns";
-import { useState } from "react";
-import { Load } from "@/type";
-
-type Props = {
-  data: Load[];
-  onDelete: (loadNumber: string) => void;
-};
-
-export default function LoadDataTable({ data, onDelete }: Props) {
-
+export default function LoadDataTable() {
   const [sortBy, setSortBy] = useState<"date" | "name" | "">("");
+  const [loadRows, setLoadRows] = useState<LoadRow[]>([]);
+  const [openModal, setOpenModal] = useState(false); // State mở modal
 
-  const router = useRouter();
+  useEffect(() => {
+    const fetchLoads = async () => {
+      try {
+        const res = await fetch("/api/load_board");
+        const { data } = await res.json();
+        const rows = data.map(mapLoadToRow);
+        setLoadRows(rows);
+      } catch (err) {
+        console.error("Failed to fetch loads", err);
+      }
+    };
 
-  const goToForm = () => {
-    router.push("./load_board/create-load");
-  };
+    fetchLoads();
+  }, []);
 
-  const sortedData = [...data].sort((a, b) => {
-    if (sortBy === "date") {
-      const parseDate = (dateStr?: string) => {
-        if (!dateStr) return new Date(0);
-        const [day, month, year] = dateStr.split("/");
-        return new Date(+`20${year}`, +month - 1, +day);
-      };
-
-      return (
-        parseDate(a.route?.pickupDate).getTime() -
-        parseDate(b.route?.pickupDate).getTime()
-      );
-    } else if (sortBy === "name") {
-      const nameA = a.customer?.name || "";
-      const nameB = b.customer?.name || "";
-      return nameA.localeCompare(nameB);
+  const handleDelete = async (id: string) => {
+    try {
+      await fetch(`/api/load_board/${id}`, { method: "DELETE" });
+      setLoadRows((prev) => prev.filter((l) => l.load_id !== id));
+    } catch (err) {
+      console.error("Delete failed", err);
     }
-    return 0; // No sorting
-  });
+  };
 
   return (
     <div className="flex flex-col space-y-6 bg-[#fafcff] p-6 rounded-lg shadow">
@@ -68,7 +62,7 @@ export default function LoadDataTable({ data, onDelete }: Props) {
           </Select>
           <Button
             type="button"
-            onClick={goToForm}
+            onClick={() => setOpenModal(true)}
             className="w-full sm:w-auto text-[#022f7e] bg-[#fafcff] hover:bg-[#022f7e] hover:text-[#fafcff]"
           >
             Create Load
@@ -77,8 +71,11 @@ export default function LoadDataTable({ data, onDelete }: Props) {
       </div>
 
       <div className="w-full overflow-x-auto">
-        {/* <DataTable columns={columns(onDelete)} data={sortedData} /> */}
+        <DataTable columns={columns(handleDelete)} data={loadRows} />
       </div>
+
+      {/* ✅ Modal */}
+      <CreateLoadModal open={openModal} onOpenChange={setOpenModal} />
     </div>
   );
 }

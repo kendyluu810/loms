@@ -26,8 +26,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Load } from "@/type";
-import { fetchLoads } from "@/utils/fetchLoads";
+import { mapLoadToRow } from "@/lib/loadBoardUtils";
+import { LoadRow } from "@/type";
 import {
   ColumnFiltersState,
   flexRender,
@@ -49,38 +49,56 @@ const LegoPage = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [loadId, setLoadId] = useState("");
 
-  const [loads, setLoads] = useState<Load[]>([]);
+  const [loadRows, setLoadRows] = useState<LoadRow[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const handleDelete = async (loadNumber: string) => {
+  const handleDelete = async (id: string) => {
     try {
-      await fetch(`/api/load_board/${loadNumber}`, { method: "DELETE" });
-      toast.success(`Load ${loadNumber} deleted successfully`);
-      await loadData(); // Refresh data after delete
-    } catch (error: any) {
-      toast.error(`Failed to delete load: ${error.message}`);
-    }
-  };
-
-  const loadData = async () => {
-    try {
-      const fetched = await fetchLoads();
-      setLoads(fetched);
-    } catch (err: any) {
-      toast.error(`Error fetching loads: ${err.message}`);
-    } finally {
-      setIsLoading(false);
+      await fetch(`/api/load_board/${id}`, { method: "DELETE" });
+      setLoadRows((prev) => prev.filter((l) => l.load_id !== id));
+    } catch (err) {
+      console.error("Delete failed", err);
     }
   };
 
   useEffect(() => {
-    loadData();
+    const fetchLoads = async () => {
+      try {
+        const res = await fetch("/api/load_board");
+        const { data } = await res.json();
+        const rows = data.map(mapLoadToRow);
+        setLoadRows(rows);
+      } catch (err) {
+        console.error("Failed to fetch loads", err);
+      }
+    };
+
+    fetchLoads();
   }, []);
+
+  const handleGlueLoad = async () => {
+    try {
+      const res = await fetch("/api/load_board/glue", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ loadId }),
+      });
+
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.message);
+
+      toast.success("Load glued successfully!");
+      setLoadRows((prev) => [mapLoadToRow(result.data), ...prev]);
+      setLoadId("");
+    } catch (error: any) {
+      toast.error(`Failed to glue load: ${error.message}`);
+    }
+  };
 
   const currentColumns = columns(handleDelete);
 
   const table = useReactTable({
-    data: loads,
+    data: loadRows,
     columns: currentColumns,
     state: {
       sorting,
@@ -117,7 +135,7 @@ const LegoPage = () => {
               setSearch(e.target.value);
               table.setColumnFilters([
                 {
-                  id: "id",
+                  id: "load_id",
                   value: e.target.value,
                 },
               ]);
@@ -135,7 +153,7 @@ const LegoPage = () => {
                 Glue Load
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-md">
+            <DialogContent className="sm:max-w-md h-fit">
               <DialogHeader>
                 <DialogTitle>Glue Load</DialogTitle>
                 <DialogDescription>
@@ -148,14 +166,7 @@ const LegoPage = () => {
                 onChange={(e) => setLoadId(e.target.value)}
               />
               <DialogFooter>
-                <Button
-                  onClick={() => {
-                    console.log("Glue Load:", loadId);
-                    setLoadId("");
-                  }}
-                >
-                  Confirm Glue
-                </Button>
+                <Button onClick={handleGlueLoad}>Confirm Glue</Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
@@ -167,7 +178,7 @@ const LegoPage = () => {
               setSort(value);
               setSorting([
                 {
-                  id: "id", // or any other column
+                  id: "load_id", // or any other column
                   desc: value === "latest",
                 },
               ]);

@@ -1,89 +1,74 @@
 import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
-
 import Load from "@/models/load_board/Load";
 import Route from "@/models/load_board/Routes";
 import Shipment from "@/models/load_board/Shipment";
-import "@/models/customer/Customers";
-
-function generateLoadNumber() {
-  const now = new Date();
-  const date = now.toISOString().slice(0, 10).replace(/-/g, "");
-  const random = Math.floor(Math.random() * 900 + 100);
-  return `LOAD-${date}-${random}`;
-}
+import Customer from "@/models/customer/Customers";
 
 export async function POST(req: NextRequest) {
-  await dbConnect();
-
   try {
+    await dbConnect();
     const body = await req.json();
 
-    const { loadNumber, customer, route, shipment, miles, stop, status } = body;
+    // Validate if route, shipment, and customer exist
+    const { route, shipment, customer: customerId,status } = body;
 
-    // Convert time strings (e.g., "14:00") into Date format using a base date
-    const parseTime = (timeStr: string): Date => {
-      return new Date(`2025-01-01T${timeStr}:00Z`);
-    };
+    const [foundRoute, foundShipment, foundCustomer] = await Promise.all([
+      Route.findById(route),
+      Shipment.findById(shipment),
+      Customer.findById(customerId),
+    ]);
 
-    // Create Route document
-    const newRoute = await Route.create({
-      ...route,
-      shipperSchedule: parseTime(route.shipperSchedule),
-      receiverSchedule: parseTime(route.receiverSchedule),
-      warehouseSchedule: parseTime(route.warehouseSchedule),
-      pickupTime: parseTime(route.pickupTime),
-      deliveryTime: parseTime(route.deliveryTime),
-      time: parseTime(route.time),
-      pickupDate: new Date(route.pickupDate),
-      deliveryDate: new Date(route.deliveryDate),
-      date: new Date(route.date),
-    });
-
-    // Create Shipment document
-    const newShipment = await Shipment.create({
-      ...shipment,
-    });
-
-    // Create Load with references to route and shipment
     const newLoad = await Load.create({
-      loadNumber: loadNumber || generateLoadNumber(),
-      customer, // must be valid ObjectId
-      route: newRoute._id,
-      shipment: newShipment._id,
-      miles,
-      stop,
-      status,
+      route: foundRoute._id,
+      shipment: foundShipment._id,
+      customer: foundCustomer._id,
+      status: status || "posted",
     });
-    console.log("Post: ",newLoad); // ✅ Kiểm tra dữ liệu
+
     return NextResponse.json(newLoad, { status: 201 });
   } catch (error: any) {
-    console.error("Create load error:", error);
+    console.error("Create Load error:", error);
     return NextResponse.json(
-      {
-        error: "Failed to create load",
-        details: error.message,
-      },
+      { message: "Failed to create Load", error: error.message },
       { status: 500 }
     );
   }
 }
 
 export async function GET(req: NextRequest) {
+  await dbConnect();
   try {
-    await dbConnect();
+    const { searchParams } = new URL(req.url);
+    const search = searchParams.get("search") || "";
+    const sort = searchParams.get("sort") || "createdAt";
+    const order = searchParams.get("order") === "asc" ? 1 : -1;
+    const status = searchParams.get("status");
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = parseInt(searchParams.get("limit") || "10");
 
-    const loads = await Load.find()
-      .populate({ path: "customer", select: "name contactName contactPhone" })
+    const filter: any = {};
+    if (search) {
+      filter.load_id = { $regex: search, $options: "i" };
+    }
+    if (status) {
+      filter.status = status;
+    }
+
+    const loads = await Load.find(filter)
       .populate("route")
       .populate("shipment")
-      .sort({ createdAt: -1 }); // sắp xếp mới nhất trước
-    console.log("Sample Load Data:", loads[0].customer); // ✅ Kiểm tra dữ liệu
-    return NextResponse.json(loads, { status: 200 });
-  } catch (error: any) {
-    console.error("Fetch load error:", error);
+      .populate("customer")
+      .sort({ [sort]: order })
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    const total = await Load.countDocuments(filter);
+
+    return NextResponse.json({ data: loads, total, page }, { status: 200 });
+  } catch (error) {
     return NextResponse.json(
-      { message: "Internal Server Error" },
+      { error: "Failed to fetch loads", details: error },
       { status: 500 }
     );
   }

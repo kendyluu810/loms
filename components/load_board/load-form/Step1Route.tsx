@@ -4,14 +4,14 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
+} from "../../ui/select";
+import { Label } from "../../ui/label";
+import { Input } from "../../ui/input";
 import { useState } from "react";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { Calendar } from "../ui/calendar";
+import { Calendar } from "../../ui/calendar";
 import countries from "world-countries";
 import { useLoadStore } from "@/store/useLoadStore";
 
@@ -27,7 +27,7 @@ export default function Step1Route() {
   const [date, setDate] = useState<Date | undefined>(undefined);
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6 mt-10 border p-6 rounded-lg shadow-md">
+    <div className="mx-auto space-y-5 mt-10 border p-6 rounded-lg shadow-md">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-xl font-semibold text-[#022f7e]">Route</h3>
       </div>
@@ -70,8 +70,8 @@ export default function Step1Route() {
             </Label>
             <Input
               placeholder="Enter pickup address"
-              value={route.addressPickup || ""}
-              onChange={(e) => updateRoute({ addressPickup: e.target.value })}
+              value={route.pickupAddress || ""}
+              onChange={(e) => updateRoute({ pickupAddress: e.target.value })}
             />
           </div>
 
@@ -79,11 +79,52 @@ export default function Step1Route() {
             <Label className="text-[#022f7e] font-semibold">
               Shipper Schedule
             </Label>
-            <Input
-              type="time"
-              value={route.shipperSchedule || ""}
-              onChange={(e) => updateRoute({ shipperSchedule: e.target.value })}
-            />
+            <div className="flex gap-2">
+              <Input
+                type="time"
+                value={
+                  typeof route.shipperSchedule === "object" &&
+                  route.shipperSchedule
+                    ? route.shipperSchedule.from
+                    : ""
+                }
+                onChange={(e) =>
+                  updateRoute({
+                    shipperSchedule: {
+                      from: e.target.value,
+                      to:
+                        typeof route.shipperSchedule === "object" &&
+                        route.shipperSchedule
+                          ? route.shipperSchedule.to
+                          : "",
+                    },
+                  })
+                }
+                placeholder="From"
+              />
+              <Input
+                type="time"
+                value={
+                  typeof route.shipperSchedule === "object" &&
+                  route.shipperSchedule
+                    ? route.shipperSchedule.to
+                    : ""
+                }
+                onChange={(e) =>
+                  updateRoute({
+                    shipperSchedule: {
+                      from:
+                        typeof route.shipperSchedule === "object" &&
+                        route.shipperSchedule
+                          ? route.shipperSchedule.from
+                          : "",
+                      to: e.target.value,
+                    },
+                  })
+                }
+                placeholder="To"
+              />
+            </div>
           </div>
 
           <div className="space-y-3">
@@ -109,7 +150,7 @@ export default function Step1Route() {
                   selected={pickupDate}
                   onSelect={(date) => {
                     setPickupDate(date);
-                    if (date) updateRoute({ pickupDate: date.toISOString() });
+                    if (date) updateRoute({ pickupDate: date });
                   }}
                   initialFocus
                 />
@@ -157,15 +198,15 @@ export default function Step1Route() {
               onChange={(e) => updateRoute({ deliveryNumber: e.target.value })}
             />
           </div>
-      
+
           <div className="space-y-3">
             <Label className="text-[#022f7e] font-semibold">
               Delivery Address
             </Label>
             <Input
               placeholder="Enter Address here"
-              value={route.addressDelivery || ""}
-              onChange={(e) => updateRoute({ addressDelivery: e.target.value })}
+              value={route.deliveryAddress || ""}
+              onChange={(e) => updateRoute({ deliveryAddress: e.target.value })}
             />
           </div>
 
@@ -173,13 +214,52 @@ export default function Step1Route() {
             <Label className="text-[#022f7e] font-semibold">
               Receive Schedule
             </Label>
-            <Input
-              type="time"
-              value={route.receiverSchedule || ""}
-              onChange={(e) =>
-                updateRoute({ receiverSchedule: e.target.value })
-              }
-            />
+            <div className="flex gap-2">
+              <Input
+                type="time"
+                value={
+                  typeof route.receiveSchedule === "object" &&
+                  route.receiveSchedule
+                    ? route.receiveSchedule.from
+                    : ""
+                }
+                onChange={(e) =>
+                  updateRoute({
+                    receiveSchedule: {
+                      from: e.target.value,
+                      to:
+                        typeof route.receiveSchedule === "object" &&
+                        route.receiveSchedule
+                          ? route.receiveSchedule.to
+                          : "",
+                    },
+                  })
+                }
+                placeholder="From"
+              />
+              <Input
+                type="time"
+                value={
+                  typeof route.receiveSchedule === "object" &&
+                  route.receiveSchedule
+                    ? route.receiveSchedule.to
+                    : ""
+                }
+                onChange={(e) =>
+                  updateRoute({
+                    receiveSchedule: {
+                      from:
+                        typeof route.receiveSchedule === "object" &&
+                        route.receiveSchedule
+                          ? route.receiveSchedule.from
+                          : "",
+                      to: e.target.value,
+                    },
+                  })
+                }
+                placeholder="To"
+              />
+            </div>
           </div>
 
           <div className="space-y-3">
@@ -207,7 +287,7 @@ export default function Step1Route() {
                   selected={deliveryDate}
                   onSelect={(date) => {
                     setDeliveryDate(date);
-                    if (date) updateRoute({ deliveryDate: date.toISOString() });
+                    if (date) updateRoute({ deliveryDate: date });
                   }}
                   initialFocus
                 />
@@ -227,7 +307,7 @@ export default function Step1Route() {
           </div>
         </div>
         {/* 3rd row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 border rounded-md p-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border rounded-md p-4">
           <div className="space-y-3">
             <Label className="text-[#022f7e] font-semibold">
               Additional Stop
@@ -264,13 +344,52 @@ export default function Step1Route() {
             <Label className="text-[#022f7e] font-semibold">
               Warehouse Schedule
             </Label>
-            <Input
-              type="time"
-              value={route.warehouseSchedule || ""}
-              onChange={(e) =>
-                updateRoute({ warehouseSchedule: e.target.value })
-              }
-            />
+            <div className="flex gap-2">
+              <Input
+                type="time"
+                value={
+                  typeof route.warehouseSchedule === "object" &&
+                  route.warehouseSchedule
+                    ? route.warehouseSchedule.from
+                    : ""
+                }
+                onChange={(e) =>
+                  updateRoute({
+                    warehouseSchedule: {
+                      from: e.target.value,
+                      to:
+                        typeof route.warehouseSchedule === "object" &&
+                        route.warehouseSchedule
+                          ? route.warehouseSchedule.to
+                          : "",
+                    },
+                  })
+                }
+                placeholder="From"
+              />
+              <Input
+                type="time"
+                value={
+                  typeof route.warehouseSchedule === "object" &&
+                  route.warehouseSchedule
+                    ? route.warehouseSchedule.to
+                    : ""
+                }
+                onChange={(e) =>
+                  updateRoute({
+                    warehouseSchedule: {
+                      from:
+                        typeof route.warehouseSchedule === "object" &&
+                        route.warehouseSchedule
+                          ? route.warehouseSchedule.from
+                          : "",
+                      to: e.target.value,
+                    },
+                  })
+                }
+                placeholder="To"
+              />
+            </div>
           </div>
 
           <div className="space-y-3">
@@ -292,7 +411,7 @@ export default function Step1Route() {
                   selected={date}
                   onSelect={(date) => {
                     setDate(date);
-                    if (date) updateRoute({ date: date.toISOString() });
+                    if (date) updateRoute({ date });
                   }}
                   initialFocus
                 />

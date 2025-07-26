@@ -1,67 +1,57 @@
-import mongoose, { Document } from "mongoose";
+import mongoose, { Document, Schema } from "mongoose";
+
+const TimeRangeSchema = new Schema(
+  {
+    from: { type: String },
+    to: { type: String },
+  },
+  { _id: false }
+);
 
 export interface IRoute extends Document {
   origin: string;
-  pickupNumber: string;
-  shipperSchedule: Date;
-  addressPickup: string;
-  addressDelivery: string;
-  pickupTime: Date;
-  pickupDate: Date;
+  pickupNumber?: string;
+  pickupAddress: string;
+  shipperSchedule?: { from: string; to: string };
+  pickupDate?: Date;
+  pickupTime?: string;
+
   destination: string;
-  deliveryNumber: string;
-  receiverSchedule: Date;
-  deliveryTime: Date;
-  deliveryDate: Date;
-  additionalStop: string;
-  warehouseNumber: string;
-  warehouseSchedule: Date;
-  date: Date;
-  time: Date;
-  timeline?: {
-    step: string;
-    location: string;
-    time: Date;
-    status: "done" | "in-progress" | "pending";
-  }[];
+  deliveryNumber?: string;
+  deliveryAddress: string;
+  receiverSchedule?: { from: string; to: string };
+  deliveryDate?: Date;
+  deliveryTime?: string;
+
+  additionalStop?: string;
+  warehouseNumber?: string;
+  warehouseSchedule?: { from: string; to: string };
+
+  date?: Date;
+  time?: string;
 }
 
-const RouteSchema = new mongoose.Schema(
-  {
-    origin: { type: String, required: true },
-    pickupNumber: { type: String, required: true },
-    shipperSchedule: { type: Date, required: true },
-    addressPickup: { type: String, required: true },
-    pickupTime: { type: Date, required: true },
-    pickupDate: { type: Date, required: true },
-    destination: { type: String, required: true },
-    deliveryNumber: { type: String, required: true },
-    receiverSchedule: { type: Date, required: true },
-    addressDelivery: { type: String, required: true },
-    deliveryTime: { type: Date, required: true },
-    deliveryDate: { type: Date, required: true },
-    additionalStop: { type: String },
-    warehouseNumber: { type: String, required: true },
-    warehouseSchedule: { type: Date, required: true },
-    date: { type: Date, required: true },
-    time: { type: Date, required: true },
-    timeline: [
-      {
-        step: { type: String, required: true },
-        location: { type: String, required: true },
-        time: { type: Date, required: true },
-        status: {
-          type: String,
-          enum: ["done", "in-progress", "pending"],
-          default: "pending",
-        },
-      },
-    ],
-  },
-  {
-    timestamps: true,
-  }
-);
+const RouteSchema = new Schema({
+  origin: { type: String, required: true },
+  pickupNumber: { type: String },
+  pickupAddress: { type: String, required: true },
+  shipperSchedule: { type: TimeRangeSchema },
+  pickupDate: { type: Date },
+  pickupTime: { type: String },
 
+  destination: { type: String, required: true },
+  deliveryNumber: { type: String },
+  deliveryAddress: { type: String, required: true },
+  receiverSchedule: { type: TimeRangeSchema },
+  deliveryDate: { type: Date },
+  deliveryTime: { type: String },
+
+  additionalStop: { type: String },
+  warehouseNumber: { type: String },
+  warehouseSchedule: { type: TimeRangeSchema },
+
+  date: { type: Date },
+  time: { type: String },
+});
 export default mongoose.models.Route ||
   mongoose.model<IRoute>("Route", RouteSchema);

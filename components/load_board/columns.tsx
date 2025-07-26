@@ -3,27 +3,12 @@ import { Checkbox } from "../ui/checkbox";
 import { Badge } from "../ui/badge";
 import { useRouter } from "next/navigation";
 import { ConfirmDeleteDialog } from "../dialogs/ConfirmDeleteDialog";
-export type Load = {
-  loadNumber: string;
-  age: string;
-  customer: string;
-  contact: string;
-  origin: string;
-  pickupTime: string;
-  pickupDate: string;
-  miles: string;
-  destination: string;
-  deliveryTime: string;
-  deliveryDate: string;
-  equipment: string;
-  weight: string;
-  rate: string;
-  rateUnit: string;
-  stop: string;
-  state: string;
-};
+import { LoadRow } from "@/type"; // đảm bảo import LoadRow
+import { formatDistanceToNow } from "date-fns";
 
-export const columns = (onDelete: (id: string) => void): ColumnDef<Load>[] => [
+export const columns = (
+  onDelete: (id: string) => void
+): ColumnDef<LoadRow>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -40,37 +25,50 @@ export const columns = (onDelete: (id: string) => void): ColumnDef<Load>[] => [
     ),
   },
   {
-    accessorKey: "loadNumber",
+    accessorKey: "load_id",
     header: "Load#",
     cell: ({ row }) => {
       const router = useRouter();
-      const load = row.original;
       return (
         <div
           className="text-blue-600 underline cursor-pointer"
-          onClick={() => router.push(`/load_board/${load.loadNumber}`)}
+          onClick={() => router.push(`/load_board/${row.getValue("load_id")}`)}
         >
-          {load.loadNumber}
+          {row.getValue("load_id")}
         </div>
       );
     },
   },
   {
-    accessorKey: "age",
-    header: "Age",
+    accessorKey: "createdAt",
+    header: "Created",
+    cell: ({ row }) => {
+      const createdAt = row.getValue("createdAt");
+      const timeAgo = formatDistanceToNow(
+        new Date(createdAt as string | number | Date),
+        {
+          addSuffix: true,
+        }
+      );
+      return <div className="text-sm text-gray-500">{timeAgo}</div>;
+    },
   },
   {
-    accessorKey: "customer",
-    header: "Customer",
-    cell: ({ row }) => (
+  accessorKey: "customer",
+  header: "Customer",
+  cell: ({ row }) => {
+    const { companyName, contactPerson, contactPhone } = row.original.customer;
+
+    return (
       <div>
-        <div className="text-blue-600 underline cursor-pointer">
-          {row.getValue("customer")}
+        <div className="font-medium">{companyName}</div>
+        <div className="text-sm text-muted-foreground">
+          ({contactPerson} - {contactPhone})
         </div>
-        <div className="text-sm">{row.original.contact}</div>
       </div>
-    ),
+    );
   },
+},
   {
     accessorKey: "origin",
     header: "Origin",
@@ -84,10 +82,6 @@ export const columns = (onDelete: (id: string) => void): ColumnDef<Load>[] => [
         <div className="text-sm">{row.original.pickupDate}</div>
       </div>
     ),
-  },
-  {
-    accessorKey: "miles",
-    header: "Miles",
   },
   {
     accessorKey: "destination",
@@ -132,7 +126,7 @@ export const columns = (onDelete: (id: string) => void): ColumnDef<Load>[] => [
     cell: ({ row }) => (
       <Badge
         variant={
-          row.getValue("status") === "Posted" ? "secondary" : "destructive"
+          row.getValue("status") === "posted" ? "secondary" : "destructive"
         }
       >
         {row.getValue("status")}
@@ -142,15 +136,11 @@ export const columns = (onDelete: (id: string) => void): ColumnDef<Load>[] => [
   {
     id: "actions",
     header: "Actions",
-    cell: ({ row }) => {
-      const load = row.original;
-
-      return (
-        <ConfirmDeleteDialog
-          onConfirm={() => onDelete(load.loadNumber)}
-          itemName={load.loadNumber}
-        />
-      );
-    },
+    cell: ({ row }) => (
+      <ConfirmDeleteDialog
+        onConfirm={() => onDelete(row.original.load_id)}
+        itemName={row.original.load_id}
+      />
+    ),
   },
 ];

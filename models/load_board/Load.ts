@@ -1,56 +1,54 @@
 import mongoose, { Document, Schema } from "mongoose";
-import "../customer/Customers"
-import "./Routes";
-import "./Shipment";
-import "./Shipment";
+import { IRoute } from "./Routes";
+import { IShipment } from "./Shipment";
+
+function generateLoadID() {
+  const now = new Date();
+  return `LOAD${now.getFullYear()}${(now.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}${now.getDate().toString().padStart(2, "0")}${Math.floor(
+    Math.random() * 10000
+  )
+    .toString()
+    .padStart(4, "0")}`;
+}
 
 export interface ILoad extends Document {
-  loadNumber: string;
+  load_id: string;
+  route: mongoose.Types.ObjectId | IRoute;
+  shipment: mongoose.Types.ObjectId | IShipment;
   customer: mongoose.Types.ObjectId;
-  route: mongoose.Types.ObjectId;
-  shipment: mongoose.Types.ObjectId;
-  driver: mongoose.Types.ObjectId;
-  createdAt: Date;
-  miles?: string;
-  stop?: string;
-  status?: string;
+  status: "posted" | "in_transit" | "delivered" | "cancelled";
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const LoadBoardSchema: Schema = new Schema(
   {
-    loadNumber: { type: String, required: true, unique: true },
-    customer: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Customer",
-      required: true,
+    load_id: {
+      type: String,
+      unique: true,
+      default: generateLoadID,
     },
-
-    // Route
     route: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Route",
       required: true,
     },
-
-    // shipment
     shipment: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Shipment",
       required: true,
     },
-    // driver
-    driver: {
+    customer: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Driver",
-      required: false, // nếu có thể null
+      ref: "Customer",
+      required: true,
     },
-    createdAt: { type: Date, default: Date.now },
-
-    miles: { type: String },
-    stop: { type: String },
     status: {
       type: String,
-      enum: ["Available", "Assigned", "In Transit", "Delivered"],
+      enum: ["posted", "in_transit", "delivered", "cancelled"],
+      default: "posted",
     },
   },
   { timestamps: true }

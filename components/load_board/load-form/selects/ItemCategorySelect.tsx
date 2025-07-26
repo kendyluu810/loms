@@ -20,50 +20,55 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { Trash2 } from "lucide-react";
 
-export function DangerTypeSelect({
+export function ItemCategorySelect({
   value,
   onChange,
 }: {
   value: string;
   onChange: (v: string) => void;
 }) {
-  const { dangerTypes, addDangerType, removeDangerType } = useShipmentOptions();
+  const { itemCategories, addItemCategory, removeItemCategory } =
+    useShipmentOptions();
   const [open, setOpen] = useState(false);
   const [newValue, setNewValue] = useState("");
 
   const handleAdd = async () => {
     const trimmed = newValue.trim();
-    if (!trimmed || dangerTypes.includes(trimmed)) return;
-    await addDangerType(trimmed);
+    if (!trimmed || itemCategories.includes(trimmed)) return;
+
+    await addItemCategory(trimmed);
     onChange(trimmed);
     setNewValue("");
     setOpen(false);
   };
 
+  
   const handleDelete = async (item: string, e: React.MouseEvent) => {
     e.stopPropagation(); // tránh làm trigger select
-    await removeDangerType(item);
+    await removeItemCategory(item);
     if (value === item) onChange(""); // reset nếu đang chọn item bị xóa
   };
+
   return (
     <>
       <Select value={value} onValueChange={onChange}>
         <SelectTrigger className="w-full">
-          <SelectValue placeholder="Select danger type" />
+          <SelectValue placeholder="Select item category" />
         </SelectTrigger>
         <SelectContent>
-          {dangerTypes.map((item) => (
+          {itemCategories.map((item) => (
             <div
               key={item}
               className="flex justify-between items-center px-2 py-1 hover:bg-muted"
             >
-              <SelectItem key={item} value={item}>
+              <SelectItem value={item} className="flex-1">
                 {item}
               </SelectItem>
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={(e) => handleDelete(item, e)}
+                className="ml-2 w-5 h-5"
+                onClick={(e) => {handleDelete(item, e)}}
               >
                 <Trash2 className="w-4 h-4 text-red-500" />
               </Button>
@@ -83,14 +88,14 @@ export function DangerTypeSelect({
       </Select>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
+        <DialogContent className="max-w-sm h-fit">
           <DialogHeader>
-            <DialogTitle>Add new danger type</DialogTitle>
+            <DialogTitle>Add new item category</DialogTitle>
           </DialogHeader>
           <Input
             value={newValue}
             onChange={(e) => setNewValue(e.target.value)}
-            placeholder="Enter danger type"
+            placeholder="Enter new category"
           />
           <DialogFooter>
             <Button onClick={handleAdd}>Add</Button>

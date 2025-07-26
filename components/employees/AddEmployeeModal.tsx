@@ -41,7 +41,7 @@ export default function AddEmployeeModal({ onAdded }: { onAdded: () => void }) {
           Add Employee
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-h-[90vh] overflow-y-auto px-4">
+      <DialogContent className="max-w-5xl h-fit">
         <DialogHeader>
           <DialogTitle className="text-[#022f7e] font-bold text-2xl">
             Add Employee

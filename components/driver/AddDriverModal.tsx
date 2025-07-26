@@ -84,7 +84,7 @@ export default function AddDriverModal({ onAdded }: { onAdded: () => void }) {
           Add Driver
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-h-[90vh] overflow-y-auto px-4">
+      <DialogContent className="max-w-5xl h-fit overflow-y-auto px-4">
         <DialogHeader>
           <DialogTitle className="text-[#022f7e] font-bold text-2xl">
             Add New Driver

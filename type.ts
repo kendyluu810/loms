@@ -1,98 +1,114 @@
-export type CustomerType =
-  | "Shipper"
-  | "Receiver"
-  | "Broker"
-  | "Partner"
-  | "Other";
-
+// Customer
 export interface Customer {
   _id?: string;
   cusID?: string;
   companyName: string;
-  customerType: CustomerType;
+  customerType?: string;
   companyEmail: string;
   companyPhone: string;
   contactPerson?: string;
   contactPhone?: string;
   contactEmail?: string;
 }
-
-export type RouteTimelineStep = {
-  step: string;
-  location: string;
-  time: string; // ISO date
-  status: "done" | "in-progress" | "pending";
-};
-
-export type Route = {
-  _id: string;
-  origin: string;
-  pickupNumber: string;
-  shipperSchedule: string;
-  addressPickup: string;
-  pickupTime: string;
-  pickupDate: string;
-  destination: string;
-  deliveryNumber: string;
-  receiverSchedule: string;
-  addressDelivery: string;
-  deliveryTime: string;
-  deliveryDate: string;
-  additionalStop: string;
-  warehouseNumber: string;
-  warehouseSchedule: string;
-  date: string;
-  time: string;
-  timeline?: RouteTimelineStep[];
-};
-
-export type Shipment = {
-  _id: string;
-  itemCategory: string;
-  weight: number;
-  length: number;
-  rate: number;
-  rateUnit: "USD" | "EUR" | "VND";
-  equipmentType: string;
-  truckLoad: string;
-  dangerousGoods: boolean;
-  dangerType: string;
-};
-
-export type Employee = {
+// Employee
+export interface Employee {
   _id: string;
   Eid: string;
   name: string;
   phone: string;
   email: string;
-  position: string;
-};
-
-export type Driver = {
+  position: "Manager" | "Staff" | "Driver";
+}
+// Driver
+export interface Driver {
   _id: string;
-  employee: Employee;
+  employee: Employee; // populated from ObjectId
   driverlicense: string;
   licensetype: string;
-  licenseexpiry: string;
+  licenseexpiry: string; // ISO string from backend (e.g. "2025-12-31T00:00:00.000Z")
   vehicleid: string;
   vehicleType: string;
   vehicleNumber: string;
-};
-
-export type Load = {
-  _id: string;
-  loadNumber: string;
-  customer: {
-    name: string;
-    contactName: string;
-    contactPhone: string;
+}
+// Routes
+export interface Route {
+  _id?: string;
+  origin: string;
+  pickupNumber: string;
+  pickupAddress: string;
+  shipperSchedule?: {
+    from: string;
+    to: string;
   };
-  route?: Route;
-  shipment?: Shipment;
-  driver?: Driver;
+  pickupDate?: string;
+  pickupTime?: string;
+
+  destination: string;
+  deliveryNumber: string;
+  deliveryAddress: string;
+  receiverSchedule?: {
+    from: string;
+    to: string;
+  };
+  deliveryDate?: string;
+  deliveryTime?: string;
+
+  additionalStop?: string;
+  warehouseNumber?: string;
+  warehouseSchedule?: {
+    from: string;
+    to: string;
+  };
+
+  date?: string;
+  time?: string;
+}
+// Shipment
+export interface Shipment {
+  _id?: string;
+  itemCategory: string;
+  weight: number;
+  length: number;
+  rate: number;
+  rateUnit: "USD" | "VND" | "Other";
+  equipmentType: string;
+  truckLoad: string;
+  dangerousGood: boolean;
+  dangerType?: string;
+}
+// LoadBoard
+export type LoadStatus = "posted" | "in_transit" | "delivered" | "cancelled";
+
+export interface LoadBoard {
+  _id?: string;
+  load_id: string;
+  route: Route | string;
+  shipment: Shipment | string;
+  customer: Customer | string;
+  status: LoadStatus;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface LoadRow {
+  load_id: string; // load_id
+  customer: {
+    companyName: string; // customer.companyName
+    contactPerson?: string; // customer.contactPerson
+    contactPhone?: string; // customer.contactPhone
+  };
+  origin: string; // route.origin
+  pickupTime: string; // route.pickupTime
+  pickupDate?: string;
   miles?: string;
-  stop?: string;
-  status?: "Posted" | "Assigned" | "In Transit" | "Delivered";
+  destination: string;
+  deliveryTime: string;
+  deliveryDate?: string;
+  equipment?: string; // shipment.equipmentType
+  weight?: string; // shipment.weight
+  rate?: string; // shipment.rate
+  rateUnit?: string;
+  stop?: string; // route.additionalStop
+  status: string; // LoadStatus
   createdAt: string;
-  updatedAt: string;
-};
+}

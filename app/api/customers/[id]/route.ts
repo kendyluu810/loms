@@ -2,6 +2,26 @@ import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import Customers from "@/models/customer/Customers";
 
+//Get by id
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  await dbConnect();
+  try {
+    const customer = await Customers.findById(params.id);
+    if (!customer) {
+      return NextResponse.json(
+        { message: "Customer not found" },
+        { status: 404 }
+      );
+    }
+    return NextResponse.json(customer);
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
+}
+
 // Update Customer
 export async function PUT(
   req: NextRequest,

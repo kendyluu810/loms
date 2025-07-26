@@ -14,7 +14,6 @@ function generateCusID() {
 export interface ICustomer extends Document {
   cusID: string;
   companyName: string;
-  customerType: "shipper" | "receiver" | "broker" | "partner" | "other";
   companyEmail: string;
   companyPhone: string;
   contactPerson?: string;
@@ -32,8 +31,6 @@ const CustomerSchema: Schema = new Schema(
     companyName: { type: String, required: true },
     customerType: {
       type: String,
-      enum: ["Shipper", "Receiver", "Broker", "Partner", "Other"],
-      default: "Shipper",
     },
     companyEmail: { type: String, required: true },
     companyPhone: { type: String, required: true },

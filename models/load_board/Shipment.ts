@@ -5,28 +5,28 @@ export interface IShipment extends Document {
   weight: number;
   length: number;
   rate: number;
-  rateUnit: string;
+  rateUnit: "USD" | "VND" | "Other"; // Enum for rate unit
   equipmentType: string;
   truckLoad: string;
-  dangerousGoods: boolean;
-  dangerType: string;
+  dangerousGood?: boolean; // Optional field, default is false
+  dangerType?: string; // Optional field
 }
 
 const ShipmentSchema = new mongoose.Schema(
   {
-    itemCategory: { type: String, required: true },
-    weight: { type: Number, required: true },
-    length: { type: Number, required: true },
-    rate: { type: Number, required: true },
+    itemCategory: String,
+    weight: Number,
+    length: Number,
+    rate: Number,
     rateUnit: {
       type: String,
-      required: true,
-      enum: ["USD", "EUR", "VND"], // Example units, adjust as necessary
+      enum: ["USD", "VND", "Other"],
+      default: "USD",
     },
-    equipmentType: { type: String, required: true },
-    truckLoad: { type: String, required: true },
-    dangerousGoods: { type: Boolean, default: false },
-    dangerType: { type: String, default: "" },
+    equipmentType: String,
+    truckLoad: String,
+    dangerousGood: { type: Boolean, default: false },
+    dangerType: String,
   },
   { timestamps: true }
 );

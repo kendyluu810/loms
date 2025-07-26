@@ -1,40 +1,49 @@
-import { Customer, Route, Shipment } from "@/type";
+import { LoadFormValues } from "@/lib/schemas/fullSchema";
 import { create } from "zustand";
 
-interface LoadState {
-  route: Partial<Route>;
-  shipment: Partial<Shipment>;
-  owner: Partial<Customer>;
-  updateRoute: (route: Partial<Route>) => void;
-  updateShipment: (shipment: Partial<Shipment>) => void;
-  updateOwner: (owner: Partial<Customer>) => void;
+type WithId<T> = Partial<T> & { _id?: string };
+
+type PartialLoadFormValues = {
+  route: WithId<LoadFormValues["route"]>;
+  shipment: WithId<LoadFormValues["shipment"]>;
+  customer: WithId<LoadFormValues["customer"]>;
+};
+
+interface LoadState extends PartialLoadFormValues {
+  updateRoute: (route: WithId<LoadFormValues["route"]>) => void;
+  updateShipment: (shipment: WithId<LoadFormValues["shipment"]>) => void;
+  updateCustomer: (customer: WithId<LoadFormValues["customer"]>) => void;
   reset: () => void;
 }
 
-export const useLoadStore = create<LoadState>((set, get) => ({
+export const useLoadStore = create<LoadState>((set) => ({
   route: {},
   shipment: {},
-  owner: {
-    customerType: "Shipper", // Default value
+  customer: {
+    customerType: "Shipper", // default
   },
+
   updateRoute: (route) =>
     set((state) => ({
       route: { ...state.route, ...route },
     })),
+
   updateShipment: (shipment) =>
     set((state) => ({
       shipment: { ...state.shipment, ...shipment },
     })),
-  updateOwner: (owner) =>
+
+  updateCustomer: (customer) =>
     set((state) => ({
-      owner: { ...state.owner, ...owner },
+      customer: { ...state.customer, ...customer },
     })),
+
   reset: () =>
     set({
       route: {},
       shipment: {},
-      owner: {
-        customerType: "Shipper", // Reset to default value
+      customer: {
+        customerType: "Shipper", // reset default
       },
     }),
 }));

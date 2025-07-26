@@ -1,19 +1,19 @@
 import { Weight } from "lucide-react";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
+import { Input } from "../../ui/input";
+import { Label } from "../../ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
-import { Button } from "../ui/button";
+} from "../../ui/select";
+import { Button } from "../../ui/button";
 import { useLoadStore } from "@/store/useLoadStore";
-import { ItemCategorySelect } from "./ItemCategorySelect";
-import { EquipmentTypeSelect } from "./EquipmentTypeSelect";
-import { TruckLoadSelect } from "./TruckLoadSelect";
-import { DangerTypeSelect } from "./DangerTypeSelect";
+import { ItemCategorySelect } from "../load-form/selects/ItemCategorySelect";
+import { EquipmentTypeSelect } from "../load-form/selects/EquipmentTypeSelect";
+import { TruckLoadSelect } from "../load-form/selects/TruckLoadSelect";
+import { DangerTypeSelect } from "../load-form/selects/DangerTypeSelect";
 import { useShipmentOptions } from "@/store/useShipmentOptions";
 import { useEffect } from "react";
 
@@ -92,15 +92,17 @@ export default function Step2Shipments() {
               />
               <Select
                 value={shipment.rateUnit}
-                onValueChange={(value) => updateShipment({ rateUnit: value as "USD" | "EUR" | "VND" })}
+                onValueChange={(value) =>
+                  updateShipment({ rateUnit: value as "USD" | "VND" | "Other" })
+                }
               >
                 <SelectTrigger className="w-fit">
                   <SelectValue defaultValue="USD " placeholder="USD" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="USD">USD</SelectItem>
-                  <SelectItem value="EUR">EUR</SelectItem>
                   <SelectItem value="VND">VND</SelectItem>
+                  <SelectItem value="Other">Other</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -134,9 +136,9 @@ export default function Step2Shipments() {
               Dangerous Goods
             </Label>
             <Select
-              value={shipment.dangerousGoods ? "yes" : "no"}
+              value={shipment.dangerousGood ? "yes" : "no"}
               onValueChange={(value) =>
-                updateShipment({ dangerousGoods: value === "yes" })
+                updateShipment({ dangerousGood: value === "yes" })
               }
             >
               <SelectTrigger className="w-full">
