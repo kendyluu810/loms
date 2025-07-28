@@ -14,13 +14,13 @@ import { Button } from "../ui/button";
 import countries from "world-countries";
 import { Customer } from "@/type";
 import { useLoadStore } from "@/store/useLoadStore";
+import { CountrySelect } from "./countriesSelect";
 
-const countryOptions = countries.map((country) => ({
-  value: country.cca2,
-  label: country.name.common,
-}));
-
-export default function EnterInformation_Form() {
+export default function EnterInformation_Form({
+  onApplyFilters,
+}: {
+  onApplyFilters: (filters: Record<string, string>) => void;
+}) {
   const [formData, setFormData] = useState({
     origin: "",
     stateFrom: "",
@@ -32,7 +32,7 @@ export default function EnterInformation_Form() {
     destination: "",
     stateTo: "",
     radiusTo: "",
-    age: "",
+    createdAt: "",
     pickupTo: "",
     searchTerm: "",
     customer: "",
@@ -44,40 +44,23 @@ export default function EnterInformation_Form() {
     ratePerMile: "",
   });
 
-  const handleChange = (name: string, value: string) => {
-    setFormData({ ...formData, [name]: value });
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData);
+    const filters = Object.fromEntries(
+      Object.entries(formData).filter(([_, v]) => v.trim() !== "")
+    );
+    onApplyFilters(filters);
   };
 
   const handleReset = () => {
-    setFormData({
-      origin: "",
-      stateFrom: "",
-      radiusFrom: "",
-      additionalStop: "",
-      pickupFrom: "",
-      equipmentType: "",
-      rate: "",
-      destination: "",
-      stateTo: "",
-      radiusTo: "",
-      age: "",
-      pickupTo: "",
-      searchTerm: "",
-      customer: "",
-      customerType: "",
-      contactPerson: "",
-      minWeight: "",
-      maxWeight: "",
-      minMiles: "",
-      ratePerMile: "",
-    });
+    const resetData = Object.fromEntries(
+      Object.entries(formData).map(([key]) => [key, ""])
+    );
+    setFormData(resetData as typeof formData);
+    onApplyFilters({});
   };
-  const { owner, updateOwner } = useLoadStore();
+
+  const { customer, updateCustomer } = useLoadStore();
 
   const [customers, setCustomers] = useState<Customer[]>([]);
 
@@ -93,16 +76,18 @@ export default function EnterInformation_Form() {
   const handleSelectCustomer = (_id: string) => {
     const selected = customers.find((c) => c._id === _id);
     if (selected) {
-      updateOwner({
+      updateCustomer({
         _id: selected._id,
-        Cid: selected.Cid,
-        name: selected.name,
-        email: selected.email,
-        phone: selected.phone,
-        contactName: selected.contactName,
+        cusID: selected.cusID,
+        companyName: selected.companyName,
+        companyEmail: selected.companyEmail,
+        companyPhone: selected.companyPhone,
+        contactPerson: selected.contactPerson,
         contactEmail: selected.contactEmail,
         contactPhone: selected.contactPhone,
+        customerType: selected.customerType || "Shipper", // default to Shipper if not set
       });
+      setFormData((prev) => ({ ...prev, customer: selected._id ?? "" }));
     }
   };
   return (
@@ -128,35 +113,21 @@ export default function EnterInformation_Form() {
         {/* Origin */}
         <div className="flex flex-col space-y-2">
           <Label>Origin</Label>
-          <Select onValueChange={(v) => handleChange("origin", v)}>
-            <SelectTrigger className="w-full border border-[#d6e5ff] ">
-              <SelectValue placeholder="Select Origin" />
-            </SelectTrigger>
-            <SelectContent>
-              {countryOptions.map((country) => (
-                <SelectItem key={country.value} value={country.label}>
-                  {country.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <CountrySelect
+            value={formData.origin}
+            onChange={(v) => setFormData((prev) => ({ ...prev, origin: v }))}
+            placeholder="Select Origin"
+          />
         </div>
 
         {/* State From */}
         <div className="flex flex-col space-y-2">
           <Label>State From</Label>
-          <Select onValueChange={(v) => handleChange("stateFrom", v)}>
-            <SelectTrigger className="w-full border border-[#d6e5ff] ">
-              <SelectValue placeholder="Select State" />
-            </SelectTrigger>
-            <SelectContent>
-              {countryOptions.map((country) => (
-                <SelectItem key={country.value} value={country.label}>
-                  {country.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <CountrySelect
+            value={formData.stateFrom}
+            onChange={(v) => setFormData((prev) => ({ ...prev, stateFrom: v }))}
+            placeholder="Select State"
+          />
         </div>
 
         {/* Radius From */}
@@ -165,25 +136,22 @@ export default function EnterInformation_Form() {
           <Input
             type="number"
             value={formData.radiusFrom}
-            onChange={(e) => handleChange("radiusFrom", e.target.value)}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, radiusFrom: e.target.value }))
+            }
           />
         </div>
 
         {/* Additional Stop */}
         <div className="flex flex-col space-y-2">
           <Label>Additional Stop</Label>
-          <Select onValueChange={(v) => handleChange("additionalStop", v)}>
-            <SelectTrigger className="w-full border border-[#d6e5ff] ">
-              <SelectValue placeholder="Select Stop" />
-            </SelectTrigger>
-            <SelectContent>
-              {countryOptions.map((country) => (
-                <SelectItem key={country.value} value={country.label}>
-                  {country.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <CountrySelect
+            value={formData.additionalStop}
+            onChange={(v) =>
+              setFormData((prev) => ({ ...prev, additionalStop: v }))
+            }
+            placeholder="Select Stop"
+          />
         </div>
 
         {/* Pickup From */}
@@ -192,7 +160,9 @@ export default function EnterInformation_Form() {
           <Input
             type="date"
             value={formData.pickupFrom}
-            onChange={(e) => handleChange("pickupFrom", e.target.value)}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, pickupFrom: e.target.value }))
+            }
           />
         </div>
 
@@ -201,7 +171,12 @@ export default function EnterInformation_Form() {
           <Label>Equipment Types</Label>
           <Input
             value={formData.equipmentType}
-            onChange={(e) => handleChange("equipmentType", e.target.value)}
+            onChange={(e) =>
+              setFormData((prev) => ({
+                ...prev,
+                equipmentType: e.target.value,
+              }))
+            }
           />
         </div>
 
@@ -211,42 +186,32 @@ export default function EnterInformation_Form() {
           <Input
             type="number"
             value={formData.rate}
-            onChange={(e) => handleChange("rate", e.target.value)}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, rate: e.target.value }))
+            }
           />
         </div>
 
         {/* Destination */}
         <div className="flex flex-col space-y-2">
           <Label>Destination</Label>
-          <Select onValueChange={(v) => handleChange("destination", v)}>
-            <SelectTrigger className="w-full border border-[#d6e5ff] ">
-              <SelectValue placeholder="Select Destination" />
-            </SelectTrigger>
-            <SelectContent>
-              {countryOptions.map((country) => (
-                <SelectItem key={country.value} value={country.label}>
-                  {country.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <CountrySelect
+            value={formData.destination}
+            onChange={(v) =>
+              setFormData((prev) => ({ ...prev, destination: v }))
+            }
+            placeholder="Select Destination"
+          />
         </div>
 
         {/* State To */}
         <div className="flex flex-col space-y-2">
           <Label>State To</Label>
-          <Select onValueChange={(v) => handleChange("stateTo", v)}>
-            <SelectTrigger className="w-full border border-[#d6e5ff] ">
-              <SelectValue placeholder="Select State" />
-            </SelectTrigger>
-            <SelectContent>
-              {countryOptions.map((country) => (
-                <SelectItem key={country.value} value={country.label}>
-                  {country.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <CountrySelect
+            value={formData.stateTo}
+            onChange={(v) => setFormData((prev) => ({ ...prev, stateTo: v }))}
+            placeholder="Select State"
+          />
         </div>
 
         {/* Radius To */}
@@ -255,17 +220,21 @@ export default function EnterInformation_Form() {
           <Input
             type="number"
             value={formData.radiusTo}
-            onChange={(e) => handleChange("radiusTo", e.target.value)}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, radiusTo: e.target.value }))
+            }
           />
         </div>
 
-        {/* Age */}
+        {/* createdAt */}
         <div className="flex flex-col space-y-2">
-          <Label>Age (Hour)</Label>
+          <Label>createdAt</Label>
           <Input
             type="number"
-            value={formData.age}
-            onChange={(e) => handleChange("age", e.target.value)}
+            value={formData.createdAt}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, createdAt: e.target.value }))
+            }
           />
         </div>
 
@@ -275,7 +244,9 @@ export default function EnterInformation_Form() {
           <Input
             type="date"
             value={formData.pickupTo}
-            onChange={(e) => handleChange("pickupTo", e.target.value)}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, pickupTo: e.target.value }))
+            }
           />
         </div>
 
@@ -284,55 +255,57 @@ export default function EnterInformation_Form() {
           <Label>Search Term</Label>
           <Input
             value={formData.searchTerm}
-            onChange={(e) => handleChange("searchTerm", e.target.value)}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, searchTerm: e.target.value }))
+            }
           />
         </div>
 
         {/* Customer */}
         <div className="flex flex-col space-y-2">
-          <Label>Customer</Label>
+          <Label>Company Name</Label>
           <Select onValueChange={(id) => handleSelectCustomer(id)}>
             <SelectTrigger className="w-full border border-[#d6e5ff] ">
-              <SelectValue placeholder="Select Customer" />
+              <SelectValue placeholder="Select Company" />
             </SelectTrigger>
             <SelectContent>
               {customers.map((customer) => (
                 <SelectItem key={customer._id ?? ""} value={customer._id ?? ""}>
-                  {customer.name}
+                  {customer.companyName}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
         </div>
 
-        {/* Customer Phone */}
+        {/* Contact Person */}
         <div className="flex flex-col space-y-2">
-          <Label>Customer Phone</Label>
+          <Label>Contact Person</Label>
           <Select onValueChange={(id) => handleSelectCustomer(id)}>
             <SelectTrigger className="w-full border border-[#d6e5ff] ">
-              <SelectValue placeholder="Select Customer Phone" />
+              <SelectValue placeholder="Select Contact Person" />
             </SelectTrigger>
             <SelectContent>
               {customers.map((customer) => (
                 <SelectItem key={customer._id ?? ""} value={customer._id ?? ""}>
-                  {customer.phone}
+                  {customer.contactPerson}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
         </div>
 
-        {/* Contact Email */}
+        {/*Customer Type */}
         <div className="flex flex-col space-y-2">
-          <Label>Contact Email</Label>
+          <Label>Customer Type</Label>
           <Select onValueChange={(id) => handleSelectCustomer(id)}>
             <SelectTrigger className="w-full border border-[#d6e5ff] ">
-              <SelectValue placeholder="Select Customer Email" />
+              <SelectValue placeholder="Select Customer Type" />
             </SelectTrigger>
             <SelectContent>
               {customers.map((customer) => (
                 <SelectItem key={customer._id ?? ""} value={customer._id ?? ""}>
-                  {customer.email}
+                  {customer.customerType}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -345,7 +318,9 @@ export default function EnterInformation_Form() {
           <Input
             type="number"
             value={formData.minWeight}
-            onChange={(e) => handleChange("minWeight", e.target.value)}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, minWeight: e.target.value }))
+            }
           />
         </div>
 
@@ -355,7 +330,9 @@ export default function EnterInformation_Form() {
           <Input
             type="number"
             value={formData.maxWeight}
-            onChange={(e) => handleChange("maxWeight", e.target.value)}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, maxWeight: e.target.value }))
+            }
           />
         </div>
 
@@ -365,7 +342,9 @@ export default function EnterInformation_Form() {
           <Input
             type="number"
             value={formData.minMiles}
-            onChange={(e) => handleChange("minMiles", e.target.value)}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, minMiles: e.target.value }))
+            }
           />
         </div>
 
@@ -376,7 +355,9 @@ export default function EnterInformation_Form() {
             type="number"
             step="0.01"
             value={formData.ratePerMile}
-            onChange={(e) => handleChange("ratePerMile", e.target.value)}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, ratePerMile: e.target.value }))
+            }
           />
         </div>
       </div>

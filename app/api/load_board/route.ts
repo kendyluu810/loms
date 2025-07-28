@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
 
     // Validate if route, shipment, and customer exist
-    const { route, shipment, customer: customerId,status } = body;
+    const { route, shipment, customer: customerId, status } = body;
 
     const [foundRoute, foundShipment, foundCustomer] = await Promise.all([
       Route.findById(route),
@@ -55,7 +55,30 @@ export async function GET(req: NextRequest) {
       filter.status = status;
     }
 
-    const loads = await Load.find(filter)
+    const filters: any = {};
+
+    const origin = searchParams.get("origin");
+    const destination = searchParams.get("destination");
+    const additionalStops = searchParams.get("additionalStops");
+    const stateFrom = searchParams.get("stateFrom");
+    const stateTo = searchParams.get("stateTo");
+    const stop = searchParams.get("stop");
+    const equipmentType = searchParams.get("equipmentType");
+    const radius = searchParams.get("radius");
+    const pickupFrom = searchParams.get("pickupFrom");
+    const pickupTo = searchParams.get("pickupTo");
+    const rate = searchParams.get("rate");
+    const ratePerMile = searchParams.get("ratePerMile");
+    const customerType = searchParams.get("customerType");
+    const companyName = searchParams.get("companyName");
+    const contactPerson = searchParams.get("contactPerson");
+    const minWeight = searchParams.get("minWeight");
+    const maxWeight = searchParams.get("maxWeight");
+    const miles = searchParams.get("miles");
+    const minMiles = searchParams.get("minMiles");
+    const createdAt = searchParams.get("createdAt");
+
+    const loads = await Load.find()
       .populate("route")
       .populate("shipment")
       .populate("customer")
@@ -65,7 +88,44 @@ export async function GET(req: NextRequest) {
 
     const total = await Load.countDocuments(filter);
 
-    return NextResponse.json({ data: loads, total, page }, { status: 200 });
+    const filtered = loads.filter((load: any) => {
+      const { route, shipment, customer } = load;
+      if (origin && route?.origin !== origin) return false;
+      if (destination && route?.destination !== destination) return false;
+      if (additionalStops && route?.additionalStops !== additionalStops)
+        return false;
+      if (stateFrom && route?.stateFrom !== stateFrom) return false;
+      if (stateTo && route?.stateTo !== stateTo) return false;
+      if (stop && route?.stop !== stop) return false;
+      if (equipmentType && shipment?.equipmentType !== equipmentType)
+        return false;
+      if (radius && route?.radius !== radius) return false;
+      // pickupDate filters
+      const pickupDate = new Date(route?.pickupDate);
+      if (pickupFrom && pickupDate < new Date(pickupFrom)) return false;
+      if (pickupTo && pickupDate > new Date(pickupTo)) return false;
+      //Miles filters
+      const mile = parseFloat(route?.miles || "0");
+      if (minMiles && mile < parseFloat(minMiles)) return false;
+      if (miles && mile > parseFloat(miles)) return false;
+      if (rate && shipment?.rate < parseFloat(rate)) return false;
+      if (ratePerMile && shipment?.ratePerMile < parseFloat(ratePerMile))
+        return false;
+      if (customerType && customer?.customerType !== customerType) return false;
+      if (companyName && customer?.companyName !== companyName) return false;
+      if (contactPerson && customer?.contactPerson !== contactPerson)
+        return false;
+      const weight = parseFloat(shipment?.weight || "0");
+      if (minWeight && weight < parseFloat(minWeight)) return false;
+      if (maxWeight && weight > parseFloat(maxWeight)) return false;
+      if (createdAt) {
+        const createdDate = new Date(load.createdAt);
+        if (createdDate.toISOString().split("T")[0] !== createdAt) return false;
+      }
+      return true;
+    });
+
+    return NextResponse.json({ data: filtered, total, page }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to fetch loads", details: error },

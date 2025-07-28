@@ -3,14 +3,15 @@ import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import GeneralTabs from "@/components/load_board/Tabs/GeneralTab";
+import GeneralTabs from "@/components/load_board/load-form/Tabs/GeneralTab";
 import { useParams, useRouter } from "next/navigation";
-import { Load } from "@/type";
+import { LoadRow } from "@/type";
+import InvoiceTabs from "@/components/load_board/load-form/Tabs/InvoiceTabs";
 
 export default function LoadDetails() {
   const router = useRouter();
-  const { id} = useParams();
-  const [load, setLoad] = useState<Load | null>(null);
+  const { id } = useParams();
+  const [load, setLoad] = useState<LoadRow | null>(null);
   const [activeTab, setActiveTab] = useState<"general" | "invoice" | "history">(
     "general"
   );
@@ -39,13 +40,13 @@ export default function LoadDetails() {
         <div className="space-y-4 p-4">
           <h2 className="font-bold text-2xl text-[#022f7e]">Open Load</h2>
           <div className="flex items-center space-x-4">
-            <h2 className="text-[#022f7e] font-medium">#{load.loadNumber}</h2>
+            <h2 className="text-[#022f7e] font-medium">#{load.load_id}</h2>
             <div className="flex items-center gap-2">
               <Badge className="border border-green-500 bg-white text-[#022f7e]">
-                {load.state}
+                {load.status}
               </Badge>
               <Badge className="border border-blue-500 bg-white text-[#022f7e]">
-                {load.equipment}
+                {load.equipment || "N/A"}
               </Badge>
             </div>
           </div>
@@ -53,11 +54,11 @@ export default function LoadDetails() {
         {/* right */}
         <div className="space-y-4 p-4">
           <h2 className="text-[#022f7e] text-2xl font-medium">
-            {load.customer}
+            {load.customer.companyName}
           </h2>
           <div className="flex items-center space-x-2">
-            <h2 className="text-[#022f7e]">{load.contact}</h2>
-            <h2 className="text-[#022f7e]">{load.phone}</h2>
+            <h2 className="text-[#022f7e]">{load.customer.contactPerson}</h2>
+            <h2 className="text-[#022f7e]">{load.customer.contactPhone}</h2>
           </div>
         </div>
       </div>
@@ -98,14 +99,14 @@ export default function LoadDetails() {
           <Button variant="outline" onClick={() => router.push("/load_board")}>
             Cancel
           </Button>
-          <Button>Booking</Button>
+          <Button onClick={() => router.push(`/load_board/${id}/booking`)} className="bg-blue-600 text-white hover:bg-blue-700">
+            Booking
+          </Button>
         </div>
       </div>
       <div className="p-4">
-        {activeTab === "general" && <GeneralTabs />}
-        {activeTab === "invoice" && (
-          <div className="text-center text-gray-500">Invoice details here</div>
-        )}
+        {activeTab === "general" && <GeneralTabs load={load} />}
+        {activeTab === "invoice" && <InvoiceTabs />}
         {activeTab === "history" && (
           <div className="text-center text-gray-500">History details here</div>
         )}

@@ -15,7 +15,13 @@ import { columns } from "./columns";
 import { LoadRow } from "@/type";
 import { mapLoadToRow } from "@/lib/loadBoardUtils";
 
-export default function LoadDataTable() {
+export default function LoadDataTable({
+  data,
+  setData,
+}: {
+  data: LoadRow[];
+  setData: React.Dispatch<React.SetStateAction<LoadRow[]>>;
+}) {
   const [sortBy, setSortBy] = useState<"date" | "name" | "">("");
   const [loadRows, setLoadRows] = useState<LoadRow[]>([]);
   const [openModal, setOpenModal] = useState(false); // State mở modal

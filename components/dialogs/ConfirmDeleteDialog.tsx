@@ -41,7 +41,7 @@ export const ConfirmDeleteDialog = ({
           Delete
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-w-md h-fit">
         <DialogHeader>
           <DialogTitle>Are you sure?</DialogTitle>
           <DialogDescription>
