@@ -149,7 +149,7 @@ export default function GeneralTabs({ load }: { load: LoadRow }) {
       <Card className="border rounded-lg shadow-sm h-fitx">
         <CardHeader className="border-b flex flex-row items-center justify-between">
           <CardTitle className="text-lg font-semibold text-[#022f7e]">
-            Route
+            Customer
           </CardTitle>
           <div className="flex items-center space-x-2 ">
             <Pencil className="text-[#022f7e] cursor-pointer w-4 h-4" />
@@ -160,7 +160,7 @@ export default function GeneralTabs({ load }: { load: LoadRow }) {
           <div className="grid grid-cols-2 gap-6 text-sm">
             <div>
               <div className="font-semibold text-gray-600">
-                Contact Customer
+                Company Contact
               </div>
               <div className="text-blue-700">@lgexport</div>
               <div>+1 210 896 2166</div>
