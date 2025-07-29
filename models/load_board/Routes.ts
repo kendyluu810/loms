@@ -1,4 +1,5 @@
 import mongoose, { Document, Schema } from "mongoose";
+import { IRoutePoint, RoutePointSchema } from "./RoutePoint";
 
 const TimeRangeSchema = new Schema(
   {
@@ -29,6 +30,10 @@ export interface IRoute extends Document {
 
   date?: Date;
   time?: string;
+
+  pickupPoint?: IRoutePoint;
+  deliveryPoint?: IRoutePoint;
+  stopPoints?: IRoutePoint[];
 }
 
 const RouteSchema = new Schema({
@@ -52,6 +57,10 @@ const RouteSchema = new Schema({
 
   date: { type: Date },
   time: { type: String },
+
+  pickupPoint: RoutePointSchema,
+  deliveryPoint: RoutePointSchema,
+  stopPoints: [RoutePointSchema],
 });
 export default mongoose.models.Route ||
   mongoose.model<IRoute>("Route", RouteSchema);

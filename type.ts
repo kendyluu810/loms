@@ -112,3 +112,40 @@ export interface LoadRow {
   status: string; // LoadStatus
   createdAt: string;
 }
+
+export interface RoutePoint {
+  _id?: string;
+  type: "pickup" | "stop" | "delivery";
+  timezone: string;
+  localTime: string;
+  early: string;
+  late: string;
+  date: string;
+  locationName: string;
+  cityState: string;
+  address: string;
+  status: string;
+  eta: string;
+}
+
+export interface ShipmentPoint {
+  _id?: string;
+  type: "pickup" | "stop" | "delivery";
+  code: string;
+  locationName?: string;
+  eta?: string;
+  status?: string; // e.g., 'pending', 'in transit', 'delivered'
+  timezone?: string;
+  remarks?: string;
+}
+
+export interface ExtendedLoadRow extends LoadRow {
+  route: { points: RoutePoint[] };
+  shipment: {
+    weight: number;
+    pallets: number;
+    rate: number;
+    points: ShipmentPoint[];
+  };
+  customer: Customer;
+}

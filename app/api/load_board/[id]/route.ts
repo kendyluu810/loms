@@ -7,33 +7,39 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
-  const id = params.id;
+  const { id } = await context.params;
   await dbConnect();
+
   try {
     const load = await Load.findOne({ load_id: id })
       .populate("route")
       .populate("shipment")
       .populate("customer");
+
     if (!load) {
       return NextResponse.json({ message: "Not found" }, { status: 404 });
     }
+
     return NextResponse.json(load);
   } catch (error) {
+    console.error("GET Error:", error);
     return NextResponse.json({ message: "Error" }, { status: 500 });
   }
 }
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   await dbConnect();
+  const { id } = await context.params;
+
   try {
     const data = await req.json();
 
-    const load = await Load.findById(params.id);
+    const load = await Load.findOne({ load_id: id });
 
     if (!load) {
       return NextResponse.json({ message: "Load not found" }, { status: 404 });
@@ -75,7 +81,7 @@ export async function PUT(
     await load.set(data).save();
 
     // Populate lại trước khi trả về
-    const updatedLoad = await Load.findById(params.id)
+    const updatedLoad = await Load.findOne({ load_id: id })
       .populate("route")
       .populate("shipment")
       .populate("customer");
@@ -89,11 +95,12 @@ export async function PUT(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await dbConnect();
+  const { id } = await params;
   try {
-    await Load.findByIdAndDelete(params.id);
+    await Load.findOneAndDelete({ load_id: id });
     return NextResponse.json({ message: "Deleted successfully" });
   } catch (error) {
     console.error("DELETE Error:", error);

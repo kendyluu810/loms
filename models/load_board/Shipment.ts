@@ -1,4 +1,5 @@
 import mongoose, { Document } from "mongoose";
+import { IShipmentPoint, ShipmentPointSchema } from "./ShipmentPoint";
 
 export interface IShipment extends Document {
   itemCategory: string;
@@ -10,6 +11,9 @@ export interface IShipment extends Document {
   truckLoad: string;
   dangerousGood?: boolean; // Optional field, default is false
   dangerType?: string; // Optional field
+  pickupPoint?: IShipmentPoint;
+  stopPoint?: IShipmentPoint;
+  deliveryPoint?: IShipmentPoint;
 }
 
 const ShipmentSchema = new mongoose.Schema(
@@ -27,6 +31,10 @@ const ShipmentSchema = new mongoose.Schema(
     truckLoad: String,
     dangerousGood: { type: Boolean, default: false },
     dangerType: String,
+
+    pickupPoint: ShipmentPointSchema,
+    stopPoint: ShipmentPointSchema,
+    deliveryPoint: ShipmentPointSchema,
   },
   { timestamps: true }
 );

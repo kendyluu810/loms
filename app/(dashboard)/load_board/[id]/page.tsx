@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import GeneralTabs from "@/components/load_board/load-form/Tabs/GeneralTab";
 import { useParams, useRouter } from "next/navigation";
-import { LoadRow } from "@/type";
+import { ExtendedLoadRow, LoadRow } from "@/type";
 import InvoiceTabs from "@/components/load_board/load-form/Tabs/InvoiceTabs";
 
 export default function LoadDetails() {
@@ -99,13 +99,18 @@ export default function LoadDetails() {
           <Button variant="outline" onClick={() => router.push("/load_board")}>
             Cancel
           </Button>
-          <Button onClick={() => router.push(`/load_board/${id}/booking`)} className="bg-blue-600 text-white hover:bg-blue-700">
+          <Button
+            onClick={() => router.push(`/load_board/${id}/booking`)}
+            className="bg-blue-600 text-white hover:bg-blue-700"
+          >
             Booking
           </Button>
         </div>
       </div>
       <div className="p-4">
-        {activeTab === "general" && <GeneralTabs load={load} />}
+        {activeTab === "general" && (
+          <GeneralTabs load={load as ExtendedLoadRow} />
+        )}
         {activeTab === "invoice" && <InvoiceTabs />}
         {activeTab === "history" && (
           <div className="text-center text-gray-500">History details here</div>

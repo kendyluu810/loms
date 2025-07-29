@@ -218,19 +218,19 @@ export default function Step1Route() {
               <Input
                 type="time"
                 value={
-                  typeof route.receiveSchedule === "object" &&
-                  route.receiveSchedule
-                    ? route.receiveSchedule.from
+                  typeof route.receiverSchedule === "object" &&
+                  route.receiverSchedule
+                    ? route.receiverSchedule.from
                     : ""
                 }
                 onChange={(e) =>
                   updateRoute({
-                    receiveSchedule: {
+                    receiverSchedule: {
                       from: e.target.value,
                       to:
-                        typeof route.receiveSchedule === "object" &&
-                        route.receiveSchedule
-                          ? route.receiveSchedule.to
+                        typeof route.receiverSchedule === "object" &&
+                        route.receiverSchedule
+                          ? route.receiverSchedule.to
                           : "",
                     },
                   })
@@ -240,18 +240,18 @@ export default function Step1Route() {
               <Input
                 type="time"
                 value={
-                  typeof route.receiveSchedule === "object" &&
-                  route.receiveSchedule
-                    ? route.receiveSchedule.to
+                  typeof route.receiverSchedule === "object" &&
+                  route.receiverSchedule
+                    ? route.receiverSchedule.to
                     : ""
                 }
                 onChange={(e) =>
                   updateRoute({
-                    receiveSchedule: {
+                    receiverSchedule: {
                       from:
-                        typeof route.receiveSchedule === "object" &&
-                        route.receiveSchedule
-                          ? route.receiveSchedule.from
+                        typeof route.receiverSchedule === "object" &&
+                        route.receiverSchedule
+                          ? route.receiverSchedule.from
                           : "",
                       to: e.target.value,
                     },

@@ -72,8 +72,8 @@ export default function Step4Review() {
                   Receiver Schedule
                 </Label>
                 <span>
-                  {route.receiveSchedule
-                    ? `${route.receiveSchedule.from} - ${route.receiveSchedule.to}`
+                  {route.receiverSchedule
+                    ? `${route.receiverSchedule.from} - ${route.receiverSchedule.to}`
                     : ""}
                 </span>
               </div>
@@ -182,6 +182,12 @@ export default function Step4Review() {
                   Dangerous Goods
                 </Label>
                 <span>{shipment.dangerousGood ? "Yes" : "No"}</span>
+              </div>
+              <div className="flex justify-between">
+                <Label className="text-[#022f7e] font-semibold">
+                  Danger Type
+                </Label>
+                <span>{shipment.dangerType}</span>
               </div>
             </CardContent>
             <CardContent className="space-y-3 p-4">
