@@ -14,9 +14,6 @@ export async function PUT(req: NextRequest, { params }: any) {
       driverlicense: body.driverlicense,
       licensetype: body.licensetype,
       licenseexpiry: body.licenseexpiry,
-      vehicleid: body.vehicleid,
-      vehicleType: body.vehicleType,
-      vehicleNumber: body.vehicleNumber,
     },
     { new: true }
   ).populate("employee");

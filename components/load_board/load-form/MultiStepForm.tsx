@@ -24,7 +24,7 @@ export default function MultiStepForm({ onClose }: Props) {
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
 
-  const { route, shipment, customer, reset } = useLoadStore();
+  const { route, shipment, customer, carrier, reset } = useLoadStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async () => {
@@ -54,6 +54,7 @@ export default function MultiStepForm({ onClose }: Props) {
           route: newRoute._id,
           shipment: newShipment._id,
           customer: customer._id,
+          carrier: carrier._id,
           status: "posted",
         }),
       });

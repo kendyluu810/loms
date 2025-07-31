@@ -12,24 +12,42 @@ export async function GET(req: NextRequest) {
   const sort = searchParams.get("sort") || "createdAt";
   const order = searchParams.get("order") === "desc" ? -1 : 1;
 
-  const query = {
-    $or: [
-      { driverlicense: { $regex: search, $options: "i" } },
-      { licensetype: { $regex: search, $options: "i" } },
-      { vehicleType: { $regex: search, $options: "i" } },
-      { vehicleNumber: { $regex: search, $options: "i" } },
-    ],
-  };
+    const pipeline: any[] = [
+    {
+      $lookup: {
+        from: "employees", // collection name
+        localField: "employee",
+        foreignField: "_id",
+        as: "employee",
+      },
+    },
+    { $unwind: "$employee" },
+    {
+      $match: {
+        $or: [
+          { driverlicense: { $regex: search, $options: "i" } },
+          { licensetype: { $regex: search, $options: "i" } },
+          { "employee.name": { $regex: search, $options: "i" } },
+        ],
+      },
+    },
+    {
+      $sort: { [sort]: order },
+    },
+    { $skip: (page - 1) * pageSize },
+    { $limit: pageSize },
+  ];
 
-  const drivers = await Driver.find(query)
-    .populate("employee")
-    .sort({ [sort]: order })
-    .skip((page - 1) * pageSize)
-    .limit(pageSize);
+  const drivers = await Driver.aggregate(pipeline);
+  const total = await Driver.aggregate([
+    ...pipeline.slice(0, 3),
+    { $count: "total" },
+  ]);
 
-  const total = await Driver.countDocuments(query);
-
-  return NextResponse.json({ drivers, total });
+  return NextResponse.json({
+    drivers,
+    total: total[0]?.total || 0,
+  });
 }
 
 export async function POST(req: NextRequest) {
@@ -40,9 +58,6 @@ export async function POST(req: NextRequest) {
     driverlicense: body.driverlicense,
     licensetype: body.licensetype,
     licenseexpiry: body.licenseexpiry,
-    vehicleid: body.vehicleid,
-    vehicleType: body.vehicleType,
-    vehicleNumber: body.vehicleNumber,
   });
   await driver.save();
 

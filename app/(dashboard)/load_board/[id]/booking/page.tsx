@@ -1,13 +1,13 @@
 "use client";
 import BookingForm from "@/components/load_board/load-form/BookingForm";
 import { Badge } from "@/components/ui/badge";
-import { LoadRow } from "@/type";
+import { ExtendedLoadRow, LoadRow } from "@/type";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function BookingPage() {
   const { id } = useParams();
-  const [load, setLoad] = useState<LoadRow | null>(null);
+  const [load, setLoad] = useState<ExtendedLoadRow | null>(null);
 
   useEffect(() => {
     const fetchLoad = async () => {
@@ -35,7 +35,7 @@ export default function BookingPage() {
                 {load?.status}
               </Badge>
               <Badge className="border border-blue-500 bg-white text-[#022f7e]">
-                {load?.equipment || "N/A"}
+                {load?.shipment.equipmentType || "N/A"}
               </Badge>
             </div>
           </div>

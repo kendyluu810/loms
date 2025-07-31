@@ -29,9 +29,6 @@ export default function AddDriverModal({ onAdded }: { onAdded: () => void }) {
     driverlicense: "",
     licensetype: "",
     licenseexpiry: "",
-    vehicleid: "",
-    vehicleType: "",
-    vehicleNumber: "",
   });
 
   useEffect(() => {
@@ -70,9 +67,6 @@ export default function AddDriverModal({ onAdded }: { onAdded: () => void }) {
       driverlicense: "",
       licensetype: "",
       licenseexpiry: "",
-      vehicleid: "",
-      vehicleType: "",
-      vehicleNumber: "",
     });
     onAdded();
     toast.success("Driver added successfully");
@@ -138,35 +132,6 @@ export default function AddDriverModal({ onAdded }: { onAdded: () => void }) {
               name="licenseexpiry"
               placeholder="License Expiry"
               value={form.licenseexpiry}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="space-x-4 space-y-4">
-            <Label className="text-[#022f7e] font-semibold">Vehicle ID</Label>
-            <Input
-              name="vehicleid"
-              placeholder="Vehicle ID"
-              value={form.vehicleid}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="space-x-4 space-y-4">
-            <Label className="text-[#022f7e] font-semibold">Vehicle Type</Label>
-            <Input
-              name="vehicleType"
-              placeholder="Vehicle Type"
-              value={form.vehicleType}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="space-x-4 space-y-4">
-            <Label className="text-[#022f7e] font-semibold">
-              Vehicle Number
-            </Label>
-            <Input
-              name="vehicleNumber"
-              placeholder="Vehicle Number"
-              value={form.vehicleNumber}
               onChange={handleChange}
             />
           </div>

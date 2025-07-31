@@ -18,7 +18,9 @@ export interface ILoad extends Document {
   route: mongoose.Types.ObjectId | IRoute;
   shipment: mongoose.Types.ObjectId | IShipment;
   customer: mongoose.Types.ObjectId;
+  carrier?: mongoose.Types.ObjectId;
   status: "posted" | "in_transit" | "delivered" | "cancelled";
+  invoice: mongoose.Types.ObjectId;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -45,10 +47,18 @@ const LoadBoardSchema: Schema = new Schema(
       ref: "Customer",
       required: true,
     },
+    carrier: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Carrier",
+    },
     status: {
       type: String,
       enum: ["posted", "in_transit", "delivered", "cancelled"],
       default: "posted",
+    },
+    invoice: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Invoice",
     },
   },
   { timestamps: true }

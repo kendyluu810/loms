@@ -4,6 +4,7 @@ import Load from "@/models/load_board/Load";
 import Route from "@/models/load_board/Routes";
 import Shipment from "@/models/load_board/Shipment";
 import Customer from "@/models/customer/Customers";
+import Carrier from "@/models/Carrier";
 
 export async function POST(req: NextRequest) {
   try {
@@ -11,18 +12,108 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
 
     // Validate if route, shipment, and customer exist
-    const { route, shipment, customer: customerId, status } = body;
+    const { route, shipment, customer: customerId, carrier, status } = body;
 
-    const [foundRoute, foundShipment, foundCustomer] = await Promise.all([
-      Route.findById(route),
-      Shipment.findById(shipment),
-      Customer.findById(customerId),
-    ]);
+    const [foundRoute, foundShipment, foundCustomer, foundCarrier] =
+      await Promise.all([
+        Route.findById(route),
+        Shipment.findById(shipment),
+        Customer.findById(customerId),
+        Carrier.findById(carrier),
+      ]);
+
+    if (!foundRoute || !foundShipment || !foundCustomer || !foundCarrier) {
+      return NextResponse.json(
+        { message: "Route, Shipment, Customer, or Carrier not found" },
+        { status: 404 }
+      );
+    }
+
+    if (
+      !foundRoute.pickupPoint ||
+      !foundRoute.deliveryPoint ||
+      !foundRoute.stopPoints
+    ) {
+      foundRoute.pickupPoint = {
+        type: "pickup",
+        locationName: foundRoute.origin || "",
+        cityState: foundRoute.origin || "",
+        address: foundRoute.pickupAddress || "",
+        timezone: "UTC+7",
+        date: foundRoute.pickupDate?.toISOString() || "",
+        localTime: foundRoute.pickupTime || "",
+        early: foundRoute.shipperSchedule?.from || "",
+        late: foundRoute.shipperSchedule?.to || "",
+        status: "pending",
+        eta: "",
+      };
+
+      foundRoute.deliveryPoint = {
+        type: "delivery",
+        locationName: foundRoute.destination || "",
+        cityState: foundRoute.destination || "",
+        address: foundRoute.deliveryAddress || "",
+        timezone: "UTC+7",
+        date: foundRoute.deliveryDate?.toISOString() || "",
+        localTime: foundRoute.deliveryTime || "",
+        early: foundRoute.receiverSchedule?.from || "",
+        late: foundRoute.receiverSchedule?.to || "",
+        status: "pending",
+        eta: "",
+      };
+
+      foundRoute.stopPoints = {
+        type: "stop",
+        locationName: foundRoute.additionalStop || "",
+        cityState: "",
+        address: "N/A",
+        timezone: "UTC+7",
+        date: foundRoute.date || "",
+        localTime: foundRoute.time || "",
+        status: "planned",
+        eta: "",
+      };
+
+      await foundRoute.save();
+    }
+
+    if (
+      !foundShipment.pickupPoint ||
+      !foundShipment.deliveryPoint ||
+      !foundShipment.stopPoint
+    ) {
+      foundShipment.pickupPoint = {
+        type: "pickup",
+        code: foundShipment.pickupNumber || "AUTO",
+        locationName: foundRoute.origin || "",
+        eta: foundRoute.pickupDate?.toISOString() || "",
+        status: "pending",
+      };
+
+      foundShipment.deliveryPoint = {
+        type: "delivery",
+        code: foundShipment.deliveryNumber || "AUTO",
+        locationName: foundRoute.destination || "",
+        eta: foundRoute.deliveryDate?.toISOString() || "",
+        status: "pending",
+      };
+
+      foundShipment.stopPoint = {
+        type: "stop",
+        code: foundShipment.warehouseNumber || "AUTO",
+        locationName: foundRoute.additionalStop || "",
+        eta: foundRoute.date?.toISOString() || "",
+        status: "planned",
+      };
+
+      await foundShipment.save();
+    }
 
     const newLoad = await Load.create({
       route: foundRoute._id,
       shipment: foundShipment._id,
       customer: foundCustomer._id,
+      carrier: foundCarrier._id,
       status: status || "posted",
     });
 

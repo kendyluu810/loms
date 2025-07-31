@@ -6,6 +6,22 @@ const timeRangeSchema = z.object({
 });
 
 // -------------------------
+// RoutePoint Schema
+// -------------------------
+export const routePointSchema = z.object({
+  type: z.enum(["pickup", "stop", "delivery"]),
+  timezone: z.string().optional(),
+  localTime: z.string().optional(),
+  early: z.string().optional(),
+  late: z.string().optional(),
+  date: z.string().optional(),
+  locationName: z.string().optional(),
+  cityState: z.string().optional(),
+  address: z.string().optional(),
+  status: z.string().optional(),
+  eta: z.string().optional(),
+});
+// -------------------------
 // Route Schema
 // -------------------------
 export const routeSchema = z.object({
@@ -19,7 +35,7 @@ export const routeSchema = z.object({
   destination: z.string().min(1),
   deliveryNumber: z.string().optional(),
   deliveryAddress: z.string().min(1),
-  receiveSchedule: timeRangeSchema.optional(),
+  receiverSchedule: timeRangeSchema.optional(),
   deliveryDate: z.coerce.date(),
   deliveryTime: z.string().optional(),
 
@@ -29,6 +45,23 @@ export const routeSchema = z.object({
 
   date: z.coerce.date().optional(),
   time: z.string().optional(),
+
+  pickupPoint: routePointSchema.optional(),
+  deliveryPoint: routePointSchema.optional(),
+  stopPoints: z.array(routePointSchema).optional(),
+});
+
+// -------------------------
+// ShipmentPoint Schema
+// -------------------------
+export const shipmentPointSchema = z.object({
+  type: z.enum(["pickup", "stop", "delivery"]),
+  code: z.string(),
+  locationName: z.string().optional(),
+  eta: z.string().optional(),
+  status: z.string().optional(), // e.g., 'pending', 'in transit', 'delivered'
+  timezone: z.string().optional(),
+  remarks: z.string().optional(),
 });
 
 // -------------------------
@@ -45,6 +78,10 @@ export const shipmentSchema = z.object({
   truckLoad: z.string().min(1),
   dangerousGood: z.boolean().optional(),
   dangerType: z.string().optional(),
+
+  pickupPoint: shipmentPointSchema.optional(),
+  stopPoint: shipmentPointSchema.optional(),
+  deliveryPoint: shipmentPointSchema.optional(),
 });
 
 // -------------------------
@@ -62,12 +99,29 @@ export const customerSchema = z.object({
 });
 
 // -------------------------
+// Carrier Schema
+// -------------------------
+export const carrierSchema = z.object({
+  _id: z.string().optional(),
+  name: z.string().min(1),
+  mcNumber: z.string().optional(),
+  dotNumber: z.string().optional(),
+  email: z.string().email().optional(),
+  phone: z.string().min(5).optional(),
+  address: z.string().optional(),
+  customer: z.string().optional(), // Reference to Customer ID
+  equipmentTypes: z.array(z.string()).optional(),
+  active: z.boolean().default(true),
+});
+
+// -------------------------
 // Tổng Schema Form
 // -------------------------
 export const loadFormSchema = z.object({
   route: routeSchema,
   shipment: shipmentSchema,
   customer: customerSchema,
+  carrier: carrierSchema,
 });
 
 // -------------------------

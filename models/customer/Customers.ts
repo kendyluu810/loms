@@ -19,6 +19,7 @@ export interface ICustomer extends Document {
   contactPerson?: string;
   contactPhone?: string;
   contactEmail?: string;
+  customerType?: string; // Optional field for customer type
 }
 
 const CustomerSchema: Schema = new Schema(

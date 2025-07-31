@@ -36,31 +36,36 @@ export interface IRoute extends Document {
   stopPoints?: IRoutePoint[];
 }
 
-const RouteSchema = new Schema({
-  origin: { type: String, required: true },
-  pickupNumber: { type: String },
-  pickupAddress: { type: String, required: true },
-  shipperSchedule: { type: TimeRangeSchema },
-  pickupDate: { type: Date },
-  pickupTime: { type: String },
+const RouteSchema = new Schema(
+  {
+    origin: { type: String, required: true },
+    pickupNumber: { type: String },
+    pickupAddress: { type: String, required: true },
+    shipperSchedule: { type: TimeRangeSchema },
+    pickupDate: { type: Date },
+    pickupTime: { type: String },
 
-  destination: { type: String, required: true },
-  deliveryNumber: { type: String },
-  deliveryAddress: { type: String, required: true },
-  receiverSchedule: { type: TimeRangeSchema },
-  deliveryDate: { type: Date },
-  deliveryTime: { type: String },
+    destination: { type: String, required: true },
+    deliveryNumber: { type: String },
+    deliveryAddress: { type: String, required: true },
+    receiverSchedule: { type: TimeRangeSchema },
+    deliveryDate: { type: Date },
+    deliveryTime: { type: String },
 
-  additionalStop: { type: String },
-  warehouseNumber: { type: String },
-  warehouseSchedule: { type: TimeRangeSchema },
+    additionalStop: { type: String },
+    warehouseNumber: { type: String },
+    warehouseSchedule: { type: TimeRangeSchema },
 
-  date: { type: Date },
-  time: { type: String },
+    date: { type: Date },
+    time: { type: String },
 
-  pickupPoint: RoutePointSchema,
-  deliveryPoint: RoutePointSchema,
-  stopPoints: [RoutePointSchema],
-});
+    createdAt: { type: Date, default: Date.now },
+
+    pickupPoint: RoutePointSchema,
+    deliveryPoint: RoutePointSchema,
+    stopPoints: [RoutePointSchema],
+  },
+  { timestamps: true }
+);
 export default mongoose.models.Route ||
   mongoose.model<IRoute>("Route", RouteSchema);

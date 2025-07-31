@@ -64,13 +64,6 @@ const DriverPage = () => {
               <TableHead className="hidden md:table-cell">License</TableHead>
               <TableHead className="hidden md:table-cell">Type</TableHead>
               <TableHead className="hidden md:table-cell">Expiry</TableHead>
-              <TableHead className="hidden lg:table-cell">Vehicle ID</TableHead>
-              <TableHead className="hidden lg:table-cell">
-                Vehicle Type
-              </TableHead>
-              <TableHead className="hidden lg:table-cell">
-                Vehicle No.
-              </TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -91,15 +84,6 @@ const DriverPage = () => {
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
                     {driver.licenseexpiry}
-                  </TableCell>
-                  <TableCell className="hidden lg:table-cell">
-                    {driver.vehicleid}
-                  </TableCell>
-                  <TableCell className="hidden lg:table-cell">
-                    {driver.vehicleType}
-                  </TableCell>
-                  <TableCell className="hidden lg:table-cell">
-                    {driver.vehicleNumber}
                   </TableCell>
                   <TableCell className="flex flex-col md:flex-row gap-2">
                     <EditDriverModal driver={driver} onEdit={fetchDrivers} />

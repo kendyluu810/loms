@@ -17,7 +17,7 @@ const EmployeeSchema: Schema = new Schema(
     position: {
       type: String,
       required: true,
-      enum: ["Manager", "Staff", "Driver"],
+      enum: ["Manager", "Staff", "Driver", "Dispatcher", "Other"],
     },
   },
   { timestamps: true }

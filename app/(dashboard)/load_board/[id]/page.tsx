@@ -7,11 +7,12 @@ import GeneralTabs from "@/components/load_board/load-form/Tabs/GeneralTab";
 import { useParams, useRouter } from "next/navigation";
 import { ExtendedLoadRow, LoadRow } from "@/type";
 import InvoiceTabs from "@/components/load_board/load-form/Tabs/InvoiceTabs";
+import { toast } from "sonner";
 
 export default function LoadDetails() {
   const router = useRouter();
   const { id } = useParams();
-  const [load, setLoad] = useState<LoadRow | null>(null);
+  const [load, setLoad] = useState<ExtendedLoadRow | null>(null);
   const [activeTab, setActiveTab] = useState<"general" | "invoice" | "history">(
     "general"
   );
@@ -46,7 +47,7 @@ export default function LoadDetails() {
                 {load.status}
               </Badge>
               <Badge className="border border-blue-500 bg-white text-[#022f7e]">
-                {load.equipment || "N/A"}
+                {load.shipment?.equipmentType || "N/A"}
               </Badge>
             </div>
           </div>
@@ -108,10 +109,8 @@ export default function LoadDetails() {
         </div>
       </div>
       <div className="p-4">
-        {activeTab === "general" && (
-          <GeneralTabs load={load as ExtendedLoadRow} />
-        )}
-        {activeTab === "invoice" && <InvoiceTabs />}
+        {activeTab === "general" && <GeneralTabs load={load} />}
+        {activeTab === "invoice" && <InvoiceTabs load={load} />}
         {activeTab === "history" && (
           <div className="text-center text-gray-500">History details here</div>
         )}

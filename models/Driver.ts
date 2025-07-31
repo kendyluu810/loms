@@ -5,9 +5,6 @@ export interface IDriver extends Document {
   driverlicense: string;
   licensetype: string;
   licenseexpiry: Date;
-  vehicleid: string;
-  vehicleType: string;
-  vehicleNumber: string;
 }
 
 const DriverSchema: Schema = new Schema(
@@ -20,9 +17,6 @@ const DriverSchema: Schema = new Schema(
     driverlicense: { type: String, required: true },
     licensetype: { type: String, required: true },
     licenseexpiry: { type: Date, required: true },
-    vehicleid: { type: String, required: true },
-    vehicleType: { type: String, required: true },
-    vehicleNumber: { type: String, required: true },
   },
   { timestamps: true }
 );

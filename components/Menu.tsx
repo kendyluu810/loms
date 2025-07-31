@@ -20,6 +20,7 @@ const menuItems = [
   { title: "Lego", href: "/lego", icon: Handshake },
   { title: "Driver", href: "/drivers", icon: Truck },
   { title: "Customers", href: "/customers", icon: Users },
+  { title: "Carriers", href: "/carriers", icon: Users },
   { title: "Employees", href: "/employees", icon: IdCardLanyard },
   { title: "Settings", href: "/settings", icon: Settings },
 ];

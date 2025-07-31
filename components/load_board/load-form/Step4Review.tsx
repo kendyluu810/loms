@@ -241,12 +241,6 @@ export default function Step4Review() {
                 </Label>
                 <span>{customer.companyPhone}</span>
               </div>
-              {/* <div className="flex justify-between">
-                <Label className="text-[#022f7e] font-semibold">
-                  Cargo Instructions
-                </Label>
-                <span>Yes</span>
-              </div> */}
             </CardContent>
             <CardContent className="space-y-3 p-4">
               <div className="flex justify-between">

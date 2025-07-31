@@ -1,18 +1,71 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Plus, Search, Filter, Pencil, MoreVerticalIcon } from "lucide-react";
+import { Plus, MoreVerticalIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { useEffect, useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+type Vehicle = {
+  vehicleNumber: string;
+  trailer: string;
+};
 
 export default function BookingForm() {
-  const { register } = useForm();
   const router = useRouter();
+  const { control, register, handleSubmit, setValue } = useForm({
+    defaultValues: {
+      pickupEta: "",
+      pickupTime: "",
+      truckEmpty: "no",
+      trailer: "",
+      vehicleNumber: "",
+    },
+  });
 
+  const truckEmpty = useWatch({ control, name: "truckEmpty" });
+  const [vehicleOptions, setVehicleOptions] = useState<Vehicle[]>([]);
+  const [showVehicleModal, setShowVehicleModal] = useState(false);
+  const [newVehicleNumber, setNewVehicleNumber] = useState("");
+  const [newTrailer, setNewTrailer] = useState("");
+
+  useEffect(() => {
+    if (truckEmpty === "yes" && vehicleOptions.length === 0) {
+      setShowVehicleModal(true);
+    }
+  }, [truckEmpty, vehicleOptions]);
+
+  const handleAddVehicle = () => {
+    if (newVehicleNumber.trim()) {
+      const newVehicle: Vehicle = {
+        vehicleNumber: newVehicleNumber.trim(),
+        trailer: newTrailer.trim(),
+      };
+
+      setVehicleOptions((prev) => [...prev, newVehicle]);
+      setValue("vehicleNumber", newVehicle.vehicleNumber);
+      setValue("trailer", newVehicle.trailer);
+      setNewVehicleNumber("");
+      setNewTrailer("");
+      setShowVehicleModal(false);
+    }
+  };
   return (
     <div className="space-y-4 ">
       <div className="flex flex-col justify-between p-4 border bg-white rounded-lg shadow-sm">
@@ -24,7 +77,7 @@ export default function BookingForm() {
           </div>
         </div>
         <div className="flex flex-row justify-between items-center space-x-2">
-          <Input type="text" placeholder="Enter Carrier Name" className="max-w-md" />
+          <Input type="text" placeholder="Search..." className="max-w-md" />
           <div className="flex items-center space-x-4 text-[#022f7e]">
             <Plus className="w-4 h-4" />
             <MoreVerticalIcon className="w-4 h-4" />
@@ -53,7 +106,9 @@ export default function BookingForm() {
 
         {/* Dispatch Card */}
         <div className="col-span-2 border rounded-lg p-6 shadow-sm bg-white space-y-4">
-          <h2 className="font-semibold text-lg text-[#022f7e]">Dispatch Info</h2>
+          <h2 className="font-semibold text-lg text-[#022f7e]">
+            Dispatch Info
+          </h2>
           <div className="grid grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label>Dispatch</Label>
@@ -82,14 +137,74 @@ export default function BookingForm() {
               <Label>Time</Label>
               <Input type="time" defaultValue="09:00" />
             </div>
-            <div className="space-y-2">
-              <Label>Truck Empty</Label>
-              <Input defaultValue="No" />
-            </div>
-            <div className="space-y-2">
-              <Label>Trailer</Label>
-              <Input defaultValue="FG66244" />
-            </div> 
+            <form className="">
+              <div className="grid grid-cols-3 gap-4 items-center space-x-4">
+                <div className="space-y-2">
+                  <Label>Truck Empty</Label>
+                  <Controller
+                    name="truckEmpty"
+                    control={control}
+                    render={({ field }) => (
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="yes">Yes</SelectItem>
+                          <SelectItem value="no">No</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Trailer</Label>
+                  <Input
+                    {...register("trailer")}
+                    disabled={truckEmpty === "no"}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Vehicle Number</Label>
+                  <Controller
+                    name="vehicleNumber"
+                    control={control}
+                    render={({ field }) => (
+                      <Select
+                        value={field.value}
+                        onValueChange={(value) => {
+                          field.onChange(value);
+                          const selected = vehicleOptions.find(
+                            (v) => v.vehicleNumber === value
+                          );
+                          if (selected) {
+                            setValue("trailer", selected.trailer);
+                          }
+                        }}
+                        disabled={truckEmpty === "no"}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select vehicle" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {vehicleOptions.map((v) => (
+                            <SelectItem
+                              key={v.vehicleNumber}
+                              value={v.vehicleNumber}
+                            >
+                              {v.vehicleNumber}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
+                </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>
@@ -101,6 +216,33 @@ export default function BookingForm() {
         </Button>
         <Button className="bg-blue-600 text-white">Confirm Booking</Button>
       </div>
+
+      <Dialog open={showVehicleModal} onOpenChange={setShowVehicleModal}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add New Vehicle</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label>Vehicle Number</Label>
+              <Input
+                value={newVehicleNumber}
+                onChange={(e) => setNewVehicleNumber(e.target.value)}
+                placeholder="VD: 51C-12345"
+              />
+            </div>
+            <div>
+              <Label>Trailer</Label>
+              <Input
+                value={newTrailer}
+                onChange={(e) => setNewTrailer(e.target.value)}
+                placeholder="VD: Rơ-mooc ABC"
+              />
+            </div>
+            <Button onClick={handleAddVehicle}>Thêm Vehicle</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

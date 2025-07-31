@@ -17,7 +17,24 @@ export interface Employee {
   name: string;
   phone: string;
   email: string;
-  position: "Manager" | "Staff" | "Driver";
+  position: "Manager" | "Staff" | "Driver" | "Dispatcher" | "Other";
+}
+
+// Carrrier
+export interface Carrier {
+  _id: string;
+  name: string;
+  mcNumber?: string;
+  dotNumber?: string;
+  email?: string;
+  phone?: string;
+  address?: string;
+  customer?: Customer;
+  equipmentTypes?: string[];
+  // rating?: number;
+  active?: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 // Driver
 export interface Driver {
@@ -26,10 +43,18 @@ export interface Driver {
   driverlicense: string;
   licensetype: string;
   licenseexpiry: string; // ISO string from backend (e.g. "2025-12-31T00:00:00.000Z")
-  vehicleid: string;
-  vehicleType: string;
-  vehicleNumber: string;
 }
+
+//Vehicle
+export interface Vehicle {
+  truckNumber: string;
+  trailerNumber: string;
+  category: string;
+  status: "available" | "in-transit" | "maintenance" | "reserved";
+  isEmpty: boolean;
+  assignedDriver?: Driver;
+}
+
 // Routes
 export interface Route {
   _id?: string;
@@ -85,6 +110,7 @@ export interface LoadBoard {
   route: Route | string;
   shipment: Shipment | string;
   customer: Customer | string;
+  carrier: Carrier | string;
   status: LoadStatus;
   createdAt?: Date;
   updatedAt?: Date;
@@ -96,6 +122,11 @@ export interface LoadRow {
     companyName: string; // customer.companyName
     contactPerson?: string; // customer.contactPerson
     contactPhone?: string; // customer.contactPhone
+  };
+  carrier?: {
+    name: string; // carrier.name
+    mcNumber?: string; // carrier.mcNumber
+    dotNumber?: string; // carrier.dotNumber
   };
   origin: string; // route.origin
   pickupTime: string; // route.pickupTime
@@ -139,13 +170,50 @@ export interface ShipmentPoint {
   remarks?: string;
 }
 
+export interface Invoice {
+  _id?: string;
+  loadId: string;
+  customerId: string;
+  carrierId: string;
+
+  loadRate: number;
+  fuelSurchargeCustomer: number;
+  customerChargesTotal: number;
+
+  carrierRate: number;
+  fuelSurchargeCarrier: number;
+  carrierChargesTotal: number;
+
+  ratePerMile: number;
+  miles: number;
+  fuelRate: number;
+  fuelSurcharge: number;
+
+  invoiceTotal: number;
+  carrierTotal: number;
+  adjustedAmount?: number;
+  carrierTotalPay?: number;
+  remarks?: string;
+
+  createdAt?: string;
+  updatedAt?: string;
+}
 export interface ExtendedLoadRow extends LoadRow {
-  route: { points: RoutePoint[] };
+  route: {
+    pickupPoint?: RoutePoint;
+    deliveryPoint?: RoutePoint;
+    stopPoints?: RoutePoint[];
+  };
   shipment: {
+    equipmentType: string;
+    pickupPoint: ShipmentPoint;
+    deliveryPoint: ShipmentPoint;
+    stopPoint?: ShipmentPoint;
     weight: number;
     pallets: number;
     rate: number;
-    points: ShipmentPoint[];
   };
   customer: Customer;
+  carrier?: Carrier;
+  invoice?: Invoice;
 }

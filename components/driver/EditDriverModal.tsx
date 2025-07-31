@@ -32,9 +32,6 @@ export default function EditDriverModal({
     licenseexpiry: driver.licenseexpiry
       ? driver.licenseexpiry.slice(0, 10)
       : "",
-    vehicleid: driver.vehicleid || "",
-    vehicleType: driver.vehicleType || "",
-    vehicleNumber: driver.vehicleNumber || "",
   });
 
   useEffect(() => {
@@ -109,35 +106,6 @@ export default function EditDriverModal({
               name="licenseexpiry"
               placeholder="License Expiry"
               value={form.licenseexpiry}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label className="text-[#022f7e] font-semibold">Vehicle ID</Label>
-            <Input
-              name="vehicleid"
-              placeholder="Vehicle ID"
-              value={form.vehicleid}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label className="text-[#022f7e] font-semibold">Vehicle Type</Label>
-            <Input
-              name="vehicleType"
-              placeholder="Vehicle Type"
-              value={form.vehicleType}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label className="text-[#022f7e] font-semibold">
-              Vehicle Number
-            </Label>
-            <Input
-              name="vehicleNumber"
-              placeholder="Vehicle Number"
-              value={form.vehicleNumber}
               onChange={handleChange}
             />
           </div>
