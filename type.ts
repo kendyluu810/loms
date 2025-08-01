@@ -47,6 +47,7 @@ export interface Driver {
 
 //Vehicle
 export interface Vehicle {
+  _id?: string;
   truckNumber: string;
   trailerNumber: string;
   category: string;

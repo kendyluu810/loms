@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
   const sort = searchParams.get("sort") || "createdAt";
   const order = searchParams.get("order") === "desc" ? -1 : 1;
 
-    const pipeline: any[] = [
+  const pipeline: any[] = [
     {
       $lookup: {
         from: "employees", // collection name
@@ -28,6 +28,8 @@ export async function GET(req: NextRequest) {
           { driverlicense: { $regex: search, $options: "i" } },
           { licensetype: { $regex: search, $options: "i" } },
           { "employee.name": { $regex: search, $options: "i" } },
+          { "employee.email": { $regex: search, $options: "i" } },
+          { "employee.phone": { $regex: search, $options: "i" } },
         ],
       },
     },
@@ -39,22 +41,48 @@ export async function GET(req: NextRequest) {
   ];
 
   const drivers = await Driver.aggregate(pipeline);
-  const total = await Driver.aggregate([
-    ...pipeline.slice(0, 3),
+  const totalCount = await Driver.aggregate([
+    {
+      $lookup: {
+        from: "employees",
+        localField: "employee",
+        foreignField: "_id",
+        as: "employee",
+      },
+    },
+    { $unwind: "$employee" },
+    {
+      $match: {
+        $or: [
+          { driverlicense: { $regex: search, $options: "i" } },
+          { licensetype: { $regex: search, $options: "i" } },
+          { "employee.name": { $regex: search, $options: "i" } },
+          { "employee.email": { $regex: search, $options: "i" } },
+          { "employee.phone": { $regex: search, $options: "i" } },
+        ],
+      },
+    },
     { $count: "total" },
   ]);
 
-  return NextResponse.json({
-    drivers,
-    total: total[0]?.total || 0,
-  });
+  const total = totalCount[0]?.total || 0;
+
+  return NextResponse.json({ drivers, total });
 }
 
 export async function POST(req: NextRequest) {
   await dbConnect();
   const body = await req.json();
+  
+  if (!body.employee) {
+    return NextResponse.json(
+      { error: "Missing required field: employee" },
+      { status: 400 }
+    );
+  }
+
   const driver = new Driver({
-    employee: body.Eid,
+    employee: body.employee,
     driverlicense: body.driverlicense,
     licensetype: body.licensetype,
     licenseexpiry: body.licenseexpiry,

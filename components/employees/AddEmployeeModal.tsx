@@ -22,18 +22,40 @@ export default function AddEmployeeModal({ onAdded }: { onAdded: () => void }) {
     position: "",
   });
 
+  const [driverInfo, setDriverInfo] = useState({
+    driverlicense: "",
+    licensetype: "",
+    licenseexpiry: "",
+  });
+
   const handleSubmit = async () => {
-    await fetch("/api/employees", {
+    const res = await fetch("/api/employees", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
     });
+
+    const newEmp = await res.json();
+    if (form.position === "Driver") {
+      await fetch("/api/drivers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...driverInfo,
+          employee: newEmp._id,
+        }),
+      });
+    }
     setOpen(false);
     setForm({ name: "", phone: "", email: "", position: "" });
+    setDriverInfo({
+      driverlicense: "",
+      licensetype: "",
+      licenseexpiry: "",
+    });
     onAdded();
     toast.success("Employee added successfully");
   };
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -79,6 +101,49 @@ export default function AddEmployeeModal({ onAdded }: { onAdded: () => void }) {
               onChange={(value) => setForm({ ...form, position: value })}
             />
           </div>
+          {form.position === "Driver" && (
+            <>
+              <div className="space-y-4">
+                <Label>Driver License</Label>
+                <Input
+                  placeholder="Driver License"
+                  value={driverInfo.driverlicense}
+                  onChange={(e) =>
+                    setDriverInfo({
+                      ...driverInfo,
+                      driverlicense: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div className="space-y-4">
+                <Label>License Type</Label>
+                <Input
+                  placeholder="License Type"
+                  value={driverInfo.licensetype}
+                  onChange={(e) =>
+                    setDriverInfo({
+                      ...driverInfo,
+                      licensetype: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div>
+                <Label>License Expiry</Label>
+                <Input
+                  type="date"
+                  value={driverInfo.licenseexpiry}
+                  onChange={(e) =>
+                    setDriverInfo({
+                      ...driverInfo,
+                      licenseexpiry: e.target.value,
+                    })
+                  }
+                />
+              </div>
+            </>
+          )}
         </div>
         <div className="mt-4 flex justify-end">
           <Button

@@ -11,7 +11,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { useEffect, useState } from "react";
 import {
@@ -29,7 +28,7 @@ type Vehicle = {
 
 export default function BookingForm() {
   const router = useRouter();
-  const { control, register, handleSubmit, setValue } = useForm({
+  const { control, register, setValue } = useForm({
     defaultValues: {
       pickupEta: "",
       pickupTime: "",

@@ -1,6 +1,6 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Customer, ExtendedLoadRow, RoutePoint } from "@/type";
+import { Customer, ExtendedLoadRow } from "@/type";
 import { MoreVertical, Pencil, Save } from "lucide-react";
 import RouteCard from "./GeneralTabsForm/RouteCard";
 import ShipmentCard from "./GeneralTabsForm/ShipmentCard";

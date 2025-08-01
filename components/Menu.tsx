@@ -1,7 +1,5 @@
 "use client";
 import {
-  FileText,
-  Handshake,
   IdCardLanyard,
   LayoutDashboard,
   Package,
@@ -17,8 +15,7 @@ const menuItems = [
   { title: "Dashboard", href: "/", icon: LayoutDashboard },
   { title: "Load Board", href: "/load_board", icon: Package },
   { title: "Tracking", href: "/tracking", icon: Route },
-  { title: "Lego", href: "/lego", icon: Handshake },
-  { title: "Driver", href: "/drivers", icon: Truck },
+  { title: "Vehicles", href: "/vehicles", icon: Truck },
   { title: "Customers", href: "/customers", icon: Users },
   { title: "Carriers", href: "/carriers", icon: Users },
   { title: "Employees", href: "/employees", icon: IdCardLanyard },

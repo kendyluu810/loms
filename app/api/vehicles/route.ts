@@ -1,35 +1,32 @@
+import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import Vehicle from "@/models/Vehicle";
-import { NextRequest, NextResponse } from "next/server";
 
-// GET all vehicles
-export async function GET() {
+export async function GET(req: NextRequest) {
   await dbConnect();
 
-  try {
-    const vehicles = await Vehicle.find().populate("assignedDriver");
-    return NextResponse.json(vehicles);
-  } catch (error) {
-    return NextResponse.json(
-      { error: "Failed to fetch vehicles" },
-      { status: 500 }
-    );
-  }
+  const search = req.nextUrl.searchParams.get("search") || "";
+  const page = parseInt(req.nextUrl.searchParams.get("page") || "1");
+  const pageSize = parseInt(req.nextUrl.searchParams.get("pageSize") || "10");
+
+  const filter = {
+    truckNumber: { $regex: search, $options: "i" },
+  };
+
+  const total = await Vehicle.countDocuments(filter);
+  const vehicles = await Vehicle.find(filter)
+    .skip((page - 1) * pageSize)
+    .limit(pageSize)
+    .populate("assignedDriver");
+
+  return NextResponse.json({ vehicles, total });
 }
 
-// POST new vehicle
 export async function POST(req: NextRequest) {
   await dbConnect();
 
-  try {
-    const body = await req.json();
-    const newVehicle = await Vehicle.create(body);
-    return NextResponse.json(newVehicle, { status: 201 });
-  } catch (error) {
-    console.error("Create vehicle error:", error);
-    return NextResponse.json(
-      { error: "Failed to create vehicle" },
-      { status: 500 }
-    );
-  }
+  const body = await req.json();
+  const vehicle = await Vehicle.create(body);
+
+  return NextResponse.json(vehicle);
 }

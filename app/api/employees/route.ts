@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import Employees from "@/models/employees/Employees";
+import Driver from "@/models/Driver";
 
 export async function GET(req: NextRequest) {
   await dbConnect();
@@ -25,18 +26,19 @@ export async function GET(req: NextRequest) {
 
   const positionFilter = position ? { position } : {};
 
-  const query = {
-    $and: [positionFilter, searchFilter],
-  };
+  const query = position
+    ? { $and: [positionFilter, searchFilter] }
+    : searchFilter;
 
   const employees = await Employees.find(query)
     .sort({ [sort]: order })
     .skip((page - 1) * pageSize)
-    .limit(pageSize);
+    .limit(pageSize)
+    .lean();
 
   const total = await Employees.countDocuments(query);
 
-  return NextResponse.json({ employees, total });
+  return NextResponse.json({ data: employees, total });
 }
 
 export async function POST(req: NextRequest) {
@@ -53,6 +55,13 @@ export async function POST(req: NextRequest) {
 
   const employee = new Employees({ ...body, Eid: newEid });
   await employee.save();
+
+  if (body.position == "Driver" && body.driverInfo) {
+    await Driver.create({
+      employee: employee._id,
+      ...body.driverInfo,
+    });
+  }
 
   return NextResponse.json(employee);
 }

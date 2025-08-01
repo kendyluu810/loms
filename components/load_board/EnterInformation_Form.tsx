@@ -11,7 +11,6 @@ import {
 } from "../ui/select";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import countries from "world-countries";
 import { Customer } from "@/type";
 import { useLoadStore } from "@/store/useLoadStore";
 import { CountrySelect } from "./countriesSelect";

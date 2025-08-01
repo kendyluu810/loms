@@ -1,6 +1,6 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { MoreVertical, Pencil, Save } from "lucide-react";
+import {  Pencil, Save } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { ExtendedLoadRow } from "@/type";
 import { useEffect, useState } from "react";
