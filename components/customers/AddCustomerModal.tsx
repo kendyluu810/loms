@@ -49,7 +49,7 @@ export default function AddCustomerModal({ onAdded }: { onAdded: () => void }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-[#3461ff] text-white font-semibold">
+        <Button className="bg-[#3461ff] text-white font-semibold hover:bg-white hover:text-[#3461ff] border border-[#3461ff] flex items-center">
           Add Customer
         </Button>
       </DialogTrigger>

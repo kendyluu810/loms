@@ -33,7 +33,7 @@ export default function AddCarrierModal({ onAdded }: { onAdded: () => void }) {
         : [],
     };
 
-    console.log("payload", payload);  
+    console.log("payload", payload);
 
     const res = await fetch("/api/carriers", {
       method: "POST",
@@ -63,7 +63,7 @@ export default function AddCarrierModal({ onAdded }: { onAdded: () => void }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-[#3461ff] text-white font-semibold">
+        <Button className="bg-[#3461ff] text-white font-semibold hover:bg-white hover:text-[#3461ff]">
           Add Carrier
         </Button>
       </DialogTrigger>

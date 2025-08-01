@@ -46,8 +46,13 @@ export default function VehiclesPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Vehicle Management</h1>
-        <Button onClick={() => setAddOpen(true)}>
+        <h1 className="text-2xl font-bold text-[#022f7e]">
+          Vehicle Management
+        </h1>
+        <Button
+          onClick={() => setAddOpen(true)}
+          className="bg-[#3461ff] text-white font-semibold hover:bg-white hover:text-[#3461ff] border border-[#3461ff] flex items-center"
+        >
           <Plus className="w-4 h-4 mr-2" />
           Add Vehicle
         </Button>
