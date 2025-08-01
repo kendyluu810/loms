@@ -2,6 +2,28 @@ import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import Employees from "@/models/employees/Employees";
 import Driver from "@/models/Driver";
+import { Employee } from "@/type";
+
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  await dbConnect();
+  const { id } = await params;
+  const employee = await Employees.findById(id).lean<Employee>();
+
+  if (!employee) {
+    return NextResponse.json({ error: "Employee not found" }, { status: 404 });
+  }
+
+  // Nếu là driver, lấy thêm driver info
+  if (employee.position === "Driver") {
+    const driver = await Driver.findOne({ employee: employee._id }).lean();
+    return NextResponse.json({ ...employee, driverInfo: driver || null });
+  }
+
+  return NextResponse.json(employee);
+}
 
 export async function PUT(
   req: NextRequest,

@@ -18,6 +18,7 @@ export interface Employee {
   phone: string;
   email: string;
   position: string; // e.g., "Manager", "Staff", "Driver", "Dispatcher", "Other"}
+  driverInfo?: Driver;
 }
 
 // Carrrier
@@ -216,6 +217,6 @@ export interface ExtendedLoadRow extends LoadRow {
     rate: number;
   };
   customer: Customer;
-  carrier?: Carrier
+  carrier?: Carrier;
   invoice?: Invoice;
 }

@@ -12,9 +12,57 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useEffect, useState } from "react";
 
 export default function BookingForm() {
   const router = useRouter();
+  const [drivers, setDrivers] = useState<any[]>([]);
+  const [dispatchers, setDispatchers] = useState<any[]>([]);
+  const [vehicles, setVehicles] = useState<any[]>([]);
+
+  const [selectedDriver, setSelectedDriver] = useState<any>(null);
+  const [selectedDispatcher, setSelectedDispatcher] = useState<any>(null);
+  const [selectedVehicle, setSelectedVehicle] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const [driverRes, dispatcherRes, vehicleRes] = await Promise.all([
+        fetch("/api/employees?position=Driver"),
+        fetch("/api/employees?position=Dispatcher"),
+        fetch("/api/vehicles"),
+      ]);
+
+
+      const driverData = await driverRes.json();
+      const dispatcherData = await dispatcherRes.json();
+      const vehicleData = await vehicleRes.json();
+
+      setDrivers(driverData?.data || []);
+      setDispatchers(dispatcherData?.data || []);
+      setVehicles(vehicleData.vehicles || []);
+    };
+
+    fetchData();
+  }, []);
+
+  const handleDriverChange = async (driverId: string) => {
+    const res = await fetch(`/api/employees/${driverId}`);
+    const data = await res.json();
+    setSelectedDriver(data);
+  };
+
+  const handleDispatcherChange = async (dispatcherId: string) => {
+    const res = await fetch(`/api/employees/${dispatcherId}`);
+    const data = await res.json();
+    setSelectedDispatcher(data);
+  };
+
+  const handleVehicleChange = async (_id: string) => {
+    const res = await fetch(`/api/vehicles/${_id}`);
+    const data = await res.json();
+    setSelectedVehicle(data);
+  };
+
   return (
     <div className="space-y-4 ">
       <div className="flex flex-col justify-between p-4 border bg-white rounded-lg shadow-sm">
@@ -40,15 +88,26 @@ export default function BookingForm() {
           <div className="grid grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label>Driver</Label>
-              <Input placeholder="Denis Villeneuve" />
+              <Select onValueChange={handleDriverChange}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select Driver" />
+                </SelectTrigger>
+                <SelectContent>
+                  {drivers.map((driver) => (
+                    <SelectItem key={driver._id} value={driver._id}>
+                      {driver.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div className="space-y-2">
               <Label>Email</Label>
-              <Input placeholder="driver@lgp.com" />
+              <Input value={selectedDriver?.email || ""} disabled />
             </div>
             <div className="space-y-2">
               <Label>Phone</Label>
-              <Input placeholder="(360) 800-2399" />
+              <Input value={selectedDriver?.phone || ""} disabled />
             </div>
           </div>
         </div>
@@ -61,15 +120,26 @@ export default function BookingForm() {
           <div className="grid grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label>Dispatch</Label>
-              <Input placeholder="Phillip Arnolff" />
+              <Select onValueChange={handleDispatcherChange}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select Dispatcher" />
+                </SelectTrigger>
+                <SelectContent>
+                  {dispatchers.map((d) => (
+                    <SelectItem key={d._id} value={d._id}>
+                      {d.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div className="space-y-2">
               <Label>Email</Label>
-              <Input placeholder="dispatch@lgp.com" />
+              <Input value={selectedDispatcher?.email || ""} disabled />
             </div>
             <div className="space-y-2">
               <Label>Phone</Label>
-              <Input placeholder="(360) 800-2399" />
+              <Input value={selectedDispatcher?.phone || ""} disabled />
             </div>
           </div>
         </div>
@@ -88,19 +158,22 @@ export default function BookingForm() {
             </div>
             <div className="space-y-2">
               <Label>Vehicle Number</Label>
-
-              <Select>
+              <Select onValueChange={(value) => handleVehicleChange(value)}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select vehicle" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="TRN-001">TRN-001</SelectItem>
+                  {vehicles.map((v) => (
+                    <SelectItem key={v._id} value={String(v._id)}>
+                      {v.truckNumber}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
               <Label>Trailer</Label>
-              <Input placeholder="TRL-001" />
+              <Input value={selectedVehicle?.trailerNumber || ""} disabled />
             </div>
           </div>
         </div>
