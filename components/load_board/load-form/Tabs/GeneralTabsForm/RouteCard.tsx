@@ -16,8 +16,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "sonner";
 
-export default function RouteCard({ load }: { load: ExtendedLoadRow }) {
+interface RouteCardProps {
+  load: ExtendedLoadRow;
+  onUpdateLoad: (updatedLoad: ExtendedLoadRow) => void;
+}
+
+export default function RouteCard({ load, onUpdateLoad }: RouteCardProps) {
   const [editRoute, setEditRoute] = useState(false);
 
   const statusOptions = ["Pending", "In Progress", "Completed", "Cancelled"];
@@ -70,6 +76,18 @@ export default function RouteCard({ load }: { load: ExtendedLoadRow }) {
     });
   }, [load, reset]);
 
+  const calculateETA = (early: string, late: string) => {
+    if (!early || !late) return "";
+    const [eh, em] = early.split(":").map(Number);
+    const [lh, lm] = late.split(":").map(Number);
+    const earlyMinutes = eh * 60 + em;
+    const lateMinutes = lh * 60 + lm;
+    const avgMinutes = Math.floor((earlyMinutes + lateMinutes) / 2);
+    const hours = String(Math.floor(avgMinutes / 60)).padStart(2, "0");
+    const minutes = String(avgMinutes % 60).padStart(2, "0");
+    return `${hours}:${minutes}`;
+  };
+
   const onSubmitRoute = async (data: any) => {
     try {
       const currentRoute = load.route;
@@ -81,6 +99,8 @@ export default function RouteCard({ load }: { load: ExtendedLoadRow }) {
           late: data.pickup.late,
           address: data.pickup.address,
           status: data.pickup.condition,
+          eta: calculateETA(data.pickup.early, data.pickup.late),
+          type: "pickup",
         },
         deliveryPoint: {
           ...currentRoute.deliveryPoint,
@@ -88,6 +108,8 @@ export default function RouteCard({ load }: { load: ExtendedLoadRow }) {
           late: data.delivery.late,
           address: data.delivery.address,
           status: data.delivery.condition,
+          eta: calculateETA(data.delivery.early, data.delivery.late),
+          type: "delivery",
         },
         stopPoints: data.stop?.map((s: any, idx: number) => {
           const existingStop = currentRoute.stopPoints?.[idx] ?? {};
@@ -97,16 +119,22 @@ export default function RouteCard({ load }: { load: ExtendedLoadRow }) {
             late: s.late,
             address: s.address,
             status: s.condition,
+            eta: calculateETA(s.early, s.late),
+            type: "stop",
           };
         }),
-      };
+      } as ExtendedLoadRow["route"];
 
-      await fetch(`/api/load_board/${load.load_id}`, {
+      const res = await fetch(`/api/load_board/${load.load_id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ route: routePayload }),
       });
 
+      if (!res.ok) throw new Error("Failed to update route");
+
+      onUpdateLoad({ ...load, route: routePayload }); // ✅ cập nhật lại route trong state cha
+      toast.success("Route updated successfully");
       setEditRoute(false);
     } catch (err) {
       console.error("Update Route Error:", err);
@@ -194,11 +222,7 @@ export default function RouteCard({ load }: { load: ExtendedLoadRow }) {
                       </Select>
                     )}
                   />
-                  <span>
-                    {load.route?.pickupPoint?.eta
-                      ? format(new Date(load.route?.pickupPoint?.eta), "PPpp")
-                      : "--"}
-                  </span>
+                  <span>{load.route?.pickupPoint?.eta || "--"}</span>
                 </div>
                 {/* Delivery Point */}
                 <div className="grid grid-cols-6 gap-4 py-2 text-sm">
@@ -251,11 +275,7 @@ export default function RouteCard({ load }: { load: ExtendedLoadRow }) {
                       </Select>
                     )}
                   />
-                  <span>
-                    {load.route?.deliveryPoint?.eta
-                      ? format(new Date(load.route?.deliveryPoint?.eta), "PPpp")
-                      : "--"}
-                  </span>
+                  <span>{load.route?.deliveryPoint?.eta || "--"}</span>
                 </div>
                 {/* Stop Points */}
                 {(load.route?.stopPoints?.length ?? 0) > 0 && (
@@ -314,11 +334,7 @@ export default function RouteCard({ load }: { load: ExtendedLoadRow }) {
                             </Select>
                           )}
                         />
-                        <span>
-                          {point.eta
-                            ? format(new Date(point.eta), "PPpp")
-                            : "--"}
-                        </span>
+                        <span>{point.eta || "--"}</span>
                       </div>
                     ))}
                   </>
@@ -362,9 +378,7 @@ export default function RouteCard({ load }: { load: ExtendedLoadRow }) {
                   </Badge>
                 </span>
                 <span>
-                  {load.route?.pickupPoint?.eta
-                    ? format(new Date(load.route?.pickupPoint?.eta), "PPpp")
-                    : "--"}
+                  <span>{load.route?.pickupPoint?.eta || "--"}</span>
                 </span>
               </div>
               {/* Delivery Point */}
@@ -386,11 +400,7 @@ export default function RouteCard({ load }: { load: ExtendedLoadRow }) {
                     {load.route?.deliveryPoint?.status || "Unknown"}
                   </Badge>
                 </span>
-                <span>
-                  {load.route?.deliveryPoint?.eta
-                    ? format(new Date(load.route?.deliveryPoint?.eta), "PPpp")
-                    : "--"}
-                </span>
+                <span>{load.route?.deliveryPoint?.eta || "--"}</span>
               </div>
               {/* Stop Points */}
               {(load.route?.stopPoints?.length ?? 0) > 0 && (
@@ -416,9 +426,7 @@ export default function RouteCard({ load }: { load: ExtendedLoadRow }) {
                           {point.status || "Unknown"}
                         </Badge>
                       </span>
-                      <span>
-                        {point.eta ? format(new Date(point.eta), "PPpp") : "--"}
-                      </span>
+                      <span>{point.eta || "--"}</span>
                     </div>
                   ))}
                 </>

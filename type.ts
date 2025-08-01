@@ -199,6 +199,7 @@ export interface Invoice {
   createdAt?: string;
   updatedAt?: string;
 }
+
 export interface ExtendedLoadRow extends LoadRow {
   route: {
     pickupPoint?: RoutePoint;
@@ -215,6 +216,6 @@ export interface ExtendedLoadRow extends LoadRow {
     rate: number;
   };
   customer: Customer;
-  carrier?: Carrier;
+  carrier?: Carrier
   invoice?: Invoice;
 }

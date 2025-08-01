@@ -109,7 +109,9 @@ export default function LoadDetails() {
         </div>
       </div>
       <div className="p-4">
-        {activeTab === "general" && <GeneralTabs load={load} />}
+        {activeTab === "general" && (
+          <GeneralTabs load={load} onUpdateLoad={setLoad} />
+        )}
         {activeTab === "invoice" && <InvoiceTabs load={load} />}
         {activeTab === "history" && (
           <div className="text-center text-gray-500">History details here</div>

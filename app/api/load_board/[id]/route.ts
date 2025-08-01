@@ -4,7 +4,7 @@ import "@/models/load_board/Routes";
 import "@/models/load_board/Shipment";
 import "@/models/customer/Customers";
 import "@/models/Carrier";
-import "@/models/Invoice"
+import "@/models/Invoice";
 import { NextRequest, NextResponse } from "next/server";
 import Routes from "@/models/load_board/Routes";
 import Shipment from "@/models/load_board/Shipment";
@@ -112,7 +112,20 @@ export async function PUT(
       await load.save();
     }
 
-    return NextResponse.json({ message: "Update successful" }, { status: 200 });
+    const updatedLoad = await Load.findOne({ load_id: id })
+      .populate("route")
+      .populate({
+        path: "shipment",
+        populate: [
+          { path: "pickupPoint" },
+          { path: "deliveryPoint" },
+          { path: "stopPoint" },
+        ],
+      })
+      .populate("carrier")
+      .populate("customer");
+
+    return NextResponse.json(updatedLoad, { status: 200 });
   } catch (error) {
     console.error("PUT Error:", error);
     return NextResponse.json({ message: "Update failed" }, { status: 400 });

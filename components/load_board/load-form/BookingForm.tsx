@@ -1,18 +1,10 @@
 "use client";
-
-import { Controller, useForm, useWatch } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Plus, MoreVerticalIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { useEffect, useState } from "react";
+
 import {
   Select,
   SelectContent,
@@ -21,50 +13,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-type Vehicle = {
-  vehicleNumber: string;
-  trailer: string;
-};
-
 export default function BookingForm() {
   const router = useRouter();
-  const { control, register, setValue } = useForm({
-    defaultValues: {
-      pickupEta: "",
-      pickupTime: "",
-      truckEmpty: "no",
-      trailer: "",
-      vehicleNumber: "",
-    },
-  });
-
-  const truckEmpty = useWatch({ control, name: "truckEmpty" });
-  const [vehicleOptions, setVehicleOptions] = useState<Vehicle[]>([]);
-  const [showVehicleModal, setShowVehicleModal] = useState(false);
-  const [newVehicleNumber, setNewVehicleNumber] = useState("");
-  const [newTrailer, setNewTrailer] = useState("");
-
-  useEffect(() => {
-    if (truckEmpty === "yes" && vehicleOptions.length === 0) {
-      setShowVehicleModal(true);
-    }
-  }, [truckEmpty, vehicleOptions]);
-
-  const handleAddVehicle = () => {
-    if (newVehicleNumber.trim()) {
-      const newVehicle: Vehicle = {
-        vehicleNumber: newVehicleNumber.trim(),
-        trailer: newTrailer.trim(),
-      };
-
-      setVehicleOptions((prev) => [...prev, newVehicle]);
-      setValue("vehicleNumber", newVehicle.vehicleNumber);
-      setValue("trailer", newVehicle.trailer);
-      setNewVehicleNumber("");
-      setNewTrailer("");
-      setShowVehicleModal(false);
-    }
-  };
   return (
     <div className="space-y-4 ">
       <div className="flex flex-col justify-between p-4 border bg-white rounded-lg shadow-sm">
@@ -136,74 +86,22 @@ export default function BookingForm() {
               <Label>Time</Label>
               <Input type="time" defaultValue="09:00" />
             </div>
-            <form className="">
-              <div className="grid grid-cols-3 gap-4 items-center space-x-4">
-                <div className="space-y-2">
-                  <Label>Truck Empty</Label>
-                  <Controller
-                    name="truckEmpty"
-                    control={control}
-                    render={({ field }) => (
-                      <Select
-                        value={field.value}
-                        onValueChange={field.onChange}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select..." />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="yes">Yes</SelectItem>
-                          <SelectItem value="no">No</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    )}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Trailer</Label>
-                  <Input
-                    {...register("trailer")}
-                    disabled={truckEmpty === "no"}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Vehicle Number</Label>
-                  <Controller
-                    name="vehicleNumber"
-                    control={control}
-                    render={({ field }) => (
-                      <Select
-                        value={field.value}
-                        onValueChange={(value) => {
-                          field.onChange(value);
-                          const selected = vehicleOptions.find(
-                            (v) => v.vehicleNumber === value
-                          );
-                          if (selected) {
-                            setValue("trailer", selected.trailer);
-                          }
-                        }}
-                        disabled={truckEmpty === "no"}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select vehicle" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {vehicleOptions.map((v) => (
-                            <SelectItem
-                              key={v.vehicleNumber}
-                              value={v.vehicleNumber}
-                            >
-                              {v.vehicleNumber}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    )}
-                  />
-                </div>
-              </div>
-            </form>
+            <div className="space-y-2">
+              <Label>Vehicle Number</Label>
+
+              <Select>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select vehicle" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="TRN-001">TRN-001</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>Trailer</Label>
+              <Input placeholder="TRL-001" />
+            </div>
           </div>
         </div>
       </div>
@@ -215,33 +113,6 @@ export default function BookingForm() {
         </Button>
         <Button className="bg-blue-600 text-white">Confirm Booking</Button>
       </div>
-
-      <Dialog open={showVehicleModal} onOpenChange={setShowVehicleModal}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Add New Vehicle</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <Label>Vehicle Number</Label>
-              <Input
-                value={newVehicleNumber}
-                onChange={(e) => setNewVehicleNumber(e.target.value)}
-                placeholder="VD: 51C-12345"
-              />
-            </div>
-            <div>
-              <Label>Trailer</Label>
-              <Input
-                value={newTrailer}
-                onChange={(e) => setNewTrailer(e.target.value)}
-                placeholder="VD: Rơ-mooc ABC"
-              />
-            </div>
-            <Button onClick={handleAddVehicle}>Thêm Vehicle</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

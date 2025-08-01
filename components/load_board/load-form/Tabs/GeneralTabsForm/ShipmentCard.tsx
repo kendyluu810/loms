@@ -1,14 +1,20 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {  Pencil, Save } from "lucide-react";
+import { Pencil, Save } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { ExtendedLoadRow } from "@/type";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
-export default function ShipmentCard({ load }: { load: ExtendedLoadRow }) {
+interface ShipmentCardProps {
+  load: ExtendedLoadRow;
+  setLoad: (load: ExtendedLoadRow) => void;
+}
+
+export default function ShipmentCard({ load, setLoad }: ShipmentCardProps) {
   const [editShipment, setEditShipment] = useState(false);
 
   const {
@@ -40,7 +46,7 @@ export default function ShipmentCard({ load }: { load: ExtendedLoadRow }) {
 
   const onSubmitShipment = async (data: any) => {
     try {
-      await fetch(`/api/load_board/${load.load_id}`, {
+      const res = await fetch(`/api/load_board/${load.load_id}`, {
         method: "PUT",
         body: JSON.stringify({
           shipment: {
@@ -54,7 +60,12 @@ export default function ShipmentCard({ load }: { load: ExtendedLoadRow }) {
         }),
         headers: { "Content-Type": "application/json" },
       });
-      setEditShipment(false);
+      if (res.ok) {
+        const updatedLoad = await res.json();
+        setLoad(updatedLoad);
+        toast.success("Shipment updated successfully");
+        setEditShipment(false);
+      }
     } catch (err) {
       console.error(err);
     }

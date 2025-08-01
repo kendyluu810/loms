@@ -14,7 +14,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export default function GeneralTabs({ load }: { load: ExtendedLoadRow }) {
+interface GeneralTabsProps {
+  load: ExtendedLoadRow;
+  onUpdateLoad: (updatedLoad: ExtendedLoadRow) => void;
+}
+
+export default function GeneralTabs({ load, onUpdateLoad }: GeneralTabsProps) {
   const [editing, setEditing] = useState(false);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [selectedCustomer, setSelectedCustomer] = useState<string>(
@@ -51,6 +56,11 @@ export default function GeneralTabs({ load }: { load: ExtendedLoadRow }) {
       });
 
       if (!res.ok) throw new Error("Failed to update customer");
+      const updated = customers.find((c) => c._id === selectedCustomer);
+      if (updated) {
+        const updatedLoad = { ...load, customer: updated };
+        onUpdateLoad(updatedLoad); // ✅ gọi về LoadDetails để cập nhật lại UI
+      }
 
       toast.success("Customer updated");
       setEditing(false);
@@ -67,9 +77,9 @@ export default function GeneralTabs({ load }: { load: ExtendedLoadRow }) {
   return (
     <div className="space-y-4">
       {/* ROUTE CARD */}
-      <RouteCard load={load} />
+      <RouteCard load={load} onUpdateLoad={onUpdateLoad} />
       {/* SHIPMENT CARD */}
-      <ShipmentCard load={load} />
+      <ShipmentCard load={load} setLoad={onUpdateLoad} />
       {/* CONTACTS CARD */}
       <Card className="border rounded-lg shadow-sm h-fitx">
         <CardHeader className="border-b flex flex-row items-center justify-between">

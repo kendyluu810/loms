@@ -2,6 +2,18 @@ import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import Route from "@/models/load_board/Routes";
 
+function calculateETA(early: string, late: string) {
+  if (!early || !late) return "";
+  const [eh, em] = early.split(":").map(Number);
+  const [lh, lm] = late.split(":").map(Number);
+  const earlyMinutes = eh * 60 + em;
+  const lateMinutes = lh * 60 + lm;
+  const avgMinutes = Math.floor((earlyMinutes + lateMinutes) / 2);
+  const hours = String(Math.floor(avgMinutes / 60)).padStart(2, "0");
+  const minutes = String(avgMinutes % 60).padStart(2, "0");
+  return `${hours}:${minutes}`;
+}
+
 export async function POST(req: NextRequest) {
   try {
     await dbConnect();
@@ -21,7 +33,10 @@ export async function POST(req: NextRequest) {
         early: body.shipperSchedule?.from || "",
         late: body.shipperSchedule?.to || "",
         status: "pending",
-        eta: body.createdAt || "",
+        eta: calculateETA(
+          body.shipperSchedule?.from || "",
+          body.shipperSchedule?.to || ""
+        ),
       };
     }
 
@@ -37,7 +52,10 @@ export async function POST(req: NextRequest) {
         early: body.receiverSchedule?.from || "",
         late: body.receiverSchedule?.to || "",
         status: "pending",
-        eta: body.createdAt || "",
+        eta: calculateETA(
+          body.receiverSchedule?.from || "",
+          body.receiverSchedule?.to || ""
+        ),
       };
     }
 
@@ -54,7 +72,10 @@ export async function POST(req: NextRequest) {
           early: body.warehouseSchedule?.from || "",
           late: body.warehouseSchedule?.to || "",
           status: "planned",
-          eta: body.createdAt || "",
+          eta: calculateETA(
+            body.warehouseSchedule?.from || "",
+            body.warehouseSchedule?.to || ""
+          ),
         },
       ];
     }
