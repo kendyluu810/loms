@@ -17,7 +17,7 @@ export interface Employee {
   name: string;
   phone: string;
   email: string;
-  position: "Manager" | "Staff" | "Driver" | "Dispatcher" | "Other";
+  position: string; // e.g., "Manager", "Staff", "Driver", "Dispatcher", "Other"}
 }
 
 // Carrrier
