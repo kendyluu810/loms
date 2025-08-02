@@ -8,6 +8,7 @@ import "@/models/Invoice";
 import { NextRequest, NextResponse } from "next/server";
 import Routes from "@/models/load_board/Routes";
 import Shipment from "@/models/load_board/Shipment";
+import mongoose from "mongoose";
 
 export async function GET(
   req: NextRequest,
@@ -17,12 +18,14 @@ export async function GET(
   await dbConnect();
 
   try {
-    const load = await Load.findOne({ load_id: id })
-      .populate("route")
-      .populate("shipment")
-      .populate("customer")
-      .populate("carrier")
-      .populate("invoice");
+    const load = mongoose.Types.ObjectId.isValid(id)
+      ? await Load.findById(id) // nếu là Mongo ObjectId
+      : await Load.findOne({ load_id: id })
+          .populate("route")
+          .populate("shipment")
+          .populate("customer")
+          .populate("carrier")
+          .populate("invoice");
 
     console.log("ROUTE DATA:", load);
 
@@ -70,7 +73,9 @@ export async function PUT(
   const body = await req.json();
 
   try {
-    const load = await Load.findOne({ load_id: id }).populate("route");
+    const load = mongoose.Types.ObjectId.isValid(id)
+      ? await Load.findById(id)
+      : await Load.findOne({ load_id: id }).populate("route");
     if (!load || !load.route) {
       return NextResponse.json(
         { message: "Load or Route not found" },
@@ -139,7 +144,13 @@ export async function DELETE(
   await dbConnect();
   const { id } = await params;
   try {
-    await Load.findOneAndDelete({ load_id: id });
+    const load = mongoose.Types.ObjectId.isValid(id)
+      ? await Load.findById(id) // nếu là Mongo ObjectId
+      : await Load.findOne({ load_id: id });
+    if (!load) {
+      return NextResponse.json({ message: "Load not found" }, { status: 404 });
+    }
+    await Load.deleteOne();
     return NextResponse.json({ message: "Deleted successfully" });
   } catch (error) {
     console.error("DELETE Error:", error);

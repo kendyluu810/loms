@@ -6,6 +6,7 @@ export function mapLoadToRow(load: LoadBoard): LoadRow {
   const shipment = load.shipment as Shipment;
 
   return {
+    _id: load._id || "",
     load_id: load.load_id,
     customer: {
         companyName: customer.companyName,

@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
 
   const total = await Employees.countDocuments(query);
 
-  return NextResponse.json({ data: employees, total });
+  return NextResponse.json({ employees, total });
 }
 
 export async function POST(req: NextRequest) {

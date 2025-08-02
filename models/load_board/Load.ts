@@ -24,6 +24,8 @@ export interface ILoad extends Document {
   driver: mongoose.Types.ObjectId;
   dispatcher: mongoose.Types.ObjectId;
   vehicle: mongoose.Types.ObjectId;
+  pickupETA: String;
+  pickupTime: String;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -75,6 +77,8 @@ const LoadBoardSchema: Schema = new Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Vehicle",
     },
+    pickupETA: String,
+    pickupTime: String,
   },
   { timestamps: true }
 );

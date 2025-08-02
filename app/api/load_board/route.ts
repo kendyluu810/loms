@@ -5,6 +5,7 @@ import Route from "@/models/load_board/Routes";
 import Shipment from "@/models/load_board/Shipment";
 import Customer from "@/models/customer/Customers";
 import Carrier from "@/models/Carrier";
+import Vehicle from "@/models/Vehicle";
 
 export async function POST(req: NextRequest) {
   try {
@@ -220,6 +221,70 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to fetch loads", details: error },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PATCH(req: NextRequest) {
+  try {
+    await dbConnect();
+    const body = await req.json();
+
+    const { loadId, driver, dispatcher, vehicle, pickupETA, pickupTime } = body;
+
+    const today = new Date();
+
+    const [etaHours, etaMinutes] = pickupETA.split(":").map(Number);
+    const [timeHours, timeMinutes] = pickupTime.split(":").map(Number);
+
+    const pickupETADate = new Date(today);
+    pickupETADate.setHours(etaHours, etaMinutes, 0, 0);
+
+    const pickupTimeDate = new Date(today);
+    pickupTimeDate.setHours(timeHours, timeMinutes, 0, 0);
+    
+    if (
+      !loadId ||
+      !driver ||
+      !dispatcher ||
+      !vehicle ||
+      !pickupETA ||
+      !pickupTime
+    ) {
+      return NextResponse.json(
+        { message: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    const updatedLoad = await Load.findByIdAndUpdate(
+      loadId,
+      {
+        driver,
+        dispatcher,
+        vehicle,
+        pickupETA: pickupETADate.toISOString(),
+        pickupTime: pickupTimeDate.toISOString(),
+        status: "in_transit",
+      },
+      { new: true }
+    );
+
+    if (!updatedLoad) {
+      return NextResponse.json({ message: "Load not found" }, { status: 404 });
+    }
+
+    await Vehicle.findByIdAndUpdate(vehicle, { isEmpty: false });
+
+    return NextResponse.json({
+      message: "Booking confirmed",
+      load: updatedLoad,
+    });
+  } catch (error: any) {
+    console.error("Confirm Booking Error:", error);
+    return NextResponse.json(
+      { message: "Failed to confirm booking", error: error.message },
       { status: 500 }
     );
   }

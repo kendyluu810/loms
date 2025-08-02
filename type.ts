@@ -119,6 +119,7 @@ export interface LoadBoard {
 }
 
 export interface LoadRow {
+  _id: string;
   load_id: string; // load_id
   customer: {
     companyName: string; // customer.companyName
@@ -202,6 +203,7 @@ export interface Invoice {
 }
 
 export interface ExtendedLoadRow extends LoadRow {
+  _id: string;
   route: {
     pickupPoint?: RoutePoint;
     deliveryPoint?: RoutePoint;

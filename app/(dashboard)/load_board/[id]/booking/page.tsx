@@ -52,7 +52,7 @@ export default function BookingPage() {
         </div>
       </div>
 
-      <BookingForm />
+      {load?._id && <BookingForm loadId={load._id} />}
     </div>
   );
 }
