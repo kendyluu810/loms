@@ -12,6 +12,7 @@ export interface IRoutePoint extends Document {
   address: string;
   status: string;
   eta: string;
+  load_id: mongoose.Types.ObjectId;
 }
 
 export const RoutePointSchema = new Schema(
@@ -21,18 +22,19 @@ export const RoutePointSchema = new Schema(
       enum: ["pickup", "stop", "delivery"],
       required: true,
     },
-    timezone: { type: String},
-    localTime: { type: String},
-    early: { type: String},
-    late: { type: String},
-    date: { type: String},
-    locationName: { type: String},
-    cityState: { type: String},
-    address: { type: String},
-    status: { type: String},
-    eta: { type: String},
+    timezone: { type: String },
+    localTime: { type: String },
+    early: { type: String },
+    late: { type: String },
+    date: { type: String },
+    locationName: { type: String },
+    cityState: { type: String },
+    address: { type: String },
+    status: { type: String },
+    eta: { type: String },
+    load_id: { type: Schema.Types.ObjectId, ref: "Load" },
   },
-  { _id: false }
+  { _id: true, timestamps: true }
 );
 
 export default mongoose.models.RoutePoint ||

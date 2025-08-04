@@ -2,9 +2,13 @@ import axios from "axios";
 import {
   CheckCircle,
   Circle,
+  Clock,
+  Clock4,
   MapPin,
   Pencil,
+  RefreshCw,
   Save,
+  XCircle,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -162,20 +166,28 @@ export default function RouteDetails({ load }: any) {
         {timeline.map((step) => (
           <li key={step.id} className="ml-6 relative">
             <span className="absolute -left-6 top-0.5">
-              {step.status === "completed" ? (
+              {step.status === "cancelled" ? (
+                <XCircle className="w-5 h-5 text-red-500" />
+              ) : step.status === "completed" ? (
                 <CheckCircle className="w-5 h-5 text-green-500" />
+              ) : step.status === "pending" ? (
+                <Clock className="w-5 h-5 text-yellow-500" />
+              ) : step.status === "in_progress" ? (
+                <RefreshCw className="w-5 h-5 text-blue-500 animate-spin" />
               ) : (
                 <Circle className="w-5 h-5 text-gray-400" />
               )}
             </span>
             <div className="text-sm">
               <div className="flex justify-between items-center">
-                <div className="flex items-center space-x-1">
+                <div className="flex items-center space-x-2">
                   <p className="font-semibold text-gray-700">{step.title}</p>
-                  <Pencil
-                    className="w-4 h-4 text-blue-500 cursor-pointer"
-                    onClick={() => handleEditClick(step)}
-                  />
+                  {step.canEdit && (
+                    <Pencil
+                      className="w-4 h-4 text-blue-500 cursor-pointer"
+                      onClick={() => handleEditClick(step)}
+                    />
+                  )}
                 </div>
                 <span className="text-xs text-gray-500">
                   {step.time || "Expected"}

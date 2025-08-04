@@ -165,6 +165,7 @@ export interface RoutePoint {
   address: string;
   status: string;
   eta: string;
+  load_id: string; // Reference to LoadBoard
 }
 
 // ShipmentPoint
