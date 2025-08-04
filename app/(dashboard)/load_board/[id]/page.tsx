@@ -101,8 +101,15 @@ export default function LoadDetails() {
             Cancel
           </Button>
           <Button
-            onClick={() => router.push(`/load_board/${id}/booking`)}
             className="bg-blue-600 text-white hover:bg-blue-700"
+            onClick={() => {
+              if (!load.driver || !load.vehicle) {
+                router.push(`/load_board/${id}/booking`);
+              } else {
+                toast.warning("This load has already been booked.");
+              }
+            }}
+            disabled={!!load.driver && !!load.vehicle}
           >
             Booking
           </Button>

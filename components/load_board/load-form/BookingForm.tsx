@@ -48,9 +48,10 @@ export default function BookingForm({ loadId }: BookingFormProps) {
         const dispatchersData = await dispatchersRes.json();
         const vehiclesData = await vehiclesRes.json();
 
-        setDrivers(driversData?.employees || []);
-        setDispatchers(dispatchersData?.employees || []);
+        setDrivers(driversData?.data || []);
+        setDispatchers(dispatchersData?.data || []);
         setVehicles(vehiclesData?.vehicles || []);
+        console.log("Fetched data:", { drivers: driversData, dispatchers: dispatchersData });
       } catch (error) {
         console.error("Error fetching data:", error);
         setDrivers([]);
@@ -61,24 +62,6 @@ export default function BookingForm({ loadId }: BookingFormProps) {
 
     fetchData();
   }, []);
-
-  // const handleDriverChange = async (driverId: string) => {
-  //   const res = await fetch(`/api/employees/${driverId}`);
-  //   const data = await res.json();
-  //   setSelectedDriver(data);
-  // };
-
-  // const handleDispatcherChange = async (dispatcherId: string) => {
-  //   const res = await fetch(`/api/employees/${dispatcherId}`);
-  //   const data = await res.json();
-  //   setSelectedDispatcher(data);
-  // };
-
-  // const handleVehicleChange = async (_id: string) => {
-  //   const res = await fetch(`/api/vehicles/${_id}`);
-  //   const data = await res.json();
-  //   setSelectedVehicle(data);
-  // };
 
   const handleSubmitBooking = async () => {
     if (
@@ -92,25 +75,7 @@ export default function BookingForm({ loadId }: BookingFormProps) {
       return;
     }
 
-    // const payload = {
-    //   loadId,
-    //   driver: selectedDriver._id,
-    //   dispatcher: selectedDispatcher._id,
-    //   vehicle: selectedVehicle._id,
-    //   pickupETA,
-    //   pickupTime,
-    // };
-
-    console.log("PATCH body", {
-      loadId: loadId,
-      driver: selectedDriver?._id,
-      dispatcher: selectedDispatcher?._id,
-      vehicle: selectedVehicle?._id,
-      pickupETA: pickupETA,
-      pickupTime: pickupTime,
-    });
-
-    const res = await fetch("/api/load_board", {
+    const res = await fetch(`/api/load_board/${loadId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -122,10 +87,18 @@ export default function BookingForm({ loadId }: BookingFormProps) {
         pickupTime: pickupTime,
       }),
     });
+    console.log("Submitting booking data:", {
+      driver: selectedDriver,
+      dispatcher: selectedDispatcher,
+      vehicle: selectedVehicle,
+      pickupETA,
+      pickupTime,
+    });
 
     if (res.ok) {
+      const result = await res.json();
       toast.success("Booking confirmed successfully!");
-      router.push(`/load_board/${loadId}`);
+      router.push(`/load_board/${result.load.load_id}`);
     } else {
       const err = await res.json();
       toast.error(

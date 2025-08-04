@@ -12,7 +12,6 @@ const DriverSchema: Schema = new Schema(
     employee: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Employee",
-      required: true,
     },
     driverlicense: { type: String, required: true },
     licensetype: { type: String, required: true },

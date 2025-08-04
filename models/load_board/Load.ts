@@ -71,7 +71,7 @@ const LoadBoardSchema: Schema = new Schema(
     },
     dispatcher: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Dispatcher",
+      ref: "Employee",
     },
     vehicle: {
       type: mongoose.Schema.Types.ObjectId,

@@ -30,6 +30,19 @@ export default function InvoiceTabs({ load }: InvoiceTabsProps) {
         const res = await axios.get(`/api/load_board/${load_id}`);
         let currentInvoice = res.data.invoice;
 
+        if (!currentInvoice) {
+          const newInvoiceRes = await axios.post(`/api/invoice`, {
+            loadId: load_id,
+          });
+          currentInvoice = newInvoiceRes.data;
+
+          // Gắn invoice mới vào Load
+          await axios.put(`/api/load_board/${load_id}/invoice`, {
+            invoiceId: currentInvoice._id,
+          });
+          toast.success("Tạo mới invoice thành công!");
+        }
+
         const loadRate = parseFloat(currentInvoice.loadRate) || 0;
         const fuelSurchargeCustomer =
           parseFloat(currentInvoice.fuelSurchargeCustomer) || 0;

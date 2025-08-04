@@ -9,9 +9,11 @@ export function mapLoadToRow(load: LoadBoard): LoadRow {
     _id: load._id || "",
     load_id: load.load_id,
     customer: {
-        companyName: customer.companyName,
-        contactPerson: customer.contactPerson,
-        contactPhone: customer.contactPhone,
+      companyName: customer.companyName,
+      contactPerson: customer.contactPerson,
+      contactPhone: customer.contactPhone,
+      companyEmail: "",
+      companyPhone: ""
     },
     origin: route?.origin ?? "",
     pickupTime: route?.pickupTime ?? "",

@@ -30,6 +30,10 @@ export default function LoadDataTable({
     const fetchLoads = async () => {
       try {
         const res = await fetch("/api/load_board");
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.message || "Failed to fetch");
+        }
         const { data } = await res.json();
         const rows = data.map(mapLoadToRow);
         setLoadRows(rows);

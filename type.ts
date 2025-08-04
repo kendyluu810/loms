@@ -113,66 +113,15 @@ export interface LoadBoard {
   shipment: Shipment | string;
   customer: Customer | string;
   carrier: Carrier | string;
+  driver?: Driver
+  dispatcher?: Employee | string;
+  vehicle?: Vehicle | string;
   status: LoadStatus;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
-export interface LoadRow {
-  _id: string;
-  load_id: string; // load_id
-  customer: {
-    companyName: string; // customer.companyName
-    contactPerson?: string; // customer.contactPerson
-    contactPhone?: string; // customer.contactPhone
-  };
-  carrier?: {
-    name: string; // carrier.name
-    mcNumber?: string; // carrier.mcNumber
-    dotNumber?: string; // carrier.dotNumber
-  };
-  origin: string; // route.origin
-  pickupTime: string; // route.pickupTime
-  pickupDate?: string;
-  miles?: string;
-  destination: string;
-  deliveryTime: string;
-  deliveryDate?: string;
-  equipment?: string; // shipment.equipmentType
-  weight?: string; // shipment.weight
-  rate?: string; // shipment.rate
-  rateUnit?: string;
-  stop?: string; // route.additionalStop
-  status: string; // LoadStatus
-  createdAt: string;
-}
-
-export interface RoutePoint {
-  _id?: string;
-  type: "pickup" | "stop" | "delivery";
-  timezone: string;
-  localTime: string;
-  early: string;
-  late: string;
-  date: string;
-  locationName: string;
-  cityState: string;
-  address: string;
-  status: string;
-  eta: string;
-}
-
-export interface ShipmentPoint {
-  _id?: string;
-  type: "pickup" | "stop" | "delivery";
-  code: string;
-  locationName?: string;
-  eta?: string;
-  status?: string; // e.g., 'pending', 'in transit', 'delivered'
-  timezone?: string;
-  remarks?: string;
-}
-
+// Invoice
 export interface Invoice {
   _id?: string;
   loadId: string;
@@ -202,6 +151,63 @@ export interface Invoice {
   updatedAt?: string;
 }
 
+// RoutePoint
+export interface RoutePoint {
+  _id?: string;
+  type: "pickup" | "stop" | "delivery";
+  timezone: string;
+  localTime: string;
+  early: string;
+  late: string;
+  date: string;
+  locationName: string;
+  cityState: string;
+  address: string;
+  status: string;
+  eta: string;
+}
+
+// ShipmentPoint
+export interface ShipmentPoint {
+  _id?: string;
+  type: "pickup" | "stop" | "delivery";
+  code: string;
+  locationName?: string;
+  eta?: string;
+  status?: string; // e.g., 'pending', 'in transit', 'delivered'
+  timezone?: string;
+  remarks?: string;
+}
+
+// LoadRow
+export interface LoadRow {
+  _id: string;
+  load_id: string; // load_id
+  customer: Customer; // customer
+  carrier?: {
+    name: string; // carrier.name
+    mcNumber?: string; // carrier.mcNumber
+    dotNumber?: string; // carrier.dotNumber
+  };
+  vehicle?: Vehicle;
+  dispatcher?: Employee; // dispatcher
+  origin: string; // route.origin
+  pickupTime: string; // route.pickupTime
+  pickupDate?: string;
+  miles?: string;
+  destination: string;
+  deliveryTime: string;
+  deliveryDate?: string;
+  equipment?: string; // shipment.equipmentType
+  weight?: string; // shipment.weight
+  rate?: string; // shipment.rate
+  rateUnit?: string;
+  stop?: string; // route.additionalStop
+  status: string; // LoadStatus
+  createdAt: string;
+}
+
+// ExtendedLoadRow
 export interface ExtendedLoadRow extends LoadRow {
   _id: string;
   route: {
@@ -219,6 +225,13 @@ export interface ExtendedLoadRow extends LoadRow {
     rate: number;
   };
   customer: Customer;
+  driver?: {
+    employee?: {
+      name?: string;
+    };
+  };
+  dispatcher?: Employee;
+  vehicle?: Vehicle;
   carrier?: Carrier;
   invoice?: Invoice;
 }

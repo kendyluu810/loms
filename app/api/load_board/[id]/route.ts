@@ -1,13 +1,18 @@
 import dbConnect from "@/lib/mongodb";
 import Load from "@/models/load_board/Load";
+import Driver from "@/models/Driver";
+import Routes from "@/models/load_board/Routes";
+import Shipment from "@/models/load_board/Shipment";
+import Vehicle from "@/models/Vehicle";
 import "@/models/load_board/Routes";
 import "@/models/load_board/Shipment";
 import "@/models/customer/Customers";
 import "@/models/Carrier";
 import "@/models/Invoice";
+import "@/models/Driver";
+import "@/models/Vehicle";
+import "@/models/employees/Employees";
 import { NextRequest, NextResponse } from "next/server";
-import Routes from "@/models/load_board/Routes";
-import Shipment from "@/models/load_board/Shipment";
 import mongoose from "mongoose";
 
 export async function GET(
@@ -19,11 +24,14 @@ export async function GET(
 
   try {
     const load = mongoose.Types.ObjectId.isValid(id)
-      ? await Load.findById(id) // nếu là Mongo ObjectId
+      ? await Load.findById(id)
       : await Load.findOne({ load_id: id })
           .populate("route")
           .populate("shipment")
           .populate("customer")
+          .populate("driver")
+          .populate("dispatcher")
+          .populate("vehicle")
           .populate("carrier")
           .populate("invoice");
 
@@ -150,10 +158,88 @@ export async function DELETE(
     if (!load) {
       return NextResponse.json({ message: "Load not found" }, { status: 404 });
     }
-    await Load.deleteOne();
+    await Load.deleteOne({ _id: load._id });
     return NextResponse.json({ message: "Deleted successfully" });
   } catch (error) {
     console.error("DELETE Error:", error);
     return NextResponse.json({ message: "Delete failed" }, { status: 400 });
+  }
+}
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    await dbConnect();
+    const { id: load_id } = params; // lấy load_id từ URL
+    const body = await req.json();
+
+    const { loadId, driver, dispatcher, vehicle, pickupETA, pickupTime } = body;
+
+    const today = new Date();
+
+    const [etaHours, etaMinutes] = pickupETA.split(":").map(Number);
+    const [timeHours, timeMinutes] = pickupTime.split(":").map(Number);
+
+    const pickupETADate = new Date(today);
+    pickupETADate.setHours(etaHours, etaMinutes, 0, 0);
+
+    const pickupTimeDate = new Date(today);
+    pickupTimeDate.setHours(timeHours, timeMinutes, 0, 0);
+
+    if (
+      !loadId ||
+      !driver ||
+      !dispatcher ||
+      !vehicle ||
+      !pickupETA ||
+      !pickupTime
+    ) {
+      return NextResponse.json(
+        { message: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    const driverDoc = await Driver.findOne({ employee: driver });
+    if (!driverDoc) {
+      return NextResponse.json(
+        { message: "Driver not found" },
+        { status: 404 }
+      );
+    }
+
+    const updatedLoad = await Load.findByIdAndUpdate(
+      loadId,
+      {
+        driver: driverDoc._id,
+        dispatcher: new mongoose.Types.ObjectId(dispatcher),
+        vehicle: new mongoose.Types.ObjectId(vehicle),
+        pickupETA: pickupETADate.toISOString(),
+        pickupTime: pickupTimeDate.toISOString(),
+        status: "in_transit",
+      },
+      { new: true }
+    );
+
+    if (!updatedLoad) {
+      return NextResponse.json({ message: "Load not found" }, { status: 404 });
+    }
+
+    await Vehicle.findByIdAndUpdate(vehicle, { isEmpty: false });
+
+    return NextResponse.json({
+      message: "Booking confirmed",
+      load: {
+        _id: updatedLoad._id,
+        load_id: updatedLoad.load_id,
+      },
+    });
+  } catch (error: any) {
+    console.error("Confirm Booking Error:", error);
+    return NextResponse.json(
+      { message: "Failed to confirm booking", error: error.message },
+      { status: 500 }
+    );
   }
 }

@@ -181,16 +181,12 @@ export default function RouteCard({ load, onUpdateLoad }: RouteCardProps) {
                     <Controller
                       name="pickup.early"
                       control={control}
-                      render={({ field }) => (
-                        <Input placeholder="08:00" {...field} />
-                      )}
+                      render={({ field }) => <Input type="time" {...field} />}
                     />
                     <Controller
                       name="pickup.late"
                       control={control}
-                      render={({ field }) => (
-                        <Input placeholder="10:00" {...field} />
-                      )}
+                      render={({ field }) => <Input type="time" {...field} />}
                     />
                   </span>
                   <span>{load.route?.pickupPoint?.locationName || "--"}</span>
@@ -234,16 +230,12 @@ export default function RouteCard({ load, onUpdateLoad }: RouteCardProps) {
                     <Controller
                       name="delivery.early"
                       control={control}
-                      render={({ field }) => (
-                        <Input placeholder="08:00" {...field} />
-                      )}
+                      render={({ field }) => <Input type="time" {...field} />}
                     />
                     <Controller
                       name="delivery.late"
                       control={control}
-                      render={({ field }) => (
-                        <Input placeholder="10:00" {...field} />
-                      )}
+                      render={({ field }) => <Input type="time" {...field} />}
                     />
                   </span>
                   <span>{load.route?.deliveryPoint?.locationName || "--"}</span>
@@ -294,14 +286,14 @@ export default function RouteCard({ load, onUpdateLoad }: RouteCardProps) {
                             name={`stop.${index}.early`}
                             control={control}
                             render={({ field }) => (
-                              <Input placeholder="08:00" {...field} />
+                              <Input type="time" {...field} />
                             )}
                           />
                           <Controller
                             name={`stop.${index}.late`}
                             control={control}
                             render={({ field }) => (
-                              <Input placeholder="10:00" {...field} />
+                              <Input type="time" {...field} />
                             )}
                           />
                         </span>
