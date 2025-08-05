@@ -4,7 +4,6 @@ import { MoreVertical, Pencil, Save } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { ExtendedLoadRow } from "@/type";
 import { Badge } from "@/components/ui/badge";
-import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -76,6 +75,24 @@ export default function RouteCard({ load, onUpdateLoad }: RouteCardProps) {
     });
   }, [load, reset]);
 
+  const getStatusStyle = (status: string) => {
+    switch (status?.toLowerCase()) {
+      case "pending":
+        return "bg-yellow-100 text-yellow-800 border border-yellow-300";
+      case "in progress":
+        return "bg-blue-100 text-blue-800 border border-blue-300";
+      case "completed":
+        return "bg-green-100 text-green-800 border border-green-300";
+      case "cancelled":
+        return "bg-red-100 text-red-800 border border-red-300";
+      default:
+        return "bg-gray-100 text-gray-800 border border-gray-300";
+    }
+  };
+
+  const formatStatus = (status: string) =>
+    status.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+
   const calculateETA = (early: string, late: string) => {
     if (!early || !late) return "";
     const [eh, em] = early.split(":").map(Number);
@@ -126,18 +143,18 @@ export default function RouteCard({ load, onUpdateLoad }: RouteCardProps) {
       } as ExtendedLoadRow["route"];
 
       const res = await fetch(`/api/load_board/${load.load_id}`, {
-        method: "PUT",
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ route: routePayload }),
       });
 
       if (!res.ok) throw new Error("Failed to update route");
 
-      onUpdateLoad({ ...load, route: routePayload }); // ✅ cập nhật lại route trong state cha
+      onUpdateLoad({ ...load, route: routePayload });
       toast.success("Route updated successfully");
       setEditRoute(false);
-    } catch (err) {
-      //console.error("Update Route Error:", err);
+    } catch (err: any) {
+      toast.error(err?.message || "Update failed");
     }
   };
 
@@ -365,9 +382,13 @@ export default function RouteCard({ load, onUpdateLoad }: RouteCardProps) {
                 <span>{load.route?.pickupPoint?.locationName || "--"}</span>
                 <span>{load.route?.pickupPoint?.address || "--"}</span>
                 <span>
-                  <Badge variant="outline">
-                    {load.route?.pickupPoint?.status || "Unknown"}
-                  </Badge>
+                  <span
+                    className={`text-xs px-2 py-1 rounded font-medium ${getStatusStyle(
+                      load.route?.pickupPoint?.status || "Unknown"
+                    )}`}
+                  >
+                    {formatStatus(load.route?.pickupPoint?.status || "Unknown")}
+                  </span>
                 </span>
                 <span>
                   <span>{load.route?.pickupPoint?.eta || "--"}</span>
@@ -388,9 +409,15 @@ export default function RouteCard({ load, onUpdateLoad }: RouteCardProps) {
                 <span>{load.route?.deliveryPoint?.locationName || "--"}</span>
                 <span>{load.route?.deliveryPoint?.address || "--"}</span>
                 <span>
-                  <Badge variant="outline">
-                    {load.route?.deliveryPoint?.status || "Unknown"}
-                  </Badge>
+                  <span
+                    className={`text-xs px-2 py-1 rounded font-medium ${getStatusStyle(
+                      load.route?.deliveryPoint?.status || "Unknown"
+                    )}`}
+                  >
+                    {formatStatus(
+                      load.route?.deliveryPoint?.status || "Unknown"
+                    )}
+                  </span>
                 </span>
                 <span>{load.route?.deliveryPoint?.eta || "--"}</span>
               </div>
@@ -414,9 +441,13 @@ export default function RouteCard({ load, onUpdateLoad }: RouteCardProps) {
                       <span>{point.locationName || "--"}</span>
                       <span>{point.address || "--"}</span>
                       <span>
-                        <Badge variant="outline">
-                          {point.status || "Unknown"}
-                        </Badge>
+                        <span
+                          className={`text-xs px-2 py-1 rounded font-medium ${getStatusStyle(
+                            point.status || "Unknown"
+                          )}`}
+                        >
+                          {formatStatus(point.status || "Unknown")}
+                        </span>
                       </span>
                       <span>{point.eta || "--"}</span>
                     </div>

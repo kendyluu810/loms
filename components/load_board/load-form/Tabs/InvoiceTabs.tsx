@@ -36,12 +36,12 @@ export default function InvoiceTabs({ load }: InvoiceTabsProps) {
           });
           currentInvoice = newInvoiceRes.data;
 
-          // Gắn invoice mới vào Load
-          await axios.put(`/api/load_board/${load_id}/invoice`, {
+            // Attach the new invoice to the Load
+            await axios.put(`/api/load_board/${load_id}/invoice`, {
             invoiceId: currentInvoice._id,
-          });
-          toast.success("Tạo mới invoice thành công!");
-        }
+            });
+            toast.success("Invoice created successfully!");
+          }
 
         const loadRate = parseFloat(currentInvoice.loadRate) || 0;
         const fuelSurchargeCustomer =
@@ -72,23 +72,23 @@ export default function InvoiceTabs({ load }: InvoiceTabsProps) {
           await axios.put(`/api/load_board/${load_id}/invoice`, {
             invoiceId: currentInvoice._id,
           });
-          toast.success("Tạo mới invoice thành công!");
-        }
+            toast.success("Invoice created successfully!");
+          }
 
-        setInvoice({
-          ...currentInvoice,
-          customerChargesTotal: parseFloat(customerChargesTotal.toFixed(2)),
-          carrierChargesTotal: parseFloat(carrierChargesTotal.toFixed(2)),
-          carrierTotal: parseFloat(carrierTotal.toFixed(2)),
-          invoiceTotal: parseFloat(invoiceTotal.toFixed(2)),
-          adjustedAmount: parseFloat(adjustedAmount.toFixed(2)),
-          carrierTotalPay: parseFloat(carrierTotalPay.toFixed(2)),
-        });
-      } catch (err) {
-        //console.error("Error fetching invoice:", err);
-        toast.error("Không thể tải invoice.");
-      }
-    };
+          setInvoice({
+            ...currentInvoice,
+            customerChargesTotal: parseFloat(customerChargesTotal.toFixed(2)),
+            carrierChargesTotal: parseFloat(carrierChargesTotal.toFixed(2)),
+            carrierTotal: parseFloat(carrierTotal.toFixed(2)),
+            invoiceTotal: parseFloat(invoiceTotal.toFixed(2)),
+            adjustedAmount: parseFloat(adjustedAmount.toFixed(2)),
+            carrierTotalPay: parseFloat(carrierTotalPay.toFixed(2)),
+          });
+          } catch (err) {
+          //console.error("Error fetching invoice:", err);
+          toast.error("Unable to load invoice.");
+          }
+        };
 
     if (load_id) {
       fetchInvoice();
@@ -117,10 +117,10 @@ export default function InvoiceTabs({ load }: InvoiceTabsProps) {
         invoiceTotal: parseFloat(newInvoiceTotal.toFixed(2)),
       });
 
-      toast.success("Cập nhật thành công");
+      toast.success("Update successful");
     } catch (err) {
       //console.error(err);
-      toast.error("Cập nhật thất bại");
+      toast.error("Update failed");
     }
   };
 

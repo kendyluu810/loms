@@ -54,21 +54,22 @@ export const columns = (
     },
   },
   {
-  accessorKey: "customer",
-  header: "Customer",
-  cell: ({ row }) => {
-    const { companyName, contactPerson, contactPhone } = row.original.customer;
+    accessorKey: "customer",
+    header: "Customer",
+    cell: ({ row }) => {
+      const { companyName, contactPerson, contactPhone } =
+        row.original.customer;
 
-    return (
-      <div>
-        <div className="font-medium">{companyName}</div>
-        <div className="text-sm text-muted-foreground">
-          ({contactPerson} - {contactPhone})
+      return (
+        <div>
+          <div className="font-medium">{companyName}</div>
+          <div className="text-sm text-muted-foreground">
+            ({contactPerson} - {contactPhone})
+          </div>
         </div>
-      </div>
-    );
+      );
+    },
   },
-},
   {
     accessorKey: "origin",
     header: "Origin",
@@ -123,15 +124,39 @@ export const columns = (
   {
     accessorKey: "status",
     header: "Status",
-    cell: ({ row }) => (
-      <Badge
-        variant={
-          row.getValue("status") === "posted" ? "secondary" : "destructive"
+    cell: ({ row }) => {
+      const status = row.getValue("status");
+
+      const getStatusStyle = (status: string) => {
+        switch (status?.toLowerCase()) {
+          case "pending":
+            return "bg-yellow-100 text-yellow-800 border border-yellow-300";
+          case "in progress":
+            return "bg-blue-100 text-blue-800 border border-blue-300";
+          case "delivered":
+            return "bg-green-100 text-green-800 border border-green-300";
+          case "cancelled":
+            return "bg-red-100 text-red-800 border border-red-300";
+          default:
+            return "bg-gray-100 text-gray-800 border border-gray-300";
         }
-      >
-        {row.getValue("status")}
-      </Badge>
-    ),
+      };
+
+      const formatStatus = (status: string) =>
+        status
+          .replace(/_/g, " ") // "in_progress" → "in progress"
+          .replace(/\b\w/g, (c) => c.toUpperCase()); // "in progress" → "In Progress"
+
+      return (
+        <span
+          className={`text-xs px-2 py-1 rounded font-medium ${getStatusStyle(
+            status as string
+          )}`}
+        >
+          {formatStatus(status as string)}
+        </span>
+      );
+    },
   },
   {
     id: "actions",

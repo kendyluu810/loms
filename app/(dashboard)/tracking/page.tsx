@@ -6,6 +6,7 @@ import TrackingList from "@/components/tracking/TrackingList";
 import RouteDetails from "@/components/tracking/RouteDetails";
 import LoadDetails from "@/components/tracking/LoadDetails";
 import { ExtendedLoadRow } from "@/type";
+import { toast } from "sonner";
 
 export default function TrackingPage() {
   const [selectedLoad, setSelectedLoad] = useState<ExtendedLoadRow | null>(
@@ -24,10 +25,10 @@ export default function TrackingPage() {
           //console.log("Tracking data:", json.data);
           setLoads(json.data);
         } else {
-          //console.error("Failed to fetch tracking:", json.message);
+          toast.error("Failed to fetch tracking:", json.message);
         }
-      } catch (error) {
-        //console.error("Error fetching tracking:", error);
+      } catch (error: any) {
+        toast.error("Error fetching tracking:", error.message);
       } finally {
         setLoading(false);
       }

@@ -58,7 +58,7 @@ const LoadBoardSchema: Schema = new Schema(
     },
     status: {
       type: String,
-      enum: ["posted", "in_transit", "delivered", "cancelled"],
+      enum: ["posted", "booked", "in_progress", "delivered", "cancelled"],
       default: "posted",
     },
     invoice: {

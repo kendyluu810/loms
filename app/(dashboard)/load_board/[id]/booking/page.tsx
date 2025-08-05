@@ -4,10 +4,33 @@ import { Badge } from "@/components/ui/badge";
 import { ExtendedLoadRow, LoadRow } from "@/type";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function BookingPage() {
   const { id } = useParams();
   const [load, setLoad] = useState<ExtendedLoadRow | null>(null);
+
+  const getVariant = (status: string) => {
+    switch (status) {
+      case "posted":
+        return "secondary"; // xám nhạt
+      case "booked":
+        return "outline"; // xanh dương viền
+      case "in_progress":
+        return "outline"; // xanh dương viền
+      case "completed":
+        return "default"; // xanh lá
+      case "cancelled":
+        return "destructive"; // đỏ
+      default:
+        return "secondary";
+    }
+  };
+
+  const formatStatus = (status: string) =>
+    status
+      .replace(/_/g, " ") // "in_progress" → "in progress"
+      .replace(/\b\w/g, (c) => c.toUpperCase()); // "in progress" → "In Progress"
 
   useEffect(() => {
     const fetchLoad = async () => {
@@ -15,8 +38,8 @@ export default function BookingPage() {
         const res = await fetch(`/api/load_board/${id}`);
         const data = await res.json();
         setLoad(data);
-      } catch (error) {
-        //console.error("Failed to fetch load", error);
+      } catch (error: any) {
+        toast.error("Failed to fetch load", error.message);
       }
     };
     if (id) fetchLoad();
@@ -31,9 +54,11 @@ export default function BookingPage() {
           <div className="flex items-center space-x-4">
             <h2 className="text-[#022f7e] font-medium">#{load?.load_id}</h2>
             <div className="flex items-center gap-2">
-              <Badge className="border border-green-500 bg-white text-[#022f7e]">
-                {load?.status}
-              </Badge>
+              {load?.status && (
+                <Badge variant={getVariant(load.status)}>
+                  {formatStatus(load.status)}
+                </Badge>
+              )}
               <Badge className="border border-blue-500 bg-white text-[#022f7e]">
                 {load?.shipment.equipmentType || "N/A"}
               </Badge>
@@ -52,7 +77,7 @@ export default function BookingPage() {
         </div>
       </div>
 
-      {load?._id && <BookingForm loadId={load._id} />}
+      {load?._id && <BookingForm loadId={load.load_id} />}
     </div>
   );
 }

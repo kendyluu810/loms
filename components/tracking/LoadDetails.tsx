@@ -41,10 +41,6 @@ export default function LoadDetails({ load }: any) {
               {route?.pickupTime || "N/A"}
             </p>
             <p>
-              <strong>Stop at:</strong> {route?.stopPoint?.locatioName || "N/A"}{" "}
-              at {route?.stopTime || "N/A"}
-            </p>
-            <p>
               <strong>Delivery:</strong>{" "}
               {route?.deliveryPoint?.address || "N/A"} at{" "}
               {route?.deliveryTime || "N/A"}

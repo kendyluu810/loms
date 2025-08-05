@@ -87,13 +87,6 @@ export default function BookingForm({ loadId }: BookingFormProps) {
         pickupTime: pickupTime,
       }),
     });
-    //console.log("Submitting booking data:", {
-      driver: selectedDriver,
-      dispatcher: selectedDispatcher,
-      vehicle: selectedVehicle,
-      pickupETA,
-      pickupTime,
-    });
 
     if (res.ok) {
       const result = await res.json();

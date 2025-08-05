@@ -17,18 +17,54 @@ export default function LoadDetails() {
     "general"
   );
 
-  useEffect(() => {
-    const fetchLoad = async () => {
-      try {
-        const res = await fetch(`/api/load_board/${id}`);
-        const data = await res.json();
+  const getStatusStyle = (status: string) => {
+    switch (status?.toLowerCase()) {
+      case "pending":
+        return "bg-yellow-100 text-yellow-800 border border-yellow-300";
+      case "in_progress":
+        return "bg-blue-100 text-blue-800 border border-blue-300";
+      case "delivered":
+        return "bg-green-100 text-green-800 border border-green-300";
+      case "cancelled":
+        return "bg-red-100 text-red-800 border border-red-300";
+      default:
+        return "bg-gray-100 text-gray-800 border border-gray-300";
+    }
+  };
+
+  const formatStatus = (status: string) =>
+    status.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+
+  const fetchLoad = async () => {
+    try {
+      const res = await fetch(`/api/load_board/${id}`);
+      const data = await res.json();
+      if (res.ok) {
         setLoad(data);
-      } catch (error) {
-        //console.error("Failed to fetch load", error);
+      } else {
+        toast.error(data.message || "Failed to fetch load");
       }
-    };
+    } catch (error: any) {
+      toast.error("Failed to fetch load", error.message);
+    }
+  };
+
+  useEffect(() => {
     if (id) fetchLoad();
   }, [id]);
+
+  const handleUpdateLoad = (newData: Partial<ExtendedLoadRow>) => {
+    setLoad((prev) =>
+      prev
+        ? {
+            ...prev,
+            ...newData,
+            route: newData.route ?? prev.route,
+            status: newData.status ?? prev.status,
+          }
+        : prev
+    );
+  };
 
   if (!load) {
     return <div className="p-4 text-gray-500">Loading Load Data...</div>;
@@ -43,9 +79,15 @@ export default function LoadDetails() {
           <div className="flex items-center space-x-4">
             <h2 className="text-[#022f7e] font-medium">#{load.load_id}</h2>
             <div className="flex items-center gap-2">
-              <Badge className="border border-green-500 bg-white text-[#022f7e]">
-                {load.status}
-              </Badge>
+              {load.status && (
+                <span
+                  className={`text-xs px-2 py-1 rounded font-medium ${getStatusStyle(
+                    load.status
+                  )}`}
+                >
+                  {formatStatus(load.status || "Unknown")}
+                </span>
+              )}
               <Badge className="border border-blue-500 bg-white text-[#022f7e]">
                 {load.shipment?.equipmentType || "N/A"}
               </Badge>
@@ -117,7 +159,7 @@ export default function LoadDetails() {
       </div>
       <div className="p-4">
         {activeTab === "general" && (
-          <GeneralTabs load={load} onUpdateLoad={setLoad} />
+          <GeneralTabs load={load} onUpdateLoad={handleUpdateLoad} />
         )}
         {activeTab === "invoice" && <InvoiceTabs load={load} />}
         {activeTab === "history" && (

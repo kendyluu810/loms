@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
 
     // Validate if route, shipment, and customer exist
-    const { route, shipment, customer: customerId, carrier, status } = body;
+    const { route, shipment, customer: customerId, carrier } = body;
 
     const [foundRoute, foundShipment, foundCustomer, foundCarrier] =
       await Promise.all([
@@ -152,7 +152,7 @@ export async function POST(req: NextRequest) {
       driver: foundDriver?._id || undefined,
       vehicle: foundVehicle?._id || undefined,
       dispatcher: foundDispatcher?._id || undefined,
-      status: status || "posted",
+      status: "posted",
     });
 
     return NextResponse.json(newLoad, { status: 201 });

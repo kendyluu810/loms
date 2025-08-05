@@ -104,7 +104,7 @@ export interface Shipment {
   dangerType?: string;
 }
 // LoadBoard
-export type LoadStatus = "posted" | "in_transit" | "delivered" | "cancelled";
+export type LoadStatus = "posted" | "booked" | "in progress" | "delivered" | "cancelled";
 
 export interface LoadBoard {
   _id?: string;

@@ -66,8 +66,8 @@ export default function ShipmentCard({ load, setLoad }: ShipmentCardProps) {
         toast.success("Shipment updated successfully");
         setEditShipment(false);
       }
-    } catch (err) {
-      //console.error(err);
+    } catch (err: any) {
+      toast.error("Update Shipment Error:", err.message);
     }
   };
   return (
