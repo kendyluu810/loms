@@ -85,7 +85,7 @@ export default function RouteDetails({ load }: any) {
   ];
 
   return (
-    <div className="border rounded-xl p-4 shadow-md h-[85vh] overflow-y-auto w-full bg-white">
+    <div className="border rounded-xl p-4 shadow-md overflow-y-auto w-full h-fit bg-white">
       <h2 className="text-lg font-semibold mb-6 text-blue-900">
         Route Details
       </h2>
