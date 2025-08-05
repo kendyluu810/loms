@@ -2,7 +2,7 @@ import mongoose, { Schema, Document } from "mongoose";
 
 export interface IInvoice extends Document {
   loadId: mongoose.Types.ObjectId;
-  CustomerId: mongoose.Types.ObjectId;
+  customerId: mongoose.Types.ObjectId;
   carrierId: mongoose.Types.ObjectId;
 
   loadRate: number;
