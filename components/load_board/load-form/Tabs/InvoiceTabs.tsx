@@ -85,7 +85,7 @@ export default function InvoiceTabs({ load }: InvoiceTabsProps) {
           carrierTotalPay: parseFloat(carrierTotalPay.toFixed(2)),
         });
       } catch (err) {
-        console.error("Error fetching invoice:", err);
+        //console.error("Error fetching invoice:", err);
         toast.error("Không thể tải invoice.");
       }
     };
@@ -119,7 +119,7 @@ export default function InvoiceTabs({ load }: InvoiceTabsProps) {
 
       toast.success("Cập nhật thành công");
     } catch (err) {
-      console.error(err);
+      //console.error(err);
       toast.error("Cập nhật thất bại");
     }
   };

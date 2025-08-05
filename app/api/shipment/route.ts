@@ -6,7 +6,7 @@ export async function POST(req: NextRequest) {
   try {
     await dbConnect();
     const body = await req.json();
-    console.log("Creating shipment:", body);
+    //console.log("Creating shipment:", body);
 
     if (!body.pickupPoint) {
       body.pickupPoint = {
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(newShipment, { status: 201 });
   } catch (error) {
-    console.error("POST /api/shipment error:", error);
+    //console.error("POST /api/shipment error:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }

@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
   try {
     await dbConnect();
     const body = await req.json();
-    console.log("Creating customer:", body);
+    //console.log("Creating customer:", body);
 
     const newCustomer = new Customer(body);
     await newCustomer.save();
@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
-    console.error("POST /api/customers error:", error);
+    //console.error("POST /api/customers error:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }

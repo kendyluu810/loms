@@ -151,7 +151,7 @@ export default function RouteDetails({ load }: any) {
           <div>Unable to update status. Please try again.</div>
         </div>
       );
-      console.error("Error saving:", err);
+      //console.error("Error saving:", err);
     } finally {
       setSaving(false);
     }

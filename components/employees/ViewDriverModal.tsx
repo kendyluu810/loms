@@ -26,7 +26,7 @@ export function ViewDriverModal({
         const data = await res.json();
         setDriver(data);
       } catch (err) {
-        console.error("Error fetching driver:", err);
+        //console.error("Error fetching driver:", err);
         setDriver(null);
       }
     };

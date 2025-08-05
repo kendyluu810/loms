@@ -35,7 +35,7 @@ export async function GET(
           .populate("carrier")
           .populate("invoice");
 
-    console.log("ROUTE DATA:", load);
+    //console.log("ROUTE DATA:", load);
 
     if (!load) {
       return NextResponse.json({ message: "Not found" }, { status: 404 });
@@ -67,7 +67,7 @@ export async function GET(
     }
     return NextResponse.json(load);
   } catch (error) {
-    console.error("GET Error:", error);
+    //console.error("GET Error:", error);
     return NextResponse.json({ message: "Error" }, { status: 500 });
   }
 }
@@ -140,7 +140,7 @@ export async function PUT(
 
     return NextResponse.json(updatedLoad, { status: 200 });
   } catch (error) {
-    console.error("PUT Error:", error);
+    //console.error("PUT Error:", error);
     return NextResponse.json({ message: "Update failed" }, { status: 400 });
   }
 }
@@ -161,7 +161,7 @@ export async function DELETE(
     await Load.deleteOne({ _id: load._id });
     return NextResponse.json({ message: "Deleted successfully" });
   } catch (error) {
-    console.error("DELETE Error:", error);
+    //console.error("DELETE Error:", error);
     return NextResponse.json({ message: "Delete failed" }, { status: 400 });
   }
 }
@@ -236,7 +236,7 @@ export async function PATCH(
       },
     });
   } catch (error: any) {
-    console.error("Confirm Booking Error:", error);
+    //console.error("Confirm Booking Error:", error);
     return NextResponse.json(
       { message: "Failed to confirm booking", error: error.message },
       { status: 500 }

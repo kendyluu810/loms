@@ -67,7 +67,7 @@ export default function ShipmentCard({ load, setLoad }: ShipmentCardProps) {
         setEditShipment(false);
       }
     } catch (err) {
-      console.error(err);
+      //console.error(err);
     }
   };
   return (

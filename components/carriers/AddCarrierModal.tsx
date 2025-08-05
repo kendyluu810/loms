@@ -33,7 +33,7 @@ export default function AddCarrierModal({ onAdded }: { onAdded: () => void }) {
         : [],
     };
 
-    console.log("payload", payload);
+    //console.log("payload", payload);
 
     const res = await fetch("/api/carriers", {
       method: "POST",

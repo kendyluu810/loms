@@ -48,7 +48,7 @@ export async function PATCH(
       { status: 200 }
     );
   } catch (error) {
-    console.error("PATCH RoutePoint error:", error);
+    //console.error("PATCH RoutePoint error:", error);
     return NextResponse.json(
       { error: "Failed to update RoutePoint" },
       { status: 500 }

@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
   try {
     await dbConnect();
     const body = await req.json();
-    console.log("Creating route:", body);
+    //console.log("Creating route:", body);
 
     // Gán mặc định pickupPoint & deliveryPoint nếu chưa có
     if (!body.pickupPoint) {
@@ -85,7 +85,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(newRoute, { status: 201 });
   } catch (error) {
-    console.error("POST /api/route error:", error);
+    //console.error("POST /api/route error:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }

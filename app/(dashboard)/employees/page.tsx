@@ -38,7 +38,7 @@ export default function EmployeePage() {
 
   const loadData = async () => {
     const res = await fetchEmployees({ search, page, pageSize });
-    console.log("loadData response:", res.data);
+    //console.log("loadData response:", res.data);
     setEmployees(res.data);
     setTotal(res.total);
   };

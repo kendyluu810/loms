@@ -38,7 +38,7 @@ export default function CustomersPage() {
       setTotal(data.total);
     } catch (err) {
       toast.error("Failed to load customers");
-      console.error(err);
+      // //console.error(err);
     }
   };
 

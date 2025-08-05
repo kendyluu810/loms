@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
     const invoices = await Invoice.find(query).populate("carrier customer");
     return NextResponse.json(invoices);
   } catch (error) {
-    console.error("GET Error:", error);
+    //console.error("GET Error:", error);
     return NextResponse.json(
       { error: "Failed to fetch invoices" },
       { status: 500 }
@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(invoice, { status: 201 });
   } catch (error) {
-    console.error("POST Error:", error);
+    //console.error("POST Error:", error);
     return NextResponse.json(
       { error: "Failed to create invoice" },
       { status: 500 }

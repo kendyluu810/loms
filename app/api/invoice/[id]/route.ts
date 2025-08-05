@@ -42,7 +42,7 @@ export async function PUT(
 
     return NextResponse.json(invoice);
   } catch (error) {
-    console.error("Invoice update error:", error);
+    //console.error("Invoice update error:", error);
     return NextResponse.json(
       { error: "Failed to update invoice" },
       { status: 500 }

@@ -69,7 +69,7 @@ export default function MultiStepForm({ onClose }: Props) {
       }
       setIsSubmitting(false);
     } catch (error) {
-      console.error("Error creating load:", error);
+      //console.error("Error creating load:", error);
       setIsSubmitting(false);
       toast.error("An error occurred while creating the load.");
     }

@@ -38,7 +38,7 @@ export default function CarriersPage() {
       setTotal(data.total);
     } catch (err) {
       toast.error("Failed to load carriers");
-      console.error(err);
+      // //console.error(err);
     }
   };
 

@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
     const carrier = await Carrier.create(body);
     return NextResponse.json(carrier, { status: 201 });
   } catch (err) {
-    console.log("Create Carrier Error:", err);
+    //console.log("Create Carrier Error:", err);
     return NextResponse.json(
       { error: "Failed to create carrier", details: err },
       { status: 500 }

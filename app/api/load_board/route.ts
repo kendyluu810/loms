@@ -157,7 +157,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(newLoad, { status: 201 });
   } catch (error: any) {
-    console.error("Create Load error:", error);
+    //console.error("Create Load error:", error);
     return NextResponse.json(
       { message: "Failed to create Load", error: error.message },
       { status: 500 }
@@ -204,14 +204,14 @@ export async function GET(req: NextRequest) {
       .sort({ [sort]: order })
       .skip((page - 1) * limit)
       .limit(limit);
-    console.log("LOAD SAMPLE:", loads[0].driver);
+    //console.log("LOAD SAMPLE:", loads[0].driver);
 
     const total = await Load.countDocuments(filter);
 
     return NextResponse.json({ data: loads, total, page }, { status: 200 });
-    // console.log("driver full info", loads[0].driver);
+    // //console.log("driver full info", loads[0].driver);
   } catch (error) {
-    console.error("Load fetch error:", error);
+    //console.error("Load fetch error:", error);
     return NextResponse.json(
       { error: "Failed to fetch loads", details: error },
       { status: 500 }

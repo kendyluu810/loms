@@ -51,9 +51,9 @@ export default function BookingForm({ loadId }: BookingFormProps) {
         setDrivers(driversData?.data || []);
         setDispatchers(dispatchersData?.data || []);
         setVehicles(vehiclesData?.vehicles || []);
-        console.log("Fetched data:", { drivers: driversData, dispatchers: dispatchersData });
+        //console.log("Fetched data:", { drivers: driversData, dispatchers: dispatchersData });
       } catch (error) {
-        console.error("Error fetching data:", error);
+        //console.error("Error fetching data:", error);
         setDrivers([]);
         setDispatchers([]);
         setVehicles([]);
@@ -87,7 +87,7 @@ export default function BookingForm({ loadId }: BookingFormProps) {
         pickupTime: pickupTime,
       }),
     });
-    console.log("Submitting booking data:", {
+    //console.log("Submitting booking data:", {
       driver: selectedDriver,
       dispatcher: selectedDispatcher,
       vehicle: selectedVehicle,

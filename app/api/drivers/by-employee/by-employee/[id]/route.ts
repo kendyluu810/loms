@@ -21,7 +21,7 @@ export async function GET(
 
     return NextResponse.json(driver);
   } catch (error) {
-    console.error(error);
+    //console.error(error);
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }

@@ -21,13 +21,13 @@ export default function TrackingPage() {
         const res = await fetch("/api/load_board/tracking");
         const json = await res.json();
         if (json.success) {
-          console.log("Tracking data:", json.data);
+          //console.log("Tracking data:", json.data);
           setLoads(json.data);
         } else {
-          console.error("Failed to fetch tracking:", json.message);
+          //console.error("Failed to fetch tracking:", json.message);
         }
       } catch (error) {
-        console.error("Error fetching tracking:", error);
+        //console.error("Error fetching tracking:", error);
       } finally {
         setLoading(false);
       }

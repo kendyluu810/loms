@@ -30,11 +30,11 @@ export async function GET() {
       .populate("vehicle")
       .populate("invoice")
       .sort({ createdAt: -1 }); // Sort by creation date, most recent first
-    // console.log("First load customer:", loads[0]?.customer);
+    // //console.log("First load customer:", loads[0]?.customer);
 
     return NextResponse.json({ success: true, data: loads }, { status: 200 });
   } catch (error) {
-    console.error("Error in tracking route:", error); // log chi tiết lỗi
+    //console.error("Error in tracking route:", error); // log chi tiết lỗi
     return NextResponse.json(
       { success: false, message: "Failed to fetch tracking data" },
       { status: 500 }

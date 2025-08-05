@@ -137,7 +137,7 @@ export default function RouteCard({ load, onUpdateLoad }: RouteCardProps) {
       toast.success("Route updated successfully");
       setEditRoute(false);
     } catch (err) {
-      console.error("Update Route Error:", err);
+      //console.error("Update Route Error:", err);
     }
   };
 

@@ -16,7 +16,7 @@ export default function BookingPage() {
         const data = await res.json();
         setLoad(data);
       } catch (error) {
-        console.error("Failed to fetch load", error);
+        //console.error("Failed to fetch load", error);
       }
     };
     if (id) fetchLoad();

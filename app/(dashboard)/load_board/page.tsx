@@ -14,7 +14,7 @@ export default function LoadBoardPage() {
       const query = new URLSearchParams(filters).toString();
       const res = await fetch(`/api/load_board?${query}`);
       const { data } = await res.json();
-      console.log("Filters data:", data);
+      //console.log("Filters data:", data);
       const rows = data.map(mapLoadToRow);
       setLoadRows(rows);
     } catch (error: any) {
