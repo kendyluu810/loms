@@ -7,7 +7,6 @@ if (!MONGODB_URI) {
 }
 
 interface MongooseCache {
-  Types: any;
   conn: typeof mongoose | null;
   promise: Promise<typeof mongoose> | null;
 }
