@@ -5,11 +5,12 @@ import Customers from "@/models/customer/Customers";
 //Get by id
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await dbConnect();
   try {
-    const customer = await Customers.findById(params.id);
+    const { id } = await params;
+    const customer = await Customers.findById(id);
     if (!customer) {
       return NextResponse.json(
         { message: "Customer not found" },
@@ -26,12 +27,13 @@ export async function GET(
 // Update Customer
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await dbConnect();
     const data = await req.json();
-    const updated = await Customers.findByIdAndUpdate(params.id, data, {
+    const { id } = await params;
+    const updated = await Customers.findByIdAndUpdate(id, data, {
       new: true,
     });
 
@@ -55,11 +57,12 @@ export async function PUT(
 //  Delete Customer
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await dbConnect();
-    const deleted = await Customers.findByIdAndDelete(params.id);
+    const { id } = await params;
+    const deleted = await Customers.findByIdAndDelete(id);
 
     if (!deleted) {
       return NextResponse.json(

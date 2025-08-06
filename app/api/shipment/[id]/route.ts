@@ -4,11 +4,11 @@ import Shipment from "@/models/load_board/Shipment";
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await dbConnect();
   const data = await req.json();
-  const updated = await Shipment.findByIdAndUpdate(params.id, data, {
+  const updated = await Shipment.findByIdAndUpdate((await params).id, data, {
     new: true,
   });
   return NextResponse.json(updated);
@@ -16,9 +16,10 @@ export async function PUT(
 
 export async function DELETE(
   _: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await dbConnect();
-  const deleted = await Shipment.findByIdAndDelete(params.id);
+  const { id } = await params;
+  const deleted = await Shipment.findByIdAndDelete(id);
   return NextResponse.json(deleted);
 }

@@ -5,11 +5,11 @@ import Load from "@/models/load_board/Load";
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await dbConnect();
 
-  const { id } = params;
+  const { id } = await params;
   const body = await req.json();
   const { status } = body;
 

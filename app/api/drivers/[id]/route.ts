@@ -4,10 +4,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await dbConnect();
-  const { id } = params;
+  const { id } = await params;
   const body = await req.json();
 
   const updated = await Driver.findByIdAndUpdate(
@@ -26,10 +26,10 @@ export async function PUT(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await dbConnect();
-  const { id } = params;
+  const { id } = await params;
 
   await Driver.findByIdAndDelete(id);
   return NextResponse.json({ message: "Deleted" });

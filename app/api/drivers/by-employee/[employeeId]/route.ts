@@ -19,23 +19,25 @@ export async function GET(
 // DELETE: Xoá driver khi đổi sang vị trí khác
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { employeeId: string } }
+  { params }: { params: Promise<{ employeeId: string }> }
 ) {
   await dbConnect();
-  await Driver.findOneAndDelete({ employee: params.employeeId });
+  const { employeeId } = await params;
+  await Driver.findOneAndDelete({ employee: employeeId });
   return NextResponse.json({ message: "Driver deleted" });
 }
 
 // PUT: Cập nhật driver theo employeeId
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { employeeId: string } }
+  { params }: { params: Promise<{ employeeId: string }> }
 ) {
   await dbConnect();
   const data = await req.json();
+  const { employeeId } = await params;
 
   const updated = await Driver.findOneAndUpdate(
-    { employee: params.employeeId },
+    { employee: employeeId },
     data,
     { new: true }
   );

@@ -5,10 +5,10 @@ import dbConnect from "@/lib/mongodb";
 // Cập nhật 1 invoice theo _id
 export async function PUT(
   req: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await dbConnect();
-  const { id } = await context.params;
+  const { id } = await params;
   try {
     const updates = await req.json();
 

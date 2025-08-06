@@ -4,11 +4,12 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await dbConnect();
   try {
-    const invoice = await Invoice.findOne({ loadId: params.id })
+    const { id } = await params;
+    const invoice = await Invoice.findOne({ loadId: id })
       .populate("customerId")
       .populate("carrierId");
 
@@ -27,13 +28,14 @@ export async function GET(
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await dbConnect();
+  const { id } = await params;
   const data = await req.json();
 
   try {
-    const existing = await Invoice.findOne({ loadId: params.id });
+    const existing = await Invoice.findOne({ loadId: id });
     if (existing) {
       return NextResponse.json(
         { message: "Invoice already exists" },
@@ -42,7 +44,7 @@ export async function POST(
     }
 
     const newInvoice = await Invoice.create({
-      loadId: params.id,
+      loadId: id,
       ...data,
     });
 
