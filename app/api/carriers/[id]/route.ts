@@ -25,13 +25,14 @@ export async function GET(
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+  { params }: { params: Promise<{ id: string }> }) {
   await dbConnect();
   const body = await req.json();
+    const { id } = await params;
+
 
   try {
-    const updated = await Carrier.findByIdAndUpdate(params.id, body, {
+    const updated = await Carrier.findByIdAndUpdate(id, body, {
       new: true,
     });
     if (!updated)
