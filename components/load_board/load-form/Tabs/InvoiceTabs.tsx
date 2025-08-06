@@ -26,7 +26,7 @@ interface Invoice {
   invoiceTotal?: number;
   adjustedAmount?: number;
   carrierTotalPay?: number;
-  [key: string]: any; // fallback for dynamic fields like `loadRate`, etc.
+  [key: string]: string | number | undefined; // fallback for dynamic fields like `loadRate`, etc.
 }
 
 export default function InvoiceTabs() {

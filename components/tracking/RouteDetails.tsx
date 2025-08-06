@@ -1,4 +1,4 @@
-import { LoadBoard } from "@/type";
+import { ExtendedLoadRow, LoadBoard } from "@/type";
 import {
   CheckCircle,
   Circle,
@@ -8,14 +8,14 @@ import {
   XCircle,
 } from "lucide-react";
 
-export default function RouteDetails({ load }: any) {
+export default function RouteDetails({ load }: { load: ExtendedLoadRow }) {
   if (!load) return <div className="p-4">No load selected</div>;
 
   const pickup = load.route?.pickupPoint;
   const delivery = load.route?.deliveryPoint;
   const stops = load.route?.stopPoints || [];
 
-  const normalizeStatus = (status: string) => {
+  const normalizeStatus = (status: string | undefined) => {
     if (!status) return "planned";
     const lower = status.toLowerCase();
     if (["completed", "delivered", "picked_up"].includes(lower))
@@ -49,7 +49,7 @@ export default function RouteDetails({ load }: any) {
       pointType: "pickup",
       _id: pickup?._id,
     },
-    ...stops.map((stop: any, index: number) => ({
+    ...stops.map((stop, index: number) => ({
       id: 3 + index,
       title: "At Stop",
       location: stop.cityState || stop.locationName,

@@ -1,24 +1,21 @@
-import mongoose, { Mongoose } from "mongoose";
+import mongoose from "mongoose";
 
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/employeesdb";
 
 if (!MONGODB_URI) {
   throw new Error("Please define the MONGODB_URI environment variable");
 }
-interface MongooseGlobalCache {
-  conn: Mongoose | null;
-  promise: Promise<Mongoose> | null;
-}
-const globalWithMongoose = globalThis as typeof globalThis & {
-  mongoose: MongooseGlobalCache;
-};
 
-if (!globalWithMongoose.mongoose) {
-  globalWithMongoose.mongoose = { conn: null, promise: null };
+interface MongooseCache {
+  conn: typeof mongoose | null;
+  promise: Promise<typeof mongoose> | null;
 }
 
-const cached = globalWithMongoose.mongoose;
+declare global {
+  var mongoose: MongooseCache;
+}
 
+let cached: MongooseCache = global.mongoose || { conn: null, promise: null };
 async function dbConnect() {
   if (cached.conn) return cached.conn;
   if (!cached.promise) {

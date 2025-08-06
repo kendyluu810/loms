@@ -30,7 +30,7 @@ export async function createEmployee(data: Employee) {
   return await res.json();
 }
 
-export async function updateEmployee(id: string, data: any) {
+export async function updateEmployee(id: string, data: Employee) {
   const res = await fetch(`/api/employees/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
