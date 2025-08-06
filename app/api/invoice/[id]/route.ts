@@ -53,10 +53,10 @@ export async function PUT(
 // Xóa invoice
 export async function DELETE(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await dbConnect();
-  const invoiceId = context.params.id;
+  const invoiceId = await params;
 
   try {
     const deleted = await Invoice.findByIdAndDelete(invoiceId);
