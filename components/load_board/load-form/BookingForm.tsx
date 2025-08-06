@@ -101,152 +101,155 @@ export default function BookingForm({ loadId }: BookingFormProps) {
   };
 
   return (
-    <div className="space-y-4 ">
-      <div className="flex flex-col justify-between p-4 border bg-white rounded-lg shadow-sm">
-        <div className="flex items-center justify-between pb-4">
-          <h2 className="text-[#022f7e] font-medium">Carrier Choice</h2>
-          <div className="flex items-center space-x-2 text-[#022f7e] font-medium">
-            <Label>Truck:</Label>
-            <span>#{selectedVehicle?._id}</span>
-          </div>
+    <div className="space-y-6">
+      {/* Header Card */}
+      <div className="flex flex-col md:flex-row justify-between gap-4 p-4 border bg-white rounded-lg shadow-sm">
+        <div>
+          <h2 className="text-[#022f7e] font-medium text-lg">Carrier Choice</h2>
         </div>
-        <div className="flex flex-row justify-between items-center space-x-2">
-          <Input type="text" placeholder="Search..." className="max-w-md" />
-          <div className="flex items-center space-x-4 text-[#022f7e]">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-[#022f7e] font-medium">
+          <Label>Truck:</Label>
+          <span>#{selectedVehicle?._id}</span>
+        </div>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+          <Input
+            type="text"
+            placeholder="Search..."
+            className="max-w-md w-full"
+          />
+          <div className="flex gap-2 text-[#022f7e]">
             <Plus className="w-4 h-4" />
             <MoreVerticalIcon className="w-4 h-4" />
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-6">
-        {/* Driver Card */}
-        <div className="col-span-2 border rounded-lg p-6 shadow-sm bg-white space-y-4">
-          <h2 className="font-semibold text-lg text-[#022f7e]">Driver Info</h2>
-          <div className="grid grid-cols-3 gap-4">
-            <div className="space-y-2">
-              <Label>Driver</Label>
-              <Select
-                onValueChange={(val) =>
-                  setSelectedDriver(drivers.find((d) => d._id === val) || null)
-                }
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select Driver" />
-                </SelectTrigger>
-                <SelectContent>
-                  {drivers?.map((driver) => (
-                    <SelectItem key={driver._id} value={driver._id}>
-                      {driver.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label>Email</Label>
-              <Input value={selectedDriver?.email || ""} readOnly />
-            </div>
-            <div className="space-y-2">
-              <Label>Phone</Label>
-              <Input value={selectedDriver?.phone || ""} readOnly />
-            </div>
+      {/* Driver Info */}
+      <div className="border rounded-lg p-6 shadow-sm bg-white space-y-4">
+        <h2 className="font-semibold text-lg text-[#022f7e]">Driver Info</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="space-y-2">
+            <Label>Driver</Label>
+            <Select
+              onValueChange={(val) =>
+                setSelectedDriver(drivers.find((d) => d._id === val) || null)
+              }
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select Driver" />
+              </SelectTrigger>
+              <SelectContent>
+                {drivers?.map((driver) => (
+                  <SelectItem key={driver._id} value={driver._id}>
+                    {driver.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
-        </div>
-
-        {/* Dispatch Card */}
-        <div className="col-span-2 border rounded-lg p-6 shadow-sm bg-white space-y-4">
-          <h2 className="font-semibold text-lg text-[#022f7e]">
-            Dispatch Info
-          </h2>
-          <div className="grid grid-cols-3 gap-4">
-            <div className="space-y-2">
-              <Label>Dispatch</Label>
-              <Select
-                onValueChange={(val) =>
-                  setSelectedDispatcher(
-                    dispatchers.find((d) => d._id === val) || null
-                  )
-                }
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select Dispatcher" />
-                </SelectTrigger>
-                <SelectContent>
-                  {dispatchers?.map((d) => (
-                    <SelectItem key={d._id} value={d._id}>
-                      {d.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label>Email</Label>
-              <Input value={selectedDispatcher?.email || ""} readOnly />
-            </div>
-            <div className="space-y-2">
-              <Label>Phone</Label>
-              <Input value={selectedDispatcher?.phone || ""} readOnly />
-            </div>
+          <div className="space-y-2">
+            <Label>Email</Label>
+            <Input value={selectedDriver?.email || ""} readOnly />
           </div>
-        </div>
-
-        {/* Pickup Card */}
-        <div className="col-span-2 border rounded-lg p-6 shadow-sm bg-white space-y-4">
-          <h2 className="font-semibold text-lg text-[#022f7e]">Pickup Info</h2>
-          <div className="grid grid-cols-4 gap-4">
-            <div className="space-y-2">
-              <Label>Pickup ETA</Label>
-              <Input
-                type="time"
-                value={pickupETA}
-                onChange={(e) => setPickupETA(e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Time</Label>
-              <Input
-                type="time"
-                value={pickupTime}
-                onChange={(e) => setPickupTime(e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Vehicle Number</Label>
-              <Select
-                onValueChange={(val) =>
-                  setSelectedVehicle(
-                    vehicles.find((v) => v._id === val) || null
-                  )
-                }
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select vehicle" />
-                </SelectTrigger>
-                <SelectContent>
-                  {vehicles?.map((v) => (
-                    <SelectItem key={v._id} value={String(v._id)}>
-                      {v.truckNumber}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label>Trailer</Label>
-              <Input value={selectedVehicle?.trailerNumber || ""} readOnly />
-            </div>
+          <div className="space-y-2">
+            <Label>Phone</Label>
+            <Input value={selectedDriver?.phone || ""} readOnly />
           </div>
         </div>
       </div>
 
-      {/* Footer Action */}
-      <div className="flex justify-end gap-4">
-        <Button variant="outline" onClick={() => router.back()}>
+      {/* Dispatch Info */}
+      <div className="border rounded-lg p-6 shadow-sm bg-white space-y-4">
+        <h2 className="font-semibold text-lg text-[#022f7e]">Dispatch Info</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="space-y-2">
+            <Label>Dispatcher</Label>
+            <Select
+              onValueChange={(val) =>
+                setSelectedDispatcher(
+                  dispatchers.find((d) => d._id === val) || null
+                )
+              }
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select Dispatcher" />
+              </SelectTrigger>
+              <SelectContent>
+                {dispatchers?.map((d) => (
+                  <SelectItem key={d._id} value={d._id}>
+                    {d.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label>Email</Label>
+            <Input value={selectedDispatcher?.email || ""} readOnly />
+          </div>
+          <div className="space-y-2">
+            <Label>Phone</Label>
+            <Input value={selectedDispatcher?.phone || ""} readOnly />
+          </div>
+        </div>
+      </div>
+
+      {/* Pickup Info */}
+      <div className="border rounded-lg p-6 shadow-sm bg-white space-y-4">
+        <h2 className="font-semibold text-lg text-[#022f7e]">Pickup Info</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="space-y-2">
+            <Label>Pickup ETA</Label>
+            <Input
+              type="time"
+              value={pickupETA}
+              onChange={(e) => setPickupETA(e.target.value)}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label>Time</Label>
+            <Input
+              type="time"
+              value={pickupTime}
+              onChange={(e) => setPickupTime(e.target.value)}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label>Vehicle Number</Label>
+            <Select
+              onValueChange={(val) =>
+                setSelectedVehicle(vehicles.find((v) => v._id === val) || null)
+              }
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select vehicle" />
+              </SelectTrigger>
+              <SelectContent>
+                {vehicles?.map((v) => (
+                  <SelectItem key={v._id} value={String(v._id)}>
+                    {v.truckNumber}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label>Trailer</Label>
+            <Input value={selectedVehicle?.trailerNumber || ""} readOnly />
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="flex flex-col sm:flex-row justify-end gap-4">
+        <Button
+          variant="outline"
+          onClick={() => router.back()}
+          className="w-full sm:w-auto"
+        >
           Cancel
         </Button>
         <Button
-          className="bg-blue-600 text-white"
+          className="bg-blue-600 text-white w-full sm:w-auto"
           onClick={handleSubmitBooking}
         >
           Confirm Booking

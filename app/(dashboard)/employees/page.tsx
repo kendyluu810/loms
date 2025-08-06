@@ -49,21 +49,21 @@ export default function EmployeePage() {
   };
 
   return (
-    <div className="flex flex-col h-full p-4 space-y-4">
-      <h2 className="font-bold text-2xl text-[#022f7e]">
+    <div className="p-4 space-y-4 sm:space-y-6">
+      <h2 className="font-bold text-xl sm:text-2xl text-[#022f7e]">
         Employees Management
       </h2>
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <Input
           placeholder="Search employees..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="md:w-1/2"
+          className="md:w-1/2 w-full"
         />
         <AddEmployeeModal onAdded={loadData} />
       </div>
-
-      <div className="overflow-x-auto">
+      {/* Employees Table for Desktop */}
+      <div className="hidden sm:block overflow-x-auto rounded-lg border">
         <Table>
           <TableHeader>
             <TableRow>
@@ -113,7 +113,10 @@ export default function EmployeePage() {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={6} className="text-center py-6 text-gray-500">
+                <TableCell
+                  colSpan={6}
+                  className="text-center py-6 text-gray-500"
+                >
                   No employees found
                 </TableCell>
               </TableRow>
@@ -121,12 +124,57 @@ export default function EmployeePage() {
           </TableBody>
         </Table>
       </div>
+      {/* Mobile Card View (<sm) */}
+      <div className="block sm:hidden space-y-5">
+        {employees.length > 0 ? (
+          employees.map((employee) => (
+            <div key={employee._id} className="border rounded-lg p-4 shadow-sm">
+              <h3 className="font-semibold text-lg">{employee.name}</h3>
+              <p>
+                <strong>Eid:</strong> {employee.Eid}
+              </p>
+              <p>
+                <strong>Email:</strong> {employee.email}
+              </p>
+              <p>
+                <strong>Phone:</strong> {employee.phone}
+              </p>
+              <p>
+                <strong>Position:</strong> {employee.position}
+              </p>
+              <div className="mt-2 flex flex-wrap gap-3 space-x-2">
+                <Button variant="outline" onClick={() => handleEdit(employee)}>
+                  Edit
+                </Button>
+                {employee.position === "Driver" && (
+                  <Button
+                    variant="secondary"
+                    onClick={() => setViewDriver(employee._id)}
+                  >
+                    View Driver
+                  </Button>
+                )}
+                <Button
+                  variant="destructive"
+                  onClick={() => handleDelete(employee._id!)}
+                >
+                  Delete
+                </Button>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="text-center py-6 text-gray-500">
+            No employees found
+          </div>
+        )}
+      </div>
 
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4">
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4 w-full">
         <select
           value={pageSize}
           onChange={(e) => setPageSize(Number(e.target.value))}
-          className="border rounded px-2 py-1"
+          className="border rounded px-2 py-1 w-full sm:w-auto"
         >
           {[5, 10, 20, 50].map((size) => (
             <option key={size} value={size}>
@@ -134,7 +182,7 @@ export default function EmployeePage() {
             </option>
           ))}
         </select>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 w-full sm:w-auto justify-between">
           <Button disabled={page === 1} onClick={() => setPage(page - 1)}>
             Prev
           </Button>

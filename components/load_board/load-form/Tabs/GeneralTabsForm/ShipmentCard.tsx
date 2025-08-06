@@ -86,7 +86,7 @@ export default function ShipmentCard({ load, setLoad }: ShipmentCardProps) {
   return (
     <form onSubmit={handleSubmit(onSubmitShipment)}>
       <Card className="border rounded-lg shadow-sm">
-        <CardHeader className="border-b flex flex-row items-center justify-between">
+        <CardHeader className="border-b flex flex-row items-center justify-between flex-wrap gap-2">
           <CardTitle className="text-lg font-semibold text-[#022f7e]">
             Shipment
           </CardTitle>
@@ -109,7 +109,7 @@ export default function ShipmentCard({ load, setLoad }: ShipmentCardProps) {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-6 gap-4 font-semibold text-gray-600 border-b pb-2 text-sm">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 font-semibold text-gray-600 border-b pb-2 text-sm">
             <Label>Pickup</Label>
             <Label>Delivery</Label>
             <Label>Stop</Label>
@@ -117,7 +117,8 @@ export default function ShipmentCard({ load, setLoad }: ShipmentCardProps) {
             <Label>Pallets</Label>
             <Label>Rate</Label>
           </div>
-          <div className="grid grid-cols-6 gap-4 py-2 text-sm">
+          {/* Responsive data/input grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 py-2 text-sm">
             {editShipment ? (
               <>
                 <Input {...register("pickupCode")} />

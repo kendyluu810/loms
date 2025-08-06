@@ -75,40 +75,42 @@ export default function LoadDetails() {
 
   return (
     <div className="flex flex-col h-full p-4 space-y-4">
-      <div className="flex items-center justify-between border-b pb-4">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b pb-4 gap-4">
         {/* left */}
-        <div className="space-y-4 p-4">
-          <h2 className="font-bold text-2xl text-[#022f7e]">Open Load</h2>
+        <div className="space-y-2 md:space-y-4 p-2 md:p-4">
+          <h2 className="font-bold text-xl sm:text-2xl text-[#022f7e]">
+            Open Load
+          </h2>
           <div className="flex items-center space-x-4">
             <h2 className="text-[#022f7e] font-medium">#{load.load_id}</h2>
             <div className="flex items-center gap-2">
               {load.status && (
                 <span
-                  className={`text-xs px-2 py-1 rounded font-medium ${getStatusStyle(
+                  className={`text-xs px-1 md:px-2 md:py-1 rounded font-medium ${getStatusStyle(
                     load.status
                   )}`}
                 >
                   {formatStatus(load.status || "Unknown")}
                 </span>
               )}
-              <Badge className="border border-blue-500 bg-white text-[#022f7e]">
+              <Badge className="text-xs px-1 md:px-2 md:py-1 rounded font-medium border border-blue-500 bg-white text-[#022f7e]">
                 {load.shipment?.equipmentType || "N/A"}
               </Badge>
             </div>
           </div>
         </div>
         {/* right */}
-        <div className="space-y-4 p-4">
-          <h2 className="text-[#022f7e] text-2xl font-medium">
+        <div className="space-y-2 md:space-y-4 p-2 md:p-4">
+          <h2 className="text-[#022f7e] text-xl sm:text-2xl font-medium">
             {load.customer.companyName}
           </h2>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 text-sm">
             <h2 className="text-[#022f7e]">{load.customer.contactPerson}</h2>
             <h2 className="text-[#022f7e]">{load.customer.contactPhone}</h2>
           </div>
         </div>
       </div>
-      <div className="flex justify-between items-center border-b px-4 py-2 sticky top-0 z-10">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b px-2 md:px-4 py-2 sticky top-0 z-10 gap-4">
         <div className="flex space-x-4">
           <Button
             variant={activeTab === "general" ? "default" : "outline"}
@@ -160,7 +162,7 @@ export default function LoadDetails() {
           </Button>
         </div>
       </div>
-      <div className="p-4">
+      <div className="p-2 md:p-4">
         {activeTab === "general" && (
           <GeneralTabs load={load} onUpdateLoad={handleUpdateLoad} />
         )}

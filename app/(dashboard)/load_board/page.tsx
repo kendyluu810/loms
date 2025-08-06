@@ -24,10 +24,10 @@ export default function LoadBoardPage() {
     }
   };
   return (
-    <div className="p-4 w-full max-w-[1580px] mx-auto space-y-4">
-      <div className="bg-white p-4 rounded-xl shadow-md overflow-x-auto">
+    <div className="p-4 w-full max-w-screen-2xl mx-auto space-y-4">
+      <div className="bg-white p-4 md:p-6 lg:p-8 rounded-xl shadow-md overflow-x-auto">
         <EnterInformation_Form onApplyFilters={applyFilter} />
-        <div className="bg-white p-4 rounded-xl shadow-md overflow-auto mt-5">
+        <div className="bg-white p-4 md:p-6 lg:p-8 rounded-xl shadow-md overflow-auto mt-5">
           <LoadDataTable data={loadRows} setData={setLoadRows} />
         </div>
       </div>

@@ -92,11 +92,13 @@ export default function EnterInformation_Form({
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-6 bg-[#fafcff] p-6 rounded-lg shadow max-w-full xl:max-w-[1600px] mx-auto"
+      className="space-y-6 bg-[#fafcff] px-3 sm:px-6 py-6 rounded-lg shadow max-w-full xl:max-w-[1600px] mx-auto overflow-x-auto"
     >
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-bold text-[#022f7e]">Enter Information</h2>
-        <div className="flex space-x-4">
+        <h2 className="text-lg sm:text-xl font-bold text-[#022f7e]">
+          Enter Information
+        </h2>
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
           <Button
             type="submit"
             className="text-[#6c9ef5] bg-[#fafcff] hover:bg-[#6c9ef5] hover:text-[#fafcff]"
@@ -108,7 +110,7 @@ export default function EnterInformation_Form({
           </Button>
         </div>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
         {/* Origin */}
         <div className="flex flex-col space-y-2">
           <Label>Origin</Label>

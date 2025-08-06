@@ -49,36 +49,38 @@ export default function BookingPage() {
 
   return (
     <div className="flex flex-col h-full p-4 space-y-4">
-      <div className="flex items-center justify-between border-b pb-4">
-        {/* left */}
-        <div className="space-y-4 p-4">
+      {/* Top Info Section - Responsive */}
+      <div className="flex flex-col lg:flex-row justify-between border-b pb-4 gap-6">
+        {/* Left Info */}
+        <div className="space-y-4">
           <h2 className="font-bold text-2xl text-[#022f7e]">Book Load</h2>
-          <div className="flex items-center space-x-4">
-            <h2 className="text-[#022f7e] font-medium">#{load?.load_id}</h2>
-            <div className="flex items-center gap-2">
-              {load?.status && (
-                <Badge variant={getVariant(load.status)}>
-                  {formatStatus(load.status)}
-                </Badge>
-              )}
-              <Badge className="border border-blue-500 bg-white text-[#022f7e]">
-                {load?.shipment?.equipmentType || "N/A"}
+          <div className="flex flex-wrap items-center gap-3">
+            <h2 className="text-[#022f7e] font-medium text-lg">
+              #{load?.load_id}
+            </h2>
+            {load?.status && (
+              <Badge variant={getVariant(load.status)}>
+                {formatStatus(load.status)}
               </Badge>
-            </div>
+            )}
+            <Badge className="border border-blue-500 bg-white text-[#022f7e]">
+              {load?.shipment?.equipmentType || "N/A"}
+            </Badge>
           </div>
         </div>
-        {/* right */}
-        <div className="space-y-4 p-4">
-          <h2 className="text-[#022f7e] text-2xl font-medium">
+        {/* Right Info */}
+        <div className="space-y-2">
+          <h2 className="text-[#022f7e] text-2xl font-medium text-wrap break-words">
             {load?.customer?.companyName}
           </h2>
-          <div className="flex items-center space-x-2">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-1 sm:space-y-0">
             <h2 className="text-[#022f7e]">{load?.customer?.contactPerson}</h2>
             <h2 className="text-[#022f7e]">{load?.customer?.contactPhone}</h2>
           </div>
         </div>
       </div>
 
+      {/* Booking Form */}
       {load?._id && <BookingForm loadId={load.load_id} />}
     </div>
   );

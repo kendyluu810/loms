@@ -47,8 +47,10 @@ export default function CarriersPage() {
     fetchCarriers();
   }, [fetchCarriers]);
   return (
-    <div className="p-4 space-y-4">
-      <h2 className="font-bold text-2xl text-[#022f7e]">List of Carriers</h2>
+    <div className="p-4 space-y-4 sm:space-y-6">
+      <h2 className="font-bold text-xl sm:text-2xl text-[#022f7e]">
+        List of Carriers
+      </h2>
 
       {/* Search + Add */}
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
@@ -66,8 +68,8 @@ export default function CarriersPage() {
         />
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto rounded-lg border">
+      {/* Table  Desktop*/}
+      <div className="hidden sm:block overflow-x-auto rounded-lg border">
         <Table>
           <TableHeader>
             <TableRow>
@@ -128,12 +130,56 @@ export default function CarriersPage() {
         </Table>
       </div>
 
+      {/* Mobile list view */}
+      <div className="block sm:hidden space-y-4">
+        {Array.isArray(carriers) && carriers.length > 0 ? (
+          carriers.map((carrier) => (
+            <div key={carrier._id} className="p-4 border rounded shadow-sm">
+              <p>
+                <strong>Name:</strong> {carrier.name}
+              </p>
+              <p>
+                <strong>Phone:</strong> {carrier.phone || "-"}
+              </p>
+              <p>
+                <strong>Email:</strong> {carrier.email || "-"}
+              </p>
+              <p>
+                <strong>MC #:</strong> {carrier.mcNumber || "-"}
+              </p>
+              <p>
+                <strong>DOT #:</strong> {carrier.dotNumber || "-"}
+              </p>
+              <div className="mt-2 flex gap-3 space-x-2">
+                <EditCarrierModal carrier={carrier} onUpdated={fetchCarriers} />
+                <Button
+                  variant="destructive"
+                  onClick={async () => {
+                    await fetch(`/api/carriers/${carrier._id}`, {
+                      method: "DELETE",
+                    });
+                    fetchCarriers();
+                    toast.success(
+                      `Carrier ${carrier.name} deleted successfully`
+                    );
+                  }}
+                >
+                  Delete
+                </Button>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="p-4 text-center text-gray-500">No carrier found</div>
+        )}
+      </div>
+
       {/* Pagination */}
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4">
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4 w-full">
         <select
           value={pageSize}
           onChange={(e) => setPageSize(Number(e.target.value))}
-          className="border rounded px-2 py-1"
+          className="border rounded px-2 py-1 w-full sm:w-auto"
         >
           {[5, 10, 20, 50].map((size) => (
             <option key={size} value={size}>
@@ -141,7 +187,7 @@ export default function CarriersPage() {
             </option>
           ))}
         </select>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 w-full sm:w-auto justify-between">
           <Button disabled={page === 1} onClick={() => setPage(page - 1)}>
             Prev
           </Button>

@@ -52,9 +52,12 @@ export default function LoadDataTable({}: {
   };
 
   return (
-    <div className="flex flex-col space-y-6 bg-[#fafcff] p-6 rounded-lg shadow">
+    <div className="flex flex-col space-y-6 bg-[#fafcff] p-4 sm:p-6 rounded-lg">
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-        <h2 className="font-bold text-xl text-[#022f7e]">Available Loads</h2>
+        <h2 className="font-bold text-base sm:text-xl text-[#022f7e]">
+          Available Loads
+        </h2>
+
         <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
           <Select
             onValueChange={(value) => setSortBy(value as "date" | "name" | "")}
@@ -77,7 +80,7 @@ export default function LoadDataTable({}: {
         </div>
       </div>
 
-      <div className="w-full overflow-x-auto">
+      <div className="w-full max-w-full overflow-x-auto rounded">
         <DataTable columns={columns(handleDelete)} data={loadRows} />
       </div>
 

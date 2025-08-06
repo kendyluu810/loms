@@ -48,26 +48,29 @@ export default function VehiclesPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-[#022f7e]">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+      {/* Header + Add button */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h2 className="text-xl sm:text-2xl font-bold text-[#022f7e]">
           Vehicle Management
-        </h1>
+        </h2>
         <Button
           onClick={() => setAddOpen(true)}
-          className="bg-[#3461ff] text-white font-semibold hover:bg-white hover:text-[#3461ff] border border-[#3461ff] flex items-center"
+          className="w-full sm:w-auto bg-[#3461ff] text-white font-semibold hover:bg-white hover:text-[#3461ff] border border-[#3461ff] flex items-center"
         >
           <Plus className="w-4 h-4 mr-2" />
           Add Vehicle
         </Button>
       </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {/* Vehicle Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {vehicles.map((vehicle) => (
           <Card key={vehicle.truckNumber}>
-            <CardHeader className="flex flex-row justify-between items-center">
-              <CardTitle>{vehicle.truckNumber}</CardTitle>
-              <div className="flex space-x-2">
+            <CardHeader className="flex flex-row justify-between items-start sm:items-center">
+              <CardTitle className="text-base sm:text-lg">
+                {vehicle.truckNumber}
+              </CardTitle>
+              <div className="flex gap-2 mt-2 sm:mt-0">
                 <Button
                   size="icon"
                   variant="outline"
@@ -87,7 +90,7 @@ export default function VehiclesPage() {
                 </Button>
               </div>
             </CardHeader>
-            <CardContent className="space-y-1 text-sm text-muted-foreground">
+            <CardContent className="space-y-1 text-sm sm:text-base text-muted-foreground">
               <div>Trailer: {vehicle.trailerNumber}</div>
               <div>Category: {vehicle.category}</div>
               <div>Status: {vehicle.status}</div>

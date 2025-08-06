@@ -45,8 +45,10 @@ export default function CustomersPage() {
   }, [fetchCustomers]);
 
   return (
-    <div className="p-4 space-y-4">
-      <h2 className="font-bold text-2xl text-[#022f7e]">List of Customers</h2>
+    <div className="p-4 space-y-4 sm:space-y-6">
+      <h2 className="font-bold text-xl sm:text-2xl text-[#022f7e]">
+        List of Customers
+      </h2>
       {/* Search + Add */}
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <Input
@@ -57,8 +59,8 @@ export default function CustomersPage() {
         />
         <AddCustomerModal onAdded={fetchCustomers} />
       </div>
-      {/* Customers Table */}
-      <div className="overflow-x-auto rounded-lg border">
+      {/* Customers Table Desktop */}
+      <div className="hidden sm:block overflow-x-auto rounded-lg border">
         <Table>
           <TableHeader>
             <TableRow>
@@ -122,12 +124,67 @@ export default function CustomersPage() {
           </TableBody>
         </Table>
       </div>
+      {/* Mobile Card View (<sm) */}
+      <div className="sm:hidden space-y-6">
+        {customers.length > 0 ? (
+          customers.map((customer) => (
+            <div key={customer._id} className="border rounded-lg p-4 shadow-sm">
+              <p>
+                <strong>Cid:</strong> {customer.cusID}
+              </p>
+              <p>
+                <strong>Company:</strong> {customer.companyName}
+              </p>
+              <p>
+                <strong>Email:</strong> {customer.companyEmail}
+              </p>
+              <p>
+                <strong>Phone:</strong> {customer.companyPhone}
+              </p>
+              <p>
+                <strong>Contact:</strong> {customer.contactPerson}
+              </p>
+              <p>
+                <strong>Contact Email:</strong> {customer.contactEmail}
+              </p>
+              <p>
+                <strong>Contact Phone:</strong> {customer.contactPhone}
+              </p>
+              <p>
+                <strong>Type:</strong> {customer.customerType}
+              </p>
+              <div className="mt-2 flex flex-wrap gap-3 space-x-2">
+                <EditCustomerModal
+                  customer={customer}
+                  onUpdated={fetchCustomers}
+                />
+                <Button
+                  variant="destructive"
+                  onClick={async () => {
+                    await fetch(`/api/customers/${customer._id}`, {
+                      method: "DELETE",
+                    });
+                    fetchCustomers();
+                    toast.success(
+                      `Customer ${customer.companyName} deleted successfully`
+                    );
+                  }}
+                >
+                  Delete
+                </Button>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p className="text-center text-gray-500">No customer found</p>
+        )}
+      </div>
       {/* Pagination */}
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4">
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4 w-full">
         <select
           value={pageSize}
           onChange={(e) => setPageSize(Number(e.target.value))}
-          className="border rounded px-2 py-1"
+          className="border rounded px-2 py-1 w-full sm:w-auto"
         >
           {[5, 10, 20, 50].map((size) => (
             <option key={size} value={size}>
@@ -135,7 +192,7 @@ export default function CustomersPage() {
             </option>
           ))}
         </select>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 w-full sm:w-auto justify-between">
           <Button disabled={page === 1} onClick={() => setPage(page - 1)}>
             Prev
           </Button>

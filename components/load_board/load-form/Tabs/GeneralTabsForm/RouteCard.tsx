@@ -207,8 +207,8 @@ export default function RouteCard({ load, onUpdateLoad }: RouteCardProps) {
             <MoreVertical className="text-[#022f7e] cursor-pointer w-4 h-4" />
           </div>
         </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-6 gap-4 font-semibold text-gray-600 border-b pb-2 text-sm">
+        <CardContent className="overflow-x-auto md:overflow-visible">
+          <div className="hidden md:grid grid-cols-6 gap-4 font-semibold text-gray-600 border-b pb-2 text-sm">
             <Label>Timezone</Label>
             <Label>Early / Late</Label>
             <Label>Location</Label>
@@ -220,12 +220,18 @@ export default function RouteCard({ load, onUpdateLoad }: RouteCardProps) {
             <form onSubmit={handleSubmit(onSubmitRoute)}>
               <div className="space-y-2">
                 {/* Pickup Point */}
-                <div className="grid grid-cols-6 gap-4 py-2 text-sm">
-                  <span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-4 py-2 text-sm">
+                  <div>
+                    <span className="block font-medium text-gray-500 md:hidden">
+                      Timezone
+                    </span>
                     {load?.route?.pickupPoint?.type} <br />
                     {load.route?.pickupPoint?.timezone || "--"}
-                  </span>
-                  <span>
+                  </div>
+                  <div>
+                    <span className="block font-medium text-gray-500 md:hidden">
+                      Early/Late
+                    </span>
                     <Controller
                       name="pickup.early"
                       control={control}
@@ -236,45 +242,71 @@ export default function RouteCard({ load, onUpdateLoad }: RouteCardProps) {
                       control={control}
                       render={({ field }) => <Input type="time" {...field} />}
                     />
-                  </span>
-                  <span>{load.route?.pickupPoint?.locationName || "--"}</span>
-                  <Controller
-                    name="pickup.address"
-                    control={control}
-                    render={({ field }) => (
-                      <Input placeholder="Address..." {...field} />
-                    )}
-                  />
-                  <Controller
-                    name="pickup.condition"
-                    control={control}
-                    render={({ field }) => (
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select condition" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {statusOptions.map((opt) => (
-                            <SelectItem key={opt} value={opt}>
-                              {opt}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    )}
-                  />
-                  <span>{load.route?.pickupPoint?.eta || "--"}</span>
+                  </div>
+                  <div>
+                    <span className="block font-medium text-gray-500 md:hidden">
+                      Location Name
+                    </span>
+                    {load.route?.pickupPoint?.locationName || "--"}
+                  </div>
+                  <div>
+                    <span className="block font-medium text-gray-500 md:hidden">
+                      Address
+                    </span>
+                    <Controller
+                      name="pickup.address"
+                      control={control}
+                      render={({ field }) => (
+                        <Input placeholder="Address..." {...field} />
+                      )}
+                    />
+                  </div>
+                  <div>
+                    <span className="block font-medium text-gray-500 md:hidden">
+                      Condition
+                    </span>
+                    <Controller
+                      name="pickup.condition"
+                      control={control}
+                      render={({ field }) => (
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select condition" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {statusOptions.map((opt) => (
+                              <SelectItem key={opt} value={opt}>
+                                {opt}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
+                    />
+                  </div>
+                  <div>
+                    <span className="block font-medium text-gray-500 md:hidden">
+                      ETA
+                    </span>
+                    {load.route?.pickupPoint?.eta || "--"}
+                  </div>
                 </div>
                 {/* Delivery Point */}
-                <div className="grid grid-cols-6 gap-4 py-2 text-sm">
-                  <span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-4 py-2 text-sm">
+                  <div>
+                    <span className="block font-medium text-gray-500 md:hidden">
+                      Timezone
+                    </span>
                     {load?.route?.deliveryPoint?.type} <br />
                     {load.route?.deliveryPoint?.timezone || "--"}
-                  </span>
-                  <span>
+                  </div>
+                  <div>
+                    <span className="block font-medium text-gray-500 md:hidden">
+                      Early/Late
+                    </span>
                     <Controller
                       name="delivery.early"
                       control={control}
@@ -285,37 +317,57 @@ export default function RouteCard({ load, onUpdateLoad }: RouteCardProps) {
                       control={control}
                       render={({ field }) => <Input type="time" {...field} />}
                     />
-                  </span>
-                  <span>{load.route?.deliveryPoint?.locationName || "--"}</span>
-                  <Controller
-                    name="delivery.address"
-                    control={control}
-                    render={({ field }) => (
-                      <Input placeholder="Address..." {...field} />
-                    )}
-                  />
-                  <Controller
-                    name="delivery.condition"
-                    control={control}
-                    render={({ field }) => (
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select condition" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {statusOptions.map((opt) => (
-                            <SelectItem key={opt} value={opt}>
-                              {opt}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    )}
-                  />
-                  <span>{load.route?.deliveryPoint?.eta || "--"}</span>
+                  </div>
+                  <div>
+                    <span className="block font-medium text-gray-500 md:hidden">
+                      Location
+                    </span>
+                    {load.route?.deliveryPoint?.locationName || "--"}
+                  </div>
+                  <div>
+                    <span className="block font-medium text-gray-500 md:hidden">
+                      Address
+                    </span>
+                    <Controller
+                      name="delivery.address"
+                      control={control}
+                      render={({ field }) => (
+                        <Input placeholder="Address..." {...field} />
+                      )}
+                    />
+                  </div>
+                  <div>
+                    <span className="block font-medium text-gray-500 md:hidden">
+                      Condition
+                    </span>
+                    <Controller
+                      name="delivery.condition"
+                      control={control}
+                      render={({ field }) => (
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select condition" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {statusOptions.map((opt) => (
+                              <SelectItem key={opt} value={opt}>
+                                {opt}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
+                    />
+                  </div>
+                  <div>
+                    <span className="block font-medium text-gray-500 md:hidden">
+                      ETA
+                    </span>
+                    {load.route?.deliveryPoint?.eta || "--"}
+                  </div>
                 </div>
                 {/* Stop Points */}
                 {(load.route?.stopPoints?.length ?? 0) > 0 && (
@@ -323,13 +375,19 @@ export default function RouteCard({ load, onUpdateLoad }: RouteCardProps) {
                     {load.route?.stopPoints?.map((point, index) => (
                       <div
                         key={index}
-                        className="grid grid-cols-6 gap-4 py-2 text-sm border-b"
+                        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-4 py-2 text-sm"
                       >
-                        <span>
+                        <div>
+                          <span className="block font-medium text-gray-500 md:hidden">
+                            Timezone
+                          </span>
                           {point.type} <br />
                           {point.timezone || "--"}
-                        </span>
-                        <span>
+                        </div>
+                        <div>
+                          <span className="block font-medium text-gray-500 md:hidden">
+                            Early/Late
+                          </span>
                           <Controller
                             name={`stop.${index}.early`}
                             control={control}
@@ -344,37 +402,58 @@ export default function RouteCard({ load, onUpdateLoad }: RouteCardProps) {
                               <Input type="time" {...field} />
                             )}
                           />
-                        </span>
-                        <span>{point.locationName || "--"}</span>
-                        <Controller
-                          name={`stop.${index}.address`}
-                          control={control}
-                          render={({ field }) => (
-                            <Input placeholder="Address..." {...field} />
-                          )}
-                        />
-                        <Controller
-                          name={`stop.${index}.condition`}
-                          control={control}
-                          render={({ field }) => (
-                            <Select
-                              onValueChange={field.onChange}
-                              value={field.value}
-                            >
-                              <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Select condition" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {statusOptions.map((opt) => (
-                                  <SelectItem key={opt} value={opt}>
-                                    {opt}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          )}
-                        />
-                        <span>{point.eta || "--"}</span>
+                        </div>
+                        <div>
+                          <span className="block font-medium text-gray-500 md:hidden">
+                            Location
+                          </span>
+                          {point.locationName || "--"}
+                        </div>
+                        <div>
+                          <span className="block font-medium text-gray-500 md:hidden">
+                            Address
+                          </span>
+                          <Controller
+                            name={`stop.${index}.address`}
+                            control={control}
+                            render={({ field }) => (
+                              <Input placeholder="Address..." {...field} />
+                            )}
+                          />
+                        </div>
+                        <div>
+                          <span className="block font-medium text-gray-500 md:hidden">
+                            Condition
+                          </span>
+
+                          <Controller
+                            name={`stop.${index}.condition`}
+                            control={control}
+                            render={({ field }) => (
+                              <Select
+                                onValueChange={field.onChange}
+                                value={field.value}
+                              >
+                                <SelectTrigger className="w-full">
+                                  <SelectValue placeholder="Select condition" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {statusOptions.map((opt) => (
+                                    <SelectItem key={opt} value={opt}>
+                                      {opt}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            )}
+                          />
+                        </div>
+                        <div>
+                          <span className="block font-medium text-gray-500 md:hidden">
+                            ETA
+                          </span>
+                          {point.eta || "--"}
+                        </div>
                       </div>
                     ))}
                   </>
@@ -399,88 +478,166 @@ export default function RouteCard({ load, onUpdateLoad }: RouteCardProps) {
           ) : (
             <div className="space-y-2">
               {/* Pickup Point */}
-              <div className="grid grid-cols-6 gap-4 py-2 text-sm">
-                <span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-4 py-2 text-sm">
+                <div>
+                  <span className="block font-medium text-gray-500 md:hidden">
+                    Timezone
+                  </span>
                   {load?.route?.pickupPoint?.type} <br />
                   {load.route?.pickupPoint?.timezone || "--"}
-                </span>
-                <span>
+                </div>
+                <div>
+                  <span className="block font-medium text-gray-500 md:hidden">
+                    Early/Late
+                  </span>
                   {load.route?.pickupPoint?.date}
                   <br />
                   {load.route?.pickupPoint?.early || "--"} /{" "}
                   {load.route?.pickupPoint?.late || "--"}
-                </span>
-                <span>{load.route?.pickupPoint?.locationName || "--"}</span>
-                <span>{load.route?.pickupPoint?.address || "--"}</span>
-                <span>
-                  <span
-                    className={`text-xs px-2 py-1 rounded font-medium ${getStatusStyle(
-                      load.route?.pickupPoint?.status || "Unknown"
-                    )}`}
-                  >
-                    {formatStatus(load.route?.pickupPoint?.status || "Unknown")}
+                </div>
+                <div>
+                  <span className="block font-medium text-gray-500 md:hidden">
+                    Location Name
                   </span>
-                </span>
-                <span>
-                  <span>{load.route?.pickupPoint?.eta || "--"}</span>
-                </span>
+                  {load.route?.pickupPoint?.locationName || "--"}
+                </div>
+                <div>
+                  <span className="block font-medium text-gray-500 md:hidden">
+                    Address
+                  </span>
+                  {load.route?.pickupPoint?.address || "--"}
+                </div>
+                <div>
+                  <span className="block font-medium text-gray-500 md:hidden">
+                    Status
+                  </span>
+                  <span>
+                    <span
+                      className={`text-xs px-1 sm:px-2 py-1 rounded font-medium ${getStatusStyle(
+                        load.route?.pickupPoint?.status || "Unknown"
+                      )}`}
+                    >
+                      {formatStatus(
+                        load.route?.pickupPoint?.status || "Unknown"
+                      )}
+                    </span>
+                  </span>
+                </div>
+                <div>
+                  <span className="block font-medium text-gray-500 md:hidden">
+                    ETA
+                  </span>
+                  {load.route?.pickupPoint?.eta || "--"}
+                </div>
               </div>
               {/* Delivery Point */}
-              <div className="grid grid-cols-6 gap-4 py-2 text-sm">
-                <span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-4 py-2 text-sm">
+                <div>
+                  <span className="block font-medium text-gray-500 md:hidden">
+                    Timezone
+                  </span>
                   {load?.route?.deliveryPoint?.type} <br />
                   {load.route?.deliveryPoint?.timezone || "--"}
-                </span>
-                <span>
+                </div>
+                <div>
+                  <span className="block font-medium text-gray-500 md:hidden">
+                    Early/Late
+                  </span>
                   {load.route?.deliveryPoint?.date}
                   <br />
                   {load.route?.deliveryPoint?.early || "--"} /{" "}
                   {load.route?.deliveryPoint?.late || "--"}
-                </span>
-                <span>{load.route?.deliveryPoint?.locationName || "--"}</span>
-                <span>{load.route?.deliveryPoint?.address || "--"}</span>
-                <span>
-                  <span
-                    className={`text-xs px-2 py-1 rounded font-medium ${getStatusStyle(
-                      load.route?.deliveryPoint?.status || "Unknown"
-                    )}`}
-                  >
-                    {formatStatus(
-                      load.route?.deliveryPoint?.status || "Unknown"
-                    )}
+                </div>
+                <div>
+                  <span className="block font-medium text-gray-500 md:hidden">
+                    Location Name
                   </span>
-                </span>
-                <span>{load.route?.deliveryPoint?.eta || "--"}</span>
+                  {load.route?.deliveryPoint?.locationName || "--"}
+                </div>
+                <div>
+                  <span className="block font-medium text-gray-500 md:hidden">
+                    Address
+                  </span>
+                  {load.route?.deliveryPoint?.address || "--"}
+                </div>
+                <div>
+                  <span className="block font-medium text-gray-500 md:hidden">
+                    Status
+                  </span>
+                  <span>
+                    <span
+                      className={`text-xs px-1 sm:px-2 py-1 rounded font-medium ${getStatusStyle(
+                        load.route?.deliveryPoint?.status || "Unknown"
+                      )}`}
+                    >
+                      {formatStatus(
+                        load.route?.deliveryPoint?.status || "Unknown"
+                      )}
+                    </span>
+                  </span>
+                </div>
+                <div>
+                  <span className="block font-medium text-gray-500 md:hidden">
+                    ETA
+                  </span>
+                  {load.route?.deliveryPoint?.eta || "--"}
+                </div>
               </div>
               {/* Stop Points */}
               {(load.route?.stopPoints?.length ?? 0) > 0 && (
                 <>
                   {load.route?.stopPoints?.map((point, index) => (
                     <div
+                      className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-4 py-2 text-sm"
                       key={index}
-                      className="grid grid-cols-6 gap-4 py-2 text-sm border-b"
                     >
-                      <span>
+                      <div>
+                        <span className="block font-medium text-gray-500 md:hidden">
+                          Timezone
+                        </span>
                         {point.type} <br />
                         {point.timezone || "--"}
-                      </span>
-                      <span>
+                      </div>
+                      <div>
+                        <span className="block font-medium text-gray-500 md:hidden">
+                          Early/Late
+                        </span>
                         {point.date}
                         <br />
                         {point.early || "--"} / {point.late || "--"}
-                      </span>
-                      <span>{point.locationName || "--"}</span>
-                      <span>{point.address || "--"}</span>
-                      <span>
-                        <span
-                          className={`text-xs px-2 py-1 rounded font-medium ${getStatusStyle(
-                            point.status || "Unknown"
-                          )}`}
-                        >
-                          {formatStatus(point.status || "Unknown")}
+                      </div>
+                      <div>
+                        <span className="block font-medium text-gray-500 md:hidden">
+                          Location Name
                         </span>
-                      </span>
-                      <span>{point.eta || "--"}</span>
+                        {point.locationName || "--"}
+                      </div>
+                      <div>
+                        <span className="block font-medium text-gray-500 md:hidden">
+                          Address
+                        </span>
+                        {point.address || "--"}
+                      </div>
+                      <div>
+                        <span className="block font-medium text-gray-500 md:hidden">
+                          Status
+                        </span>
+                        <span>
+                          <span
+                            className={`text-xs px-1 sm:px-2 py-1 rounded font-medium ${getStatusStyle(
+                              point.status || "Unknown"
+                            )}`}
+                          >
+                            {formatStatus(point.status || "Unknown")}
+                          </span>
+                        </span>
+                      </div>
+                      <div>
+                        <span className="block font-medium text-gray-500 md:hidden">
+                          ETA
+                        </span>
+                        {point.eta || "--"}
+                      </div>
                     </div>
                   ))}
                 </>

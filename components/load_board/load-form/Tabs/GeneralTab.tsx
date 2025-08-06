@@ -83,14 +83,14 @@ export default function GeneralTabs({ load, onUpdateLoad }: GeneralTabsProps) {
     load.customer;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 px-2 sm:px-4">
       {/* ROUTE CARD */}
       <RouteCard load={load} onUpdateLoad={onUpdateLoad} />
       {/* SHIPMENT CARD */}
       <ShipmentCard load={load} setLoad={onUpdateLoad} />
       {/* CONTACTS CARD */}
-      <Card className="border rounded-lg shadow-sm h-fitx">
-        <CardHeader className="border-b flex flex-row items-center justify-between">
+      <Card className="border rounded-lg shadow-sm">
+        <CardHeader className="border-b flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
           <CardTitle className="text-lg font-semibold text-[#022f7e]">
             Customer
           </CardTitle>
@@ -109,7 +109,7 @@ export default function GeneralTabs({ load, onUpdateLoad }: GeneralTabsProps) {
             <MoreVertical className="text-[#022f7e] cursor-pointer w-4 h-4" />
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-4">
           {editing ? (
             <div className="grid grid-cols-1 gap-4">
               <div className="text-sm font-medium">Select Customer</div>
@@ -133,12 +133,12 @@ export default function GeneralTabs({ load, onUpdateLoad }: GeneralTabsProps) {
               </Select>
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-6 text-sm">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
               <div>
                 <div className="font-semibold text-gray-600">
                   Company Contact
                 </div>
-                <div className="text-blue-700">
+                <div className="text-blue-700 break-words">
                   @{selectedCustomerObj?.companyName}
                 </div>
                 <div>{selectedCustomerObj?.companyPhone}</div>
@@ -147,7 +147,7 @@ export default function GeneralTabs({ load, onUpdateLoad }: GeneralTabsProps) {
                 <div className="font-semibold text-gray-600">
                   Contact Person
                 </div>
-                <div className="text-blue-700">
+                <div className="text-blue-700 break-words">
                   {selectedCustomerObj?.contactPerson}
                 </div>
                 <div>{selectedCustomerObj?.contactPhone}</div>
