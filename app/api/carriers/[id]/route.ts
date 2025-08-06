@@ -4,11 +4,13 @@ import Carrier from "@/models/Carrier";
 
 export async function GET(
   _: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await dbConnect();
+  const { id } = await params;
+
   try {
-    const carrier = await Carrier.findById(params.id).populate("customer");
+    const carrier = await Carrier.findById(id).populate("customer");
     if (!carrier)
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     return NextResponse.json(carrier, { status: 200 });
