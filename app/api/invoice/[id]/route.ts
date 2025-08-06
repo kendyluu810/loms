@@ -56,9 +56,9 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   await dbConnect();
-  const { id: invoiceId } = await params;
+  const { id } = await params;
   try {
-    const deleted = await Invoice.findByIdAndDelete(invoiceId);
+    const deleted = await Invoice.findByIdAndDelete(id);
     if (!deleted) {
       return NextResponse.json({ error: "Invoice not found" }, { status: 404 });
     }
