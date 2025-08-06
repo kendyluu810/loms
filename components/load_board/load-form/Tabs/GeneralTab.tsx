@@ -39,8 +39,12 @@ export default function GeneralTabs({ load, onUpdateLoad }: GeneralTabsProps) {
         } else {
           setCustomers([]);
         }
-      } catch (err: any) {
-        toast.error(`Failed to load customers: ${err.message}`);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          toast.error(`Failed to load customers: ${err.message}`);
+        } else {
+          toast.error("Failed to load customers: Unknown error");
+        }
         setCustomers([]);
       }
     };
@@ -64,8 +68,12 @@ export default function GeneralTabs({ load, onUpdateLoad }: GeneralTabsProps) {
 
       toast.success("Customer updated");
       setEditing(false);
-    } catch (error: any) {
-      toast.error(`Update failed: ${error.message}`);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(`Update failed: ${error.message}`);
+      } else {
+        toast.error("Update failed: Unknown error");
+      }
     }
   };
 

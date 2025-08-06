@@ -1,5 +1,6 @@
 import dbConnect from "@/lib/mongodb";
 import Driver from "@/models/Driver";
+import { PipelineStage } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -12,7 +13,7 @@ export async function GET(req: NextRequest) {
   const sort = searchParams.get("sort") || "createdAt";
   const order = searchParams.get("order") === "desc" ? -1 : 1;
 
-  const pipeline: any[] = [
+  const pipeline: PipelineStage[] = [
     {
       $lookup: {
         from: "employees", // collection name

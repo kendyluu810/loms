@@ -84,8 +84,8 @@ export async function POST(req: NextRequest) {
     await newRoute.save();
 
     return NextResponse.json(newRoute, { status: 201 });
-  } catch (_) {
-    //console.error("POST /api/route error:", error);
+  } catch (error) {
+    console.error("POST /api/route error:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }

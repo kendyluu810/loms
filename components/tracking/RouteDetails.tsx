@@ -1,4 +1,4 @@
-import { ExtendedLoadRow, LoadBoard } from "@/type";
+import { ExtendedLoadRow } from "@/type";
 import {
   CheckCircle,
   Circle,

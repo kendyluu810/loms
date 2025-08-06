@@ -20,8 +20,8 @@ export async function GET(
     }
 
     return NextResponse.json(driver);
-  } catch (_) {
-    //console.error(error);
+  } catch (error) {
+    console.error("Error fetching driver by employee ID:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }

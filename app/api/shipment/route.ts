@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
       body.stopPoint = {
         type: "stop",
         code: body.warehouseNumber || "AUTO",
-        locationName: body.additionalStop ,
+        locationName: body.additionalStop,
         eta: "",
         status: "planned",
       };
@@ -43,8 +43,8 @@ export async function POST(req: NextRequest) {
     await newShipment.save();
 
     return NextResponse.json(newShipment, { status: 201 });
-  } catch (_) {
-    //console.error("POST /api/shipment error:", error);
+  } catch (error) {
+    console.error("POST /api/shipment error:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }

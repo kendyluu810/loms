@@ -41,8 +41,8 @@ export async function PUT(
     await invoice.save();
 
     return NextResponse.json(invoice);
-  } catch (_) {
-    //console.error("Invoice update error:", error);
+  } catch (error) {
+    console.error("Invoice update error:", error);
     return NextResponse.json(
       { error: "Failed to update invoice" },
       { status: 500 }
@@ -68,7 +68,8 @@ export async function DELETE(
       { message: "Deleted successfully" },
       { status: 200 }
     );
-  } catch (_) {
+  } catch (error) {
+    console.error("DELETE invoice error:", error);
     return NextResponse.json(
       { error: "Failed to delete invoice" },
       { status: 500 }

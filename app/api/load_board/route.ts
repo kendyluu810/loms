@@ -181,15 +181,13 @@ export async function GET(req: NextRequest) {
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "10");
 
-    const filter: any = {};
+    const filter:  Record<string, unknown> = {};
     if (search) {
       filter.load_id = { $regex: search, $options: "i" };
     }
     if (status) {
       filter.status = status;
     }
-
-    const filters: any = {};
 
     const loads = await Load.find(filter)
       .populate("route")

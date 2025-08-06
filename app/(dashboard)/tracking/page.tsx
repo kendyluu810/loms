@@ -27,8 +27,12 @@ export default function TrackingPage() {
         } else {
           toast.error("Failed to fetch tracking:", json.message);
         }
-      } catch (error: any) {
-        toast.error(`Error fetching tracking: ${error.message}`);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          toast.error(`Error fetching tracking: ${error.message}`);
+        } else {
+          toast.error("Error fetching tracking: Unknown error");
+        }
       } finally {
         setLoading(false);
       }
@@ -66,8 +70,8 @@ export default function TrackingPage() {
           loading={loading}
           onSelect={setSelectedLoad}
         />
-        <RouteDetails load={selectedLoad} />
-        <LoadDetails load={selectedLoad} />
+        <RouteDetails load={selectedLoad!} />
+        {selectedLoad && <LoadDetails load={selectedLoad} />}
       </div>
     </div>
   );

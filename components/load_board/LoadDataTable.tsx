@@ -34,8 +34,8 @@ export default function LoadDataTable({}: {
         const { data } = await res.json();
         const rows = data.map(mapLoadToRow);
         setLoadRows(rows);
-      } catch (_) {
-        //console.error("Failed to fetch loads", err);
+      } catch (err) {
+        console.error("Failed to fetch loads", err);
       }
     };
 
@@ -46,8 +46,8 @@ export default function LoadDataTable({}: {
     try {
       await fetch(`/api/load_board/${id}`, { method: "DELETE" });
       setLoadRows((prev) => prev.filter((l) => l.load_id !== id));
-    } catch (_) {
-      //console.error("Delete failed", err);
+    } catch (err) {
+      console.error("Delete failed", err);
     }
   };
 

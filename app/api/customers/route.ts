@@ -16,8 +16,8 @@ export async function POST(req: NextRequest) {
       { message: "Customer created", customer: newCustomer },
       { status: 201 }
     );
-  } catch (_) {
-    //console.error("POST /api/customers error:", error);
+  } catch (error) {
+    console.error("POST /api/customers error:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }

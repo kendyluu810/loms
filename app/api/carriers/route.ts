@@ -30,7 +30,8 @@ export async function GET(req: NextRequest) {
       .limit(pageSize);
 
     return NextResponse.json({ carriers, total }, { status: 200 });
-  } catch (_) {
+  } catch (error) {
+    console.error("GET carriers error:", error);
     return NextResponse.json(
       { error: "Failed to fetch carriers" },
       { status: 500 }

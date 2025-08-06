@@ -12,8 +12,8 @@ export async function GET(req: NextRequest) {
     const query = loadId ? { loadId } : {};
     const invoices = await Invoice.find(query).populate("carrier customer");
     return NextResponse.json(invoices);
-  } catch (_) {
-    //console.error("GET Error:", error);
+  } catch (error) {
+    console.error("GET Error:", error);
     return NextResponse.json(
       { error: "Failed to fetch invoices" },
       { status: 500 }
@@ -51,8 +51,8 @@ export async function POST(req: NextRequest) {
     await Load.findByIdAndUpdate(load._id, { invoice: invoice._id });
 
     return NextResponse.json(invoice, { status: 201 });
-  } catch (_) {
-    //console.error("POST Error:", error);
+  } catch (error) {
+    console.error("POST Error:", error);
     return NextResponse.json(
       { error: "Failed to create invoice" },
       { status: 500 }

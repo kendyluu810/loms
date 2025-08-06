@@ -37,6 +37,13 @@ interface RouteFormData {
   }[];
 }
 
+interface StopPoint {
+  early: string;
+  late: string;
+  address: string;
+  condition: string;
+}
+
 interface RouteCardProps {
   load: ExtendedLoadRow;
   onUpdateLoad: (updatedLoad: ExtendedLoadRow) => void;
@@ -148,7 +155,7 @@ export default function RouteCard({ load, onUpdateLoad }: RouteCardProps) {
           eta: calculateETA(data.delivery.early, data.delivery.late),
           type: "delivery",
         },
-        stopPoints: data.stop?.map((s: any, idx: number) => {
+        stopPoints: data.stop?.map((s: StopPoint, idx: number) => {
           const existingStop = currentRoute.stopPoints?.[idx] ?? {};
           return {
             ...existingStop,
@@ -173,8 +180,12 @@ export default function RouteCard({ load, onUpdateLoad }: RouteCardProps) {
       onUpdateLoad({ ...load, route: routePayload });
       toast.success("Route updated successfully");
       setEditRoute(false);
-    } catch (err: any) {
-      toast.error(err?.message || "Update failed");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toast.error(err.message || "Update failed");
+      } else {
+        toast.error("Update failed: Unknown error");
+      }
     }
   };
 

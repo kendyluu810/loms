@@ -9,6 +9,7 @@ import { Pencil } from "lucide-react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import axios from "axios";
+import { ExtendedLoadRow } from "@/type";
 
 interface Invoice {
   _id: string;
@@ -29,7 +30,11 @@ interface Invoice {
   [key: string]: string | number | undefined; // fallback for dynamic fields like `loadRate`, etc.
 }
 
-export default function InvoiceTabs() {
+interface InvoiceTabsProps {
+  load: ExtendedLoadRow;
+}
+
+export default function InvoiceTabs({ load }: InvoiceTabsProps) {
   const [editCustomer, setEditCustomer] = useState(false);
   const [editCarrier, setEditCarrier] = useState(false);
   const [editAdjustment, setEditAdjustment] = useState(false);
@@ -98,9 +103,12 @@ export default function InvoiceTabs() {
           adjustedAmount: parseFloat(adjustedAmount.toFixed(2)),
           carrierTotalPay: parseFloat(carrierTotalPay.toFixed(2)),
         });
-      } catch (err: any) {
-        //console.error("Error fetching invoice:", err);
-        toast.error(`Unable to load invoice: ${err.message}`);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          toast.error(`Unable to load invoice: ${err.message}`);
+        } else {
+          toast.error("Unable to load invoice: Unknown error");
+        }
       }
     };
 
@@ -109,7 +117,7 @@ export default function InvoiceTabs() {
     }
   }, [load_id]);
 
-  const updateInvoiceField = async (field: string, value: any) => {
+  const updateInvoiceField = async (field: string, value: string | number) => {
     if (!invoice?._id) return;
 
     try {
@@ -132,23 +140,25 @@ export default function InvoiceTabs() {
       });
 
       toast.success("Update successful");
-    } catch (err: any) {
-      //console.error(err);
-      toast.error(`Update failed: ${err.message}`);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toast.error(`Update failed: ${err.message}`);
+      } else {
+        toast.error("Update failed: Unknown error");
+      }
     }
   };
-
-  useEffect(() => {
-    if (!invoice) return;
-    const loadRate = parseFloat(invoice.loadRate) || 0;
+  const calculateTotals = (currentInvoice: Invoice) => {
+    const loadRate = parseFloat(currentInvoice.loadRate) || 0;
     const fuelSurchargeCustomer =
-      parseFloat(invoice.fuelSurchargeCustomer) || 0;
-    const carrierRate = parseFloat(invoice.carrierRate) || 0;
-    const fuelSurchargeCarrier = parseFloat(invoice.fuelSurchargeCarrier) || 0;
+      parseFloat(currentInvoice.fuelSurchargeCustomer) || 0;
+    const carrierRate = parseFloat(currentInvoice.carrierRate) || 0;
+    const fuelSurchargeCarrier =
+      parseFloat(currentInvoice.fuelSurchargeCarrier) || 0;
 
-    const rate = parseFloat(invoice.ratePerMile) || 0;
-    const miles = parseFloat(invoice.miles) || 0;
-    const fuel = parseFloat(invoice.fuelSurcharge) || 0;
+    const rate = parseFloat(currentInvoice.ratePerMile) || 0;
+    const miles = parseFloat(currentInvoice.miles) || 0;
+    const fuel = parseFloat(currentInvoice.fuelSurcharge) || 0;
 
     const customerChargesTotal = loadRate + fuelSurchargeCustomer;
     const carrierChargesTotal = carrierRate + fuelSurchargeCarrier;
@@ -158,14 +168,21 @@ export default function InvoiceTabs() {
     const carrierTotalPay =
       customerChargesTotal + carrierChargesTotal + adjustedAmount;
 
-    setInvoice((prev: any) => ({
-      ...prev,
-      carrierTotal: parseFloat(carrierTotal.toFixed(2)),
-      invoiceTotal: parseFloat(invoiceTotal.toFixed(2)),
+    return {
       customerChargesTotal: parseFloat(customerChargesTotal.toFixed(2)),
       carrierChargesTotal: parseFloat(carrierChargesTotal.toFixed(2)),
+      carrierTotal: parseFloat(carrierTotal.toFixed(2)),
+      invoiceTotal: parseFloat(invoiceTotal.toFixed(2)),
+      adjustedAmount: parseFloat(adjustedAmount.toFixed(2)),
       carrierTotalPay: parseFloat(carrierTotalPay.toFixed(2)),
-    }));
+    };
+  };
+
+  useEffect(() => {
+    if (!invoice) return;
+
+    const totals = calculateTotals(invoice);
+    setInvoice((prev) => (prev ? { ...prev, ...totals } : prev));
   }, [
     invoice?.ratePerMile,
     invoice?.miles,
@@ -184,9 +201,9 @@ export default function InvoiceTabs() {
         disabled={!editable}
         onChange={(e) => {
           const newValue = e.target.value;
-          setInvoice((prev: any) => ({ ...prev, [field]: newValue }));
+          setInvoice((prev) => (prev ? { ...prev, [field]: newValue } : prev));
         }}
-        onBlur={() => updateInvoiceField(field, invoice?.[field])}
+        onBlur={() => updateInvoiceField(field, invoice?.[field] || "")}
       />
     </div>
   );

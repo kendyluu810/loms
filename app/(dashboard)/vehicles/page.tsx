@@ -38,8 +38,12 @@ export default function VehiclesPage() {
       await deleteVehicle(id);
       toast.success("Deleted successfully");
       fetchVehicles(); // reload lại danh sách
-    } catch (error: any) {
-      toast.error(`Failed to delete vehicle: ${error.message}`);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(`Failed to delete vehicle: ${error.message}`);
+      } else {
+        toast.error("Failed to delete vehicle: Unknown error");
+      }
     }
   };
 

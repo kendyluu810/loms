@@ -21,7 +21,7 @@ export async function POST(
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    //console.error("[UPSERT DRIVER]", error);
+    console.error("[UPSERT DRIVER]", error);
     return NextResponse.json(
       { message: "Failed to upsert driver", error },
       { status: 500 }
@@ -48,7 +48,7 @@ export async function GET(
 
     return NextResponse.json(driver);
   } catch (error) {
-    //console.error(error);
+    console.error("[GET DRIVER]", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }

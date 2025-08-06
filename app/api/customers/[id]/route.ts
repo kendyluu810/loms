@@ -43,8 +43,8 @@ export async function PUT(
     }
 
     return NextResponse.json(updated);
-  } catch (_) {
-    //console.error("PUT Customer Error:", error);
+  } catch (error) {
+    console.error("PUT Customer Error:", error);
     return NextResponse.json(
       { message: "Failed to update customer" },
       { status: 500 }
@@ -69,8 +69,8 @@ export async function DELETE(
     }
 
     return NextResponse.json({ message: "Customer deleted successfully" });
-  } catch (_) {
-    //console.error("DELETE Customer Error:", error);
+  } catch (error) {
+    console.error("DELETE Customer Error:", error);
     return NextResponse.json(
       { message: "Failed to delete customer" },
       { status: 500 }

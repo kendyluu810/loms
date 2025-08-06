@@ -33,8 +33,8 @@ export async function GET() {
     // //console.log("First load customer:", loads[0]?.customer);
 
     return NextResponse.json({ success: true, data: loads }, { status: 200 });
-  } catch (_) {
-    //console.error("Error in tracking route:", error); // log chi tiết lỗi
+  } catch (error) {
+    console.error("Error in tracking route:", error); 
     return NextResponse.json(
       { success: false, message: "Failed to fetch tracking data" },
       { status: 500 }

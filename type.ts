@@ -217,11 +217,14 @@ export interface LoadRow {
 export interface ExtendedLoadRow extends LoadRow {
   _id: string;
   route: {
+    pickupTime: string;
+    deliveryTime: string;
     pickupPoint?: RoutePoint;
     deliveryPoint?: RoutePoint;
     stopPoints?: RoutePoint[];
   };
   shipment: {
+    rateUnit: string;
     equipmentType: string;
     pickupPoint: ShipmentPoint;
     deliveryPoint: ShipmentPoint;
@@ -235,6 +238,9 @@ export interface ExtendedLoadRow extends LoadRow {
     employee?: {
       name?: string;
     };
+    driverlicense: string;
+    licensetype: string;
+    licenseexpiry: string; // ISO string from backend (e.g. "2025-12-31T00:00:00.000Z")
   };
   dispatcher?: Employee;
   vehicle?: Vehicle;

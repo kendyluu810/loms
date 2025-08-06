@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -35,7 +35,7 @@ export default function LoadDetails() {
   const formatStatus = (status: string) =>
     status.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 
-  const fetchLoad = async () => {
+  const fetchLoad = useCallback(async () => {
     try {
       const res = await fetch(`/api/load_board/${id}`);
       const data = await res.json();
@@ -44,15 +44,18 @@ export default function LoadDetails() {
       } else {
         toast.error(data.message || "Failed to fetch load");
       }
-    } catch (error: any) {
-      toast.error(`Failed to fetch load: ${error.message}`);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(`Failed to fetch load: ${error.message}`);
+      } else {
+        toast.error("Failed to fetch load: Unknown error");
+      }
     }
-  };
+  }, [id]);
 
   useEffect(() => {
     if (id) fetchLoad();
-  }, [id]);
-
+  }, [id, fetchLoad]);
   const handleUpdateLoad = (newData: Partial<ExtendedLoadRow>) => {
     setLoad((prev) =>
       prev
