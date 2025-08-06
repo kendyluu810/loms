@@ -25,11 +25,11 @@ export async function GET(
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }) {
+  { params }: { params: Promise<{ id: string }> }
+) {
   await dbConnect();
   const body = await req.json();
-    const { id } = await params;
-
+  const { id } = await params;
 
   try {
     const updated = await Carrier.findByIdAndUpdate(id, body, {
@@ -49,11 +49,12 @@ export async function PUT(
 
 export async function DELETE(
   _: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await dbConnect();
   try {
-    await Carrier.findByIdAndDelete(params.id);
+    const { id } = await params;
+    await Carrier.findByIdAndDelete(id);
     return NextResponse.json(
       { message: "Deleted successfully" },
       { status: 200 }
