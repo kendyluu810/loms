@@ -38,10 +38,10 @@ const Menu = () => {
               isActive
                 ? "bg-[#E8EDFB] text-[#3461ff]"
                 : "text-gray-700 hover:bg-gray-100 hover:text-[#3461ff]"
-            } justify-center lg:justify-start`}
+            } justify-center`}
           >
             <Icon className="w-7 h-7" />
-            <span className="hidden lg:inline">{item.title}</span>
+            <span className="">{item.title}</span>
           </Link>
         );
       })}
