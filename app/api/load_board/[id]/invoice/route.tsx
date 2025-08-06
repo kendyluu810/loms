@@ -78,12 +78,13 @@ export async function PUT(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await dbConnect();
 
   try {
-    const deleted = await Invoice.findOneAndDelete({ loadId: params.id });
+    const { id: loadId } = await params;
+    const deleted = await Invoice.findOneAndDelete({ loadId });
     if (!deleted) {
       return NextResponse.json(
         { message: "Invoice not found" },
