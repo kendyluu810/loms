@@ -56,9 +56,10 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   await dbConnect();
-  const { id } =  params;
+  const invoiceId = params.id;
+
   try {
-    const deleted = await Invoice.findByIdAndDelete(id);
+    const deleted = await Invoice.findByIdAndDelete(invoiceId);
     if (!deleted) {
       return NextResponse.json({ error: "Invoice not found" }, { status: 404 });
     }
