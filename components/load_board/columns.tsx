@@ -133,7 +133,7 @@ export const columns = (
         switch (status?.toLowerCase()) {
           case "pending":
             return "bg-yellow-100 text-yellow-800 border border-yellow-300";
-          case "in progress":
+          case "in_progress":
             return "bg-blue-100 text-blue-800 border border-blue-300";
           case "delivered":
             return "bg-green-100 text-green-800 border border-green-300";
