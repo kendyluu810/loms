@@ -20,7 +20,7 @@ export async function GET(
     }
 
     return NextResponse.json(driver);
-  } catch (error) {
+  } catch (_) {
     //console.error(error);
     return NextResponse.json(
       { message: "Internal Server Error" },

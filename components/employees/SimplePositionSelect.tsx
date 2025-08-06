@@ -8,6 +8,10 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 
+type Position = {
+  name: string;
+};
+
 export function SimplePositionSelect({
   value,
   onChange,
@@ -19,8 +23,8 @@ export function SimplePositionSelect({
 
   const fetchPositions = async () => {
     const res = await fetch("/api/positions");
-    const data = await res.json();
-    setPositions(data.map((item: any) => item.name));
+    const data: Position[] = await res.json();
+    setPositions(data.map((item) => item.name));
   };
 
   useEffect(() => {

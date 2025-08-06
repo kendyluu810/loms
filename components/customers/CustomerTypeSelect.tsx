@@ -12,6 +12,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
+type CustomerType = {
+  name: string;
+};
 export function CustomerTypeSelect({
   value,
   onChange,
@@ -24,8 +27,8 @@ export function CustomerTypeSelect({
 
   const fetchCustomerTypes = async () => {
     const res = await fetch("/api/customer-types");
-    const data = await res.json();
-    setCustomerTypes(data.map((type: any) => type.name));
+    const data: CustomerType[] = await res.json();
+    setCustomerTypes(data.map((type) => type.name));
   };
 
   const addCustomerType = async () => {

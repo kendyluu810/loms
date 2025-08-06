@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -23,9 +23,7 @@ export default function CustomersPage() {
   const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState(0);
 
-  const totalPage = Math.ceil(total / pageSize);
-
-  const fetchCustomers = async () => {
+  const fetchCustomers = useCallback(async () => {
     try {
       const res = await fetch(
         `/api/customers?search=${search}&page=${page}&pageSize=${pageSize}`
@@ -38,13 +36,13 @@ export default function CustomersPage() {
       setTotal(data.total);
     } catch (err) {
       toast.error("Failed to load customers");
-      // //console.error(err);
+      console.error(err); // hoặc bỏ dòng này nếu không cần
     }
-  };
+  }, [search, page, pageSize]);
 
   useEffect(() => {
     fetchCustomers();
-  }, [search, page, pageSize]);
+  }, [fetchCustomers]);
 
   return (
     <div className="p-4 space-y-4">
@@ -112,9 +110,14 @@ export default function CustomersPage() {
                 </TableRow>
               ))
             ) : (
-              <div className="text-xl text-gray-500 font-bold space-y-4 gap-4 text-center">
-                No customer found
-              </div>
+              <TableRow>
+                <TableCell
+                  colSpan={9}
+                  className="text-center py-6 text-gray-500 font-semibold"
+                >
+                  No customer found
+                </TableCell>
+              </TableRow>
             )}
           </TableBody>
         </Table>

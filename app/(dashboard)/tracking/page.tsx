@@ -28,7 +28,7 @@ export default function TrackingPage() {
           toast.error("Failed to fetch tracking:", json.message);
         }
       } catch (error: any) {
-        toast.error("Error fetching tracking:", error.message);
+        toast.error(`Error fetching tracking: ${error.message}`);
       } finally {
         setLoading(false);
       }

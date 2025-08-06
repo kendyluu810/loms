@@ -21,8 +21,8 @@ export default function MultiStepForm({ onClose }: Props) {
   const [step, setStep] = useState(1);
   const router = useRouter();
 
-  const nextStep = () => setStep((prev) => prev + 1);
-  const prevStep = () => setStep((prev) => prev - 1);
+  // const nextStep = () => setStep((prev) => prev + 1);
+  // const prevStep = () => setStep((prev) => prev - 1);
 
   const { route, shipment, customer, carrier, reset } = useLoadStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -68,7 +68,7 @@ export default function MultiStepForm({ onClose }: Props) {
         toast.error("Failed to create load.");
       }
       setIsSubmitting(false);
-    } catch (error) {
+    } catch (_) {
       //console.error("Error creating load:", error);
       setIsSubmitting(false);
       toast.error("An error occurred while creating the load.");

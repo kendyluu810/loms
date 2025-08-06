@@ -5,9 +5,8 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "../ui/button";
+import { Driver } from "@/type";
 
 export function ViewDriverModal({
   employeeId,
@@ -16,7 +15,7 @@ export function ViewDriverModal({
   employeeId: string;
   onClose: () => void;
 }) {
-  const [driver, setDriver] = useState<any>(null);
+  const [driver, setDriver] = useState<Driver | null>(null);
 
   useEffect(() => {
     const fetchDriver = async () => {
@@ -25,7 +24,7 @@ export function ViewDriverModal({
         if (!res.ok) throw new Error("Driver not found");
         const data = await res.json();
         setDriver(data);
-      } catch (err) {
+      } catch (_) {
         //console.error("Error fetching driver:", err);
         setDriver(null);
       }

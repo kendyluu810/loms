@@ -1,3 +1,5 @@
+import { Employee } from "@/type";
+
 export async function fetchEmployees({
   search,
   page,
@@ -18,7 +20,7 @@ export async function fetchEmployees({
   return res.json(); // { employees: Employee[], total: number }
 }
 
-export async function createEmployee(data: any) {
+export async function createEmployee(data: Employee) {
   const res = await fetch("/api/employees", {
     method: "POST",
     headers: { "Content-Type": "application/json" },

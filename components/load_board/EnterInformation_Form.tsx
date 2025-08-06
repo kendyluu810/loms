@@ -46,7 +46,7 @@ export default function EnterInformation_Form({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const filters = Object.fromEntries(
-      Object.entries(formData).filter(([_, v]) => v.trim() !== "")
+      Object.entries(formData).filter(([v]) => v.trim() !== "")
     );
     onApplyFilters(filters);
   };
@@ -59,7 +59,7 @@ export default function EnterInformation_Form({
     onApplyFilters({});
   };
 
-  const { customer, updateCustomer } = useLoadStore();
+  const { updateCustomer } = useLoadStore();
 
   const [customers, setCustomers] = useState<Customer[]>([]);
 

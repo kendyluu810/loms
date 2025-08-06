@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import countries from "world-countries";
+import countries, { Country } from "world-countries";
 
 export function CountrySelect({
   value,
@@ -19,7 +19,7 @@ export function CountrySelect({
   onChange: (value: string) => void;
   placeholder?: string;
 }) {
-  const countryOptions = countries.map((country: any) => ({
+  const countryOptions = countries.map((country: Country) => ({
     value: country.cca2,
     label: country.name.common,
   }));
@@ -30,7 +30,7 @@ export function CountrySelect({
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
-        {countryOptions.map((option: any) => (
+        {countryOptions.map((option) => (
           <SelectItem key={option.value} value={option.value}>
             {option.label}
           </SelectItem>

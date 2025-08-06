@@ -1,10 +1,22 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "../ui/checkbox";
-import { Badge } from "../ui/badge";
 import { useRouter } from "next/navigation";
 import { ConfirmDeleteDialog } from "../dialogs/ConfirmDeleteDialog";
-import { LoadRow } from "@/type"; // đảm bảo import LoadRow
+import { LoadRow } from "@/type"; 
 import { formatDistanceToNow } from "date-fns";
+
+function LoadLinkCell({ loadId }: { loadId: string }) {
+  const router = useRouter();
+
+  return (
+    <div
+      className="text-blue-600 underline cursor-pointer"
+      onClick={() => router.push(`/load_board/${loadId}`)}
+    >
+      {loadId}
+    </div>
+  );
+}
 
 export const columns = (
   onDelete: (id: string) => void
@@ -27,17 +39,7 @@ export const columns = (
   {
     accessorKey: "load_id",
     header: "Load#",
-    cell: ({ row }) => {
-      const router = useRouter();
-      return (
-        <div
-          className="text-blue-600 underline cursor-pointer"
-          onClick={() => router.push(`/load_board/${row.getValue("load_id")}`)}
-        >
-          {row.getValue("load_id")}
-        </div>
-      );
-    },
+    cell: ({ row }) => <LoadLinkCell loadId={row.getValue("load_id")} />,
   },
   {
     accessorKey: "createdAt",

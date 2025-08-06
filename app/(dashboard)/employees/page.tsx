@@ -14,10 +14,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { deleteEmployee, fetchEmployees } from "@/lib/api/employees";
-import { Driver, Employee } from "@/type";
+import { Employee } from "@/type";
 import { Eye, Pencil, Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
+import { useCallback, useEffect, useState } from "react";
 
 export default function EmployeePage() {
   const [employees, setEmployees] = useState<Employee[]>([]);
@@ -29,23 +28,20 @@ export default function EmployeePage() {
   const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState(0);
 
-  const totalPage = Math.ceil(total / pageSize);
+  const loadData = useCallback(async () => {
+    const res = await fetchEmployees({ search, page, pageSize });
+    setEmployees(res.data);
+    setTotal(res.total);
+  }, [search, page, pageSize]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   const handleEdit = (employee: Employee) => {
     setSelected(employee);
     setEditModalOpen(true);
   };
-
-  const loadData = async () => {
-    const res = await fetchEmployees({ search, page, pageSize });
-    //console.log("loadData response:", res.data);
-    setEmployees(res.data);
-    setTotal(res.total);
-  };
-
-  useEffect(() => {
-    loadData();
-  }, [search, page, pageSize]);
 
   const handleDelete = async (id: string) => {
     await deleteEmployee(id);
@@ -66,7 +62,7 @@ export default function EmployeePage() {
         />
         <AddEmployeeModal onAdded={loadData} />
       </div>
-      {/* Table */}
+
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
@@ -92,9 +88,7 @@ export default function EmployeePage() {
                     <Button
                       size="icon"
                       variant="outline"
-                      onClick={() => {
-                        handleEdit(employee);
-                      }}
+                      onClick={() => handleEdit(employee)}
                     >
                       <Pencil size={16} />
                     </Button>
@@ -118,14 +112,16 @@ export default function EmployeePage() {
                 </TableRow>
               ))
             ) : (
-              <div className="text-xl text-gray-500 font-bold space-y-4 gap-4 text-center">
-                No employees found
-              </div>
+              <TableRow>
+                <TableCell colSpan={6} className="text-center py-6 text-gray-500">
+                  No employees found
+                </TableCell>
+              </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
-      {/* Pagination */}
+
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4">
         <select
           value={pageSize}
@@ -142,7 +138,9 @@ export default function EmployeePage() {
           <Button disabled={page === 1} onClick={() => setPage(page - 1)}>
             Prev
           </Button>
-          <span className="px-2">Page {page}</span>
+          <span className="text-sm">
+            Page {page} of {Math.ceil(total / pageSize)}
+          </span>
           <Button
             disabled={page * pageSize >= total}
             onClick={() => setPage(page + 1)}
@@ -157,7 +155,7 @@ export default function EmployeePage() {
         <EditEmployeeModal
           open={editModalOpen}
           employee={selected}
-          drivers={[]}
+          drivers={[]} // có thể cập nhật nếu cần
           onClose={() => setEditModalOpen(false)}
           onUpdated={loadData}
         />

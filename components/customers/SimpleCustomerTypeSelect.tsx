@@ -8,6 +8,10 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 
+type CustomerType = {
+  name: string;
+};
+
 export function SimpleCustomerTypeSelect({
   value,
   onChange,
@@ -19,8 +23,8 @@ export function SimpleCustomerTypeSelect({
 
   const fetchCustomerTypes = async () => {
     const res = await fetch("/api/customer-types");
-    const data = await res.json();
-    setCustomerTypes(data.map((item: any) => item.name));
+    const data: CustomerType[] = await res.json();
+    setCustomerTypes(data.map((item) => item.name));
   };
 
   useEffect(() => {

@@ -14,7 +14,22 @@ import {
   YAxis,
 } from "recharts";
 import { Card, CardContent } from "@/components/ui/card";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+
+type DashboardData = {
+  totalShipments: number;
+  pendingOrders: number;
+  activeDrivers: number;
+  revenueToday: number;
+  lineChartData: { name: string; shipment: number; delivery: number }[];
+  pieData: { name: string; value: number }[];
+  barData: { name: string; revenue: number }[];
+  transactionHistory: {
+    date: string;
+    customer?: { companyName?: string };
+    amount: number;
+  }[];
+};
 
 const COLORS = ["#3461FF", "#40BF60", "#FFA500", "#FF5A5F"];
 
@@ -26,14 +41,14 @@ const RANGE_OPTIONS = [
 ];
 
 export default function DashboardPage() {
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(false);
 
   const [lineRange, setLineRange] = useState("7d");
   const [barRange, setBarRange] = useState("6m");
   const [txRange, setTxRange] = useState("7d");
 
-  const fetchAllData = async () => {
+  const fetchAllData = useCallback(async () => {
     setLoading(true);
     try {
       const res = await fetch(
@@ -46,12 +61,11 @@ export default function DashboardPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [lineRange, barRange, txRange]);
 
   useEffect(() => {
     fetchAllData();
-  }, [lineRange, barRange, txRange]);
-
+  }, [fetchAllData]);
   if (loading || !data) return <div className="p-4">Loading...</div>;
 
   return (
@@ -149,7 +163,7 @@ export default function DashboardPage() {
                   outerRadius={70}
                   label
                 >
-                  {data.pieData.map((entry: any, index: number) => (
+                  {data.pieData.map((entry, index) => (
                     <Cell
                       key={`cell-${index}`}
                       fill={COLORS[index % COLORS.length]}
@@ -159,7 +173,7 @@ export default function DashboardPage() {
               </PieChart>
             </ResponsiveContainer>
             <ul className="text-xs grid grid-cols-2 gap-2 mt-2">
-              {data.pieData.map((item: any, index: number) => (
+              {data.pieData.map((item, index) => (
                 <li key={index} className="flex items-center gap-2">
                   <div
                     className="w-3 h-3 rounded-full"
@@ -229,7 +243,7 @@ export default function DashboardPage() {
               </tr>
             </thead>
             <tbody>
-              {data.transactionHistory.map((row: any, i: number) => (
+              {data.transactionHistory.map((row, i) => (
                 <tr className="border-b" key={i}>
                   <td className="py-2">{row.date}</td>
                   <td className="py-2">{row.customer?.companyName || "N/A"}</td>

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import GeneralTabs from "@/components/load_board/load-form/Tabs/GeneralTab";
 import { useParams, useRouter } from "next/navigation";
-import { ExtendedLoadRow, LoadRow } from "@/type";
+import { ExtendedLoadRow } from "@/type";
 import InvoiceTabs from "@/components/load_board/load-form/Tabs/InvoiceTabs";
 import { toast } from "sonner";
 
@@ -45,7 +45,7 @@ export default function LoadDetails() {
         toast.error(data.message || "Failed to fetch load");
       }
     } catch (error: any) {
-      toast.error("Failed to fetch load", error.message);
+      toast.error(`Failed to fetch load: ${error.message}`);
     }
   };
 

@@ -7,18 +7,20 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 export default function LoadBoardPage() {
-  const [loading, setLoading] = useState(true);
   const [loadRows, setLoadRows] = useState<LoadRow[]>([]);
   const applyFilter = async (filters: Record<string, string>) => {
     try {
       const query = new URLSearchParams(filters).toString();
       const res = await fetch(`/api/load_board?${query}`);
       const { data } = await res.json();
-      //console.log("Filters data:", data);
       const rows = data.map(mapLoadToRow);
       setLoadRows(rows);
-    } catch (error: any) {
-      toast.error(`Failed to apply filter: ${error.message}`);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(`Failed to apply filter: ${error.message}`);
+      } else {
+        toast.error("Failed to apply filter: Unknown error");
+      }
     }
   };
   return (

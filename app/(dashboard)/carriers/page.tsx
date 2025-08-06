@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -23,9 +23,7 @@ export default function CarriersPage() {
   const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState(0);
 
-  const totalPage = Math.ceil(total / pageSize);
-
-  const fetchCarriers = async () => {
+  const fetchCarriers = useCallback(async () => {
     try {
       const res = await fetch(
         `/api/carriers?search=${search}&page=${page}&pageSize=${pageSize}`
@@ -38,14 +36,12 @@ export default function CarriersPage() {
       setTotal(data.total);
     } catch (err) {
       toast.error("Failed to load carriers");
-      // //console.error(err);
     }
-  };
+  }, [search, page, pageSize]);
 
   useEffect(() => {
     fetchCarriers();
-  }, [search, page, pageSize]);
-
+  }, [fetchCarriers]);
   return (
     <div className="p-4 space-y-4">
       <h2 className="font-bold text-2xl text-[#022f7e]">List of Carriers</h2>

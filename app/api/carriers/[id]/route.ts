@@ -12,7 +12,7 @@ export async function GET(
     if (!carrier)
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     return NextResponse.json(carrier, { status: 200 });
-  } catch (err) {
+  } catch (_) {
     return NextResponse.json(
       { error: "Failed to fetch carrier" },
       { status: 500 }
@@ -34,7 +34,7 @@ export async function PUT(
     if (!updated)
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     return NextResponse.json(updated, { status: 200 });
-  } catch (err) {
+  } catch (_) {
     return NextResponse.json(
       { error: "Failed to update carrier" },
       { status: 500 }
@@ -53,7 +53,7 @@ export async function DELETE(
       { message: "Deleted successfully" },
       { status: 200 }
     );
-  } catch (err) {
+  } catch (_) {
     return NextResponse.json(
       { error: "Failed to delete carrier" },
       { status: 500 }

@@ -36,7 +36,7 @@ export default function AddVehicleModal({ open, setOpen, onCreated }: Props) {
     isEmpty: true,
   });
 
-  const handleChange = (field: keyof typeof form, value: any) => {
+  const handleChange = (field: keyof typeof form, value: string | boolean) => {
     setForm({ ...form, [field]: value });
   };
 

@@ -1,7 +1,8 @@
 "use client";
+
 import BookingForm from "@/components/load_board/load-form/BookingForm";
 import { Badge } from "@/components/ui/badge";
-import { ExtendedLoadRow, LoadRow } from "@/type";
+import { ExtendedLoadRow } from "@/type";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -15,7 +16,6 @@ export default function BookingPage() {
       case "posted":
         return "secondary"; // xám nhạt
       case "booked":
-        return "outline"; // xanh dương viền
       case "in_progress":
         return "outline"; // xanh dương viền
       case "completed":
@@ -36,10 +36,12 @@ export default function BookingPage() {
     const fetchLoad = async () => {
       try {
         const res = await fetch(`/api/load_board/${id}`);
-        const data = await res.json();
+        const data: ExtendedLoadRow = await res.json();
         setLoad(data);
-      } catch (error: any) {
-        toast.error("Failed to fetch load", error.message);
+      } catch (error: unknown) {
+        const message =
+          error instanceof Error ? error.message : "Something went wrong";
+        toast.error("Failed to fetch load: " + message);
       }
     };
     if (id) fetchLoad();
@@ -60,7 +62,7 @@ export default function BookingPage() {
                 </Badge>
               )}
               <Badge className="border border-blue-500 bg-white text-[#022f7e]">
-                {load?.shipment.equipmentType || "N/A"}
+                {load?.shipment?.equipmentType || "N/A"}
               </Badge>
             </div>
           </div>
@@ -68,11 +70,11 @@ export default function BookingPage() {
         {/* right */}
         <div className="space-y-4 p-4">
           <h2 className="text-[#022f7e] text-2xl font-medium">
-            {load?.customer.companyName}
+            {load?.customer?.companyName}
           </h2>
           <div className="flex items-center space-x-2">
-            <h2 className="text-[#022f7e]">{load?.customer.contactPerson}</h2>
-            <h2 className="text-[#022f7e]">{load?.customer.contactPhone}</h2>
+            <h2 className="text-[#022f7e]">{load?.customer?.contactPerson}</h2>
+            <h2 className="text-[#022f7e]">{load?.customer?.contactPhone}</h2>
           </div>
         </div>
       </div>

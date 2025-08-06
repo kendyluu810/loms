@@ -17,8 +17,9 @@ export async function GET(
       );
     }
     return NextResponse.json(customer);
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+  } catch (err: unknown) {
+    const error = err as Error;
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
 
@@ -42,7 +43,7 @@ export async function PUT(
     }
 
     return NextResponse.json(updated);
-  } catch (error) {
+  } catch (_) {
     //console.error("PUT Customer Error:", error);
     return NextResponse.json(
       { message: "Failed to update customer" },
@@ -68,7 +69,7 @@ export async function DELETE(
     }
 
     return NextResponse.json({ message: "Customer deleted successfully" });
-  } catch (error) {
+  } catch (_) {
     //console.error("DELETE Customer Error:", error);
     return NextResponse.json(
       { message: "Failed to delete customer" },

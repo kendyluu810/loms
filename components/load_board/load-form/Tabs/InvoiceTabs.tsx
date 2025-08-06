@@ -9,17 +9,31 @@ import { Pencil } from "lucide-react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import axios from "axios";
-import { ExtendedLoadRow } from "@/type";
 
-interface InvoiceTabsProps {
-  load: ExtendedLoadRow;
+interface Invoice {
+  _id: string;
+  loadRate: string;
+  fuelSurchargeCustomer: string;
+  carrierRate: string;
+  fuelSurchargeCarrier: string;
+  ratePerMile: string;
+  miles: string;
+  fuelSurcharge: string;
+  fuelRate: string;
+  customerChargesTotal?: number;
+  carrierChargesTotal?: number;
+  carrierTotal?: number;
+  invoiceTotal?: number;
+  adjustedAmount?: number;
+  carrierTotalPay?: number;
+  [key: string]: any; // fallback for dynamic fields like `loadRate`, etc.
 }
 
-export default function InvoiceTabs({ load }: InvoiceTabsProps) {
+export default function InvoiceTabs() {
   const [editCustomer, setEditCustomer] = useState(false);
   const [editCarrier, setEditCarrier] = useState(false);
   const [editAdjustment, setEditAdjustment] = useState(false);
-  const [invoice, setInvoice] = useState<any>(null);
+  const [invoice, setInvoice] = useState<Invoice | null>(null);
   const params = useParams();
 
   const load_id = params?.id as string;
@@ -36,12 +50,12 @@ export default function InvoiceTabs({ load }: InvoiceTabsProps) {
           });
           currentInvoice = newInvoiceRes.data;
 
-            // Attach the new invoice to the Load
-            await axios.put(`/api/load_board/${load_id}/invoice`, {
+          // Attach the new invoice to the Load
+          await axios.put(`/api/load_board/${load_id}/invoice`, {
             invoiceId: currentInvoice._id,
-            });
-            toast.success("Invoice created successfully!");
-          }
+          });
+          toast.success("Invoice created successfully!");
+        }
 
         const loadRate = parseFloat(currentInvoice.loadRate) || 0;
         const fuelSurchargeCustomer =
@@ -72,23 +86,23 @@ export default function InvoiceTabs({ load }: InvoiceTabsProps) {
           await axios.put(`/api/load_board/${load_id}/invoice`, {
             invoiceId: currentInvoice._id,
           });
-            toast.success("Invoice created successfully!");
-          }
+          toast.success("Invoice created successfully!");
+        }
 
-          setInvoice({
-            ...currentInvoice,
-            customerChargesTotal: parseFloat(customerChargesTotal.toFixed(2)),
-            carrierChargesTotal: parseFloat(carrierChargesTotal.toFixed(2)),
-            carrierTotal: parseFloat(carrierTotal.toFixed(2)),
-            invoiceTotal: parseFloat(invoiceTotal.toFixed(2)),
-            adjustedAmount: parseFloat(adjustedAmount.toFixed(2)),
-            carrierTotalPay: parseFloat(carrierTotalPay.toFixed(2)),
-          });
-          } catch (err) {
-          //console.error("Error fetching invoice:", err);
-          toast.error("Unable to load invoice.");
-          }
-        };
+        setInvoice({
+          ...currentInvoice,
+          customerChargesTotal: parseFloat(customerChargesTotal.toFixed(2)),
+          carrierChargesTotal: parseFloat(carrierChargesTotal.toFixed(2)),
+          carrierTotal: parseFloat(carrierTotal.toFixed(2)),
+          invoiceTotal: parseFloat(invoiceTotal.toFixed(2)),
+          adjustedAmount: parseFloat(adjustedAmount.toFixed(2)),
+          carrierTotalPay: parseFloat(carrierTotalPay.toFixed(2)),
+        });
+      } catch (err: any) {
+        //console.error("Error fetching invoice:", err);
+        toast.error(`Unable to load invoice: ${err.message}`);
+      }
+    };
 
     if (load_id) {
       fetchInvoice();
@@ -118,9 +132,9 @@ export default function InvoiceTabs({ load }: InvoiceTabsProps) {
       });
 
       toast.success("Update successful");
-    } catch (err) {
+    } catch (err: any) {
       //console.error(err);
-      toast.error("Update failed");
+      toast.error(`Update failed: ${err.message}`);
     }
   };
 

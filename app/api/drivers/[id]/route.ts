@@ -2,7 +2,10 @@ import dbConnect from "@/lib/mongodb";
 import Driver from "@/models/Driver";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function PUT(req: NextRequest, { params }: any) {
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   await dbConnect();
   const { id } = params;
   const body = await req.json();
@@ -17,10 +20,14 @@ export async function PUT(req: NextRequest, { params }: any) {
     },
     { new: true }
   ).populate("employee");
+
   return NextResponse.json(updated);
 }
 
-export async function DELETE(req: NextRequest, { params }: any) {
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   await dbConnect();
   const { id } = params;
 

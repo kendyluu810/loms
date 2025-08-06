@@ -1,6 +1,43 @@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../ui/tabs";
+interface LoadDetailsProps {
+  load: {
+    load_id: string;
+    shipment?: {
+      equipmentType?: string;
+      weight?: string;
+      rate?: string;
+      rateUnit?: string;
+    };
+    route?: {
+      pickupPoint?: {
+        address?: string;
+      };
+      pickupTime?: string;
+      deliveryPoint?: {
+        address?: string;
+      };
+      deliveryTime?: string;
+    };
+    driver?: {
+      driverlicense?: string;
+      licensetype?: string;
+      employee?: {
+        name?: string;
+      };
+    };
+    vehicle?: {
+      truckNumber?: string;
+      trailerNumber?: string;
+    };
+    customer?: {
+      companyName?: string;
+      contactPerson?: string;
+      contactPhone?: string;
+    };
+  };
+}
 
-export default function LoadDetails({ load }: any) {
+export default function LoadDetails({ load }: LoadDetailsProps) {
   if (!load) return null;
 
   const driver = load.driver;

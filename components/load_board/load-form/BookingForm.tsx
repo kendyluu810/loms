@@ -52,7 +52,7 @@ export default function BookingForm({ loadId }: BookingFormProps) {
         setDispatchers(dispatchersData?.data || []);
         setVehicles(vehiclesData?.vehicles || []);
         //console.log("Fetched data:", { drivers: driversData, dispatchers: dispatchersData });
-      } catch (error) {
+      } catch (_) {
         //console.error("Error fetching data:", error);
         setDrivers([]);
         setDispatchers([]);

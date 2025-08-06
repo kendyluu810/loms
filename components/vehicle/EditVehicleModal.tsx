@@ -40,7 +40,7 @@ export default function EditVehicleModal({
     setForm(vehicle);
   }, [vehicle]);
 
-  const handleChange = (field: keyof Vehicle, value: any) => {
+  const handleChange = (field: keyof Vehicle, value: string | boolean) => {
     setForm({ ...form, [field]: value });
   };
 

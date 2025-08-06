@@ -15,10 +15,7 @@ import { columns } from "./columns";
 import { LoadRow } from "@/type";
 import { mapLoadToRow } from "@/lib/loadBoardUtils";
 
-export default function LoadDataTable({
-  data,
-  setData,
-}: {
+export default function LoadDataTable({}: {
   data: LoadRow[];
   setData: React.Dispatch<React.SetStateAction<LoadRow[]>>;
 }) {
@@ -37,7 +34,7 @@ export default function LoadDataTable({
         const { data } = await res.json();
         const rows = data.map(mapLoadToRow);
         setLoadRows(rows);
-      } catch (err) {
+      } catch (_) {
         //console.error("Failed to fetch loads", err);
       }
     };
@@ -49,7 +46,7 @@ export default function LoadDataTable({
     try {
       await fetch(`/api/load_board/${id}`, { method: "DELETE" });
       setLoadRows((prev) => prev.filter((l) => l.load_id !== id));
-    } catch (err) {
+    } catch (_) {
       //console.error("Delete failed", err);
     }
   };

@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
     await newShipment.save();
 
     return NextResponse.json(newShipment, { status: 201 });
-  } catch (error) {
+  } catch (_) {
     //console.error("POST /api/shipment error:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },

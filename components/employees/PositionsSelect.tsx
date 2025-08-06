@@ -12,6 +12,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
+type Position = {
+  name: string;
+};
+
 export function PositionSelect({
   value,
   onChange,
@@ -24,8 +28,8 @@ export function PositionSelect({
 
   const fetchPositions = async () => {
     const res = await fetch("/api/positions");
-    const data = await res.json();
-    setPositions(data.map((pos: any) => pos.name));
+    const data: Position[] = await res.json();
+    setPositions(data.map((pos) => pos.name));
   };
 
   const addPosition = async () => {

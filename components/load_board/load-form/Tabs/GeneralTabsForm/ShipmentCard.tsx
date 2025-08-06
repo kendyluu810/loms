@@ -9,6 +9,15 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
+interface ShipmentFormData {
+  pickupCode: string;
+  deliveryCode: string;
+  stopCode: string;
+  weight: number;
+  pallets: number;
+  rate: number;
+}
+
 interface ShipmentCardProps {
   load: ExtendedLoadRow;
   setLoad: (load: ExtendedLoadRow) => void;
@@ -21,7 +30,7 @@ export default function ShipmentCard({ load, setLoad }: ShipmentCardProps) {
     register,
     handleSubmit,
     reset,
-    formState: { isDirty },
+    // formState: { isDirty },
   } = useForm({
     defaultValues: {
       pickupCode: load.shipment?.pickupPoint?.code || "",
@@ -44,7 +53,7 @@ export default function ShipmentCard({ load, setLoad }: ShipmentCardProps) {
     });
   }, [load, reset]);
 
-  const onSubmitShipment = async (data: any) => {
+  const onSubmitShipment = async (data: ShipmentFormData) => {
     try {
       const res = await fetch(`/api/load_board/${load.load_id}`, {
         method: "PUT",
@@ -67,7 +76,7 @@ export default function ShipmentCard({ load, setLoad }: ShipmentCardProps) {
         setEditShipment(false);
       }
     } catch (err: any) {
-      toast.error("Update Shipment Error:", err.message);
+      toast.error(`Update Shipment Error: ${err.message}`);
     }
   };
   return (

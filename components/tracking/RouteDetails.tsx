@@ -1,21 +1,15 @@
-import axios from "axios";
+import { LoadBoard } from "@/type";
 import {
   CheckCircle,
   Circle,
   Clock,
-  Clock4,
   MapPin,
-  Pencil,
   RefreshCw,
-  Save,
   XCircle,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 export default function RouteDetails({ load }: any) {
   if (!load) return <div className="p-4">No load selected</div>;
-
-  const router = useRouter();
 
   const pickup = load.route?.pickupPoint;
   const delivery = load.route?.deliveryPoint;

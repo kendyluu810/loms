@@ -1,9 +1,8 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { MoreVertical, Pencil, Save } from "lucide-react";
+import { MoreVertical, Pencil } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { ExtendedLoadRow } from "@/type";
-import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -16,6 +15,27 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+
+interface RouteFormData {
+  pickup: {
+    early: string;
+    late: string;
+    address: string;
+    condition: string;
+  };
+  delivery: {
+    early: string;
+    late: string;
+    address: string;
+    condition: string;
+  };
+  stop: {
+    early: string;
+    late: string;
+    address: string;
+    condition: string;
+  }[];
+}
 
 interface RouteCardProps {
   load: ExtendedLoadRow;
@@ -105,7 +125,7 @@ export default function RouteCard({ load, onUpdateLoad }: RouteCardProps) {
     return `${hours}:${minutes}`;
   };
 
-  const onSubmitRoute = async (data: any) => {
+  const onSubmitRoute = async (data: RouteFormData) => {
     try {
       const currentRoute = load.route;
 

@@ -156,10 +156,15 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json(newLoad, { status: 201 });
-  } catch (error: any) {
-    //console.error("Create Load error:", error);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { message: "Failed to create Load", error: error.message },
+        { status: 500 }
+      );
+    }
     return NextResponse.json(
-      { message: "Failed to create Load", error: error.message },
+      { message: "Unknown error occurred" },
       { status: 500 }
     );
   }
@@ -210,10 +215,15 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ data: loads, total, page }, { status: 200 });
     // //console.log("driver full info", loads[0].driver);
-  } catch (error) {
-    //console.error("Load fetch error:", error);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { error: "Failed to fetch loads", details: error.message },
+        { status: 500 }
+      );
+    }
     return NextResponse.json(
-      { error: "Failed to fetch loads", details: error },
+      { error: "Unknown error occurred" },
       { status: 500 }
     );
   }

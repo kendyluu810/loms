@@ -4,7 +4,7 @@ import {
   LayoutDashboard,
   Package,
   Route,
-  Settings,
+  // Settings,
   Truck,
   Users,
 } from "lucide-react";
