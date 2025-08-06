@@ -50,29 +50,29 @@ export async function PUT(
   }
 }
 
-// Xóa invoice
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  await dbConnect();
-  const invoiceId = params.id;
+// // Xóa invoice
+// export async function DELETE(
+//   req: NextRequest,
+//   { params }: { params: { id: string } }
+// ) {
+//   await dbConnect();
+//   const invoiceId = params.id;
 
-  try {
-    const deleted = await Invoice.findByIdAndDelete(invoiceId);
-    if (!deleted) {
-      return NextResponse.json({ error: "Invoice not found" }, { status: 404 });
-    }
+//   try {
+//     const deleted = await Invoice.findByIdAndDelete(invoiceId);
+//     if (!deleted) {
+//       return NextResponse.json({ error: "Invoice not found" }, { status: 404 });
+//     }
 
-    return NextResponse.json(
-      { message: "Deleted successfully" },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error("DELETE invoice error:", error);
-    return NextResponse.json(
-      { error: "Failed to delete invoice" },
-      { status: 500 }
-    );
-  }
-}
+//     return NextResponse.json(
+//       { message: "Deleted successfully" },
+//       { status: 200 }
+//     );
+//   } catch (error) {
+//     console.error("DELETE invoice error:", error);
+//     return NextResponse.json(
+//       { error: "Failed to delete invoice" },
+//       { status: 500 }
+//     );
+//   }
+// }
