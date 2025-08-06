@@ -34,8 +34,12 @@ export default function CarriersPage() {
       const data = await res.json();
       setCarriers(data.carriers);
       setTotal(data.total);
-    } catch (err) {
-      toast.error("Failed to load carriers");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toast.error(`Failed to load carriers: ${err.message}`);
+      } else {
+        toast.error("Failed to load carriers: Unknown error");
+      }
     }
   }, [search, page, pageSize]);
 

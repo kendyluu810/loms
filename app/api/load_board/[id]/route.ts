@@ -119,7 +119,7 @@ export async function PUT(
         updatedRoute?.pickupPoint?.status,
         updatedRoute?.deliveryPoint?.status,
         ...(updatedRoute?.stopPoints || []).map(
-          (pt: { status: any }) => pt.status
+          (pt: { status: string }) => pt.status
         ),
       ]
         .filter(Boolean)
@@ -337,7 +337,7 @@ export async function PATCH(
         status: updatedLoad.status,
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     if (error instanceof Error) {
       console.error("Confirm Booking Error:", error);
       return NextResponse.json(
