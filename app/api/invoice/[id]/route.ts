@@ -56,8 +56,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   await dbConnect();
-  const invoiceId = await params;
-
+  const { id: invoiceId } = await params;
   try {
     const deleted = await Invoice.findByIdAndDelete(invoiceId);
     if (!deleted) {
