@@ -207,12 +207,6 @@ export default function Step4Review() {
                 <Label className="text-[#022f7e] font-semibold">Rate</Label>
                 <span>{shipment.rate}</span>
               </div>
-              {/* <div className="flex justify-between">
-                <Label className="text-[#022f7e] font-semibold">
-                  Insure Cargo
-                </Label>
-                <span>Yes</span>
-              </div> */}
             </CardContent>
           </div>
         </Card>

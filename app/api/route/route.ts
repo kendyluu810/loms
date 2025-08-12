@@ -14,13 +14,25 @@ function calculateETA(early: string, late: string) {
   return `${hours}:${minutes}`;
 }
 
+/**
+ * Handles POST requests to create a new route in the system.
+ *
+ * This function connects to the database, parses the incoming request body,
+ * and ensures that the required route points (`pickupPoint`, `deliveryPoint`, and `stopPoints`)
+ * are present, assigning default values if they are missing. It then creates a new `Route`
+ * document and saves it to the database.
+ *
+ * @param req - The incoming Next.js request object containing route data in JSON format.
+ * @returns A JSON response with the newly created route and a 201 status code on success,
+ *          or a 500 status code with an error message on failure.
+ */
 export async function POST(req: NextRequest) {
   try {
     await dbConnect();
     const body = await req.json();
     //console.log("Creating route:", body);
 
-    // Gán mặc định pickupPoint & deliveryPoint nếu chưa có
+    // Assign default pickupPoint & deliveryPoint if not present
     if (!body.pickupPoint) {
       body.pickupPoint = {
         type: "pickup",

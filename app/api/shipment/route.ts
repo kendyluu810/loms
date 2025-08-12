@@ -2,6 +2,18 @@ import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import Shipment from "@/models/load_board/Shipment";
 
+/**
+ * Handles the creation of a new shipment via a POST request.
+ *
+ * This function connects to the database, parses the incoming request body,
+ * and ensures that the `pickupPoint`, `deliveryPoint`, and `stopPoint` fields
+ * are populated with default values if they are missing. It then creates a new
+ * `Shipment` document and saves it to the database.
+ *
+ * @param req - The incoming Next.js request object containing shipment data in JSON format.
+ * @returns A JSON response with the created shipment and a 201 status code on success,
+ *          or a 500 status code with an error message on failure.
+ */
 export async function POST(req: NextRequest) {
   try {
     await dbConnect();

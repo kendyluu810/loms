@@ -1,4 +1,3 @@
-// ✅ API: /api/dashboard/overview
 import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import Load from "@/models/load_board/Load";
@@ -20,6 +19,27 @@ interface PopulatedCustomer {
   companyName: string;
 }
 
+/**
+ * Handles GET requests for the analytics dashboard API endpoint.
+ *
+ * Connects to the database and aggregates various analytics data for the dashboard, including:
+ * - Total number of shipments
+ * - Number of pending orders
+ * - Number of active drivers
+ * - Today's total revenue
+ * - Line chart data for shipments and deliveries over a specified date range
+ * - Pie chart data for load statuses
+ * - Bar chart data for revenue over a specified month range
+ * - Recent transaction history
+ *
+ * The function supports customizable date ranges via query parameters:
+ * - `lineRange`: Range for shipment/delivery line chart (default: "7d")
+ * - `barRange`: Range for revenue bar chart (default: "1m")
+ * - `txRange`: Range for transaction history (default: "7d")
+ *
+ * @param req - The incoming Next.js request object
+ * @returns A JSON response containing all aggregated dashboard analytics data
+ */
 export async function GET(req: NextRequest) {
   await dbConnect();
 

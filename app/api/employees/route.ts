@@ -3,6 +3,24 @@ import dbConnect from "@/lib/mongodb";
 import Employees from "@/models/employees/Employees";
 import Driver from "@/models/Driver";
 
+/**
+ * Handles GET requests to retrieve a paginated, searchable, and sortable list of employees.
+ *
+ * Connects to the database, parses query parameters for search, pagination, sorting, and filtering by position.
+ * Constructs a MongoDB query based on the provided parameters, fetches the matching employees,
+ * and returns the results along with the total count.
+ *
+ * @param req - The incoming Next.js request object containing query parameters:
+ *   - `search`: (optional) Search term to filter employees by Eid, name, email, phone, or position.
+ *   - `page`: (optional) Page number for pagination (default: 1).
+ *   - `pageSize`: (optional) Number of employees per page (default: 10).
+ *   - `sort`: (optional) Field to sort by (default: "createdAt").
+ *   - `order`: (optional) Sort order, either "asc" or "desc" (default: "asc").
+ *   - `position`: (optional) Filter employees by position.
+ * @returns A JSON response containing:
+ *   - `data`: Array of employee objects matching the query.
+ *   - `total`: Total number of employees matching the query.
+ */
 export async function GET(req: NextRequest) {
   await dbConnect();
 
@@ -41,6 +59,20 @@ export async function GET(req: NextRequest) {
   return NextResponse.json({ data: employees, total });
 }
 
+/**
+ * Handles the creation of a new employee record via a POST request.
+ *
+ * - Connects to the database.
+ * - Parses the request body for employee data.
+ * - Generates a unique employee ID (`Eid`) by incrementing the last used ID.
+ * - Creates and saves a new employee document with the generated `Eid`.
+ * - If the new employee's position is "Driver" and driver information is provided,
+ *   creates a corresponding driver record linked to the employee.
+ * - Returns the created employee as a JSON response.
+ *
+ * @param req - The incoming Next.js request object containing employee data in JSON format.
+ * @returns A JSON response containing the newly created employee document.
+ */
 export async function POST(req: NextRequest) {
   await dbConnect();
   const body = await req.json();

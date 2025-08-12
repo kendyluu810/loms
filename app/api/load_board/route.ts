@@ -10,6 +10,22 @@ import Employees from "@/models/employees/Employees";
 import "@/models/Driver";
 import "@/models/Invoice";
 
+/**
+ * Handles the creation of a new Load resource via a POST request.
+ *
+ * This function performs the following steps:
+ * 1. Connects to the database.
+ * 2. Parses and validates the request body for required references (route, shipment, customer, carrier).
+ * 3. Ensures that the referenced Route, Shipment, Customer, and Carrier exist.
+ * 4. Initializes and saves missing pickup, delivery, and stop points for Route and Shipment if not already set.
+ * 5. Optionally validates and fetches associated driver, dispatcher, and vehicle if provided.
+ * 6. Creates a new Load document with the provided and resolved references.
+ * 7. Returns the created Load as a JSON response with status 201 on success.
+ * 8. Handles and returns appropriate error responses for missing entities or unexpected errors.
+ *
+ * @param req - The Next.js API request object containing the Load creation payload.
+ * @returns A NextResponse containing the created Load or an error message.
+ */
 export async function POST(req: NextRequest) {
   try {
     await dbConnect();
@@ -169,7 +185,26 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-
+//
+/**
+ * Handles GET requests to fetch a paginated, filtered, and sorted list of loads from the database.
+ *
+ * - Connects to the database and parses query parameters from the request URL, including:
+ *   - `search`: Optional search string to filter loads by `load_id` (case-insensitive).
+ *   - `sort`: Field to sort the results by (default: "createdAt").
+ *   - `order`: Sort order, either "asc" (ascending) or "desc" (descending, default).
+ *   - `status`: Optional status to filter loads.
+ *   - `page`: Page number for pagination (default: 1).
+ *   - `limit`: Number of items per page (default: 10).
+ * - Builds a filter object based on the search and status parameters.
+ * - Queries the `Load` collection with the constructed filter, applies population for related fields,
+ *   sorts, paginates, and limits the results.
+ * - Returns a JSON response containing the list of loads, total count, and current page.
+ * - Handles errors and returns appropriate error responses.
+ *
+ * @param req - The incoming Next.js request object.
+ * @returns A JSON response with the loads data, total count, and page information, or an error message.
+ */
 export async function GET(req: NextRequest) {
   await dbConnect();
   try {

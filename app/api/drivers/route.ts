@@ -3,6 +3,19 @@ import Driver from "@/models/Driver";
 import { PipelineStage } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
+/**
+ * Handles GET requests to retrieve a paginated, searchable, and sortable list of drivers.
+ *
+ * This function connects to the database, parses query parameters from the request URL
+ * (including search, pagination, and sorting options), and performs an aggregation pipeline
+ * to fetch driver records joined with their corresponding employee data. It supports searching
+ * across driver license, license type, and employee fields (name, email, phone).
+ *
+ * The response includes the list of drivers for the current page and the total count of matching records.
+ *
+ * @param req - The incoming Next.js request object.
+ * @returns A JSON response containing the paginated list of drivers and the total count.
+ */
 export async function GET(req: NextRequest) {
   await dbConnect();
 
@@ -71,6 +84,16 @@ export async function GET(req: NextRequest) {
   return NextResponse.json({ drivers, total });
 }
 
+/**
+ * Handles POST requests to create a new driver entry in the database.
+ *
+ * @param req - The incoming Next.js request object containing driver data in JSON format.
+ * @returns A JSON response with the created driver object or an error message if required fields are missing.
+ *
+ * The function expects the request body to include at least the `employee` field.
+ * If the `employee` field is missing, it responds with a 400 status and an error message.
+ * Otherwise, it creates a new `Driver` document with the provided data and saves it to the database.
+ */
 export async function POST(req: NextRequest) {
   await dbConnect();
   const body = await req.json();

@@ -80,19 +80,18 @@ export default function InvoiceTabs({ load }: InvoiceTabsProps) {
         const adjustedAmount = invoiceTotal - carrierTotal;
         const carrierTotalPay =
           customerChargesTotal + carrierChargesTotal + adjustedAmount;
-
-        if (!currentInvoice) {
-          // Tạo invoice mới nếu chưa có
-          const newInvoiceRes = await axios.post(`/api/invoice`, {
-            loadId: load_id,
-          });
-          currentInvoice = newInvoiceRes.data;
-          // Gắn vào Load
-          await axios.put(`/api/load_board/${load_id}/invoice`, {
-            invoiceId: currentInvoice._id,
-          });
-          toast.success("Invoice created successfully!");
-        }
+          if (!currentInvoice) {
+            // Create a new invoice if not exists
+            const newInvoiceRes = await axios.post(`/api/invoice`, {
+              loadId: load_id,
+            });
+            currentInvoice = newInvoiceRes.data;
+            // Attach to Load
+            await axios.put(`/api/load_board/${load_id}/invoice`, {
+              invoiceId: currentInvoice._id,
+            });
+            toast.success("Invoice created successfully!");
+          }
 
         setInvoice({
           ...currentInvoice,
