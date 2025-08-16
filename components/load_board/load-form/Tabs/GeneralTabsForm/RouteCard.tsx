@@ -2,7 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MoreVertical, Pencil } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import { ExtendedLoadRow } from "@/type";
+import { ExtendedLoadRow, RoutePoint } from "@/type";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -136,16 +136,20 @@ export default function RouteCard({ load, onUpdateLoad }: RouteCardProps) {
     try {
       const currentRoute = load.route;
 
-      const routePayload = {
+      const routePayload: ExtendedLoadRow["route"] = {
+        pickupTime: data.pickup.early,
+        deliveryTime: data.delivery.late,
         pickupPoint: {
-          ...currentRoute.pickupPoint, // giữ lại các field cũ như timezone, locationName
+          ...(currentRoute.pickupPoint || {}),
           early: data.pickup.early,
           late: data.pickup.late,
           address: data.pickup.address,
           status: data.pickup.condition,
           eta: calculateETA(data.pickup.early, data.pickup.late),
           type: "pickup",
-        },
+          timestamp: new Date().toISOString(),
+        } as RoutePoint & { timestamp?: string },
+
         deliveryPoint: {
           ...currentRoute.deliveryPoint,
           early: data.delivery.early,
@@ -154,20 +158,23 @@ export default function RouteCard({ load, onUpdateLoad }: RouteCardProps) {
           status: data.delivery.condition,
           eta: calculateETA(data.delivery.early, data.delivery.late),
           type: "delivery",
-        },
-        stopPoints: data.stop?.map((s: StopPoint, idx: number) => {
-          const existingStop = currentRoute.stopPoints?.[idx] ?? {};
-          return {
-            ...existingStop,
-            early: s.early,
-            late: s.late,
-            address: s.address,
-            status: s.condition,
-            eta: calculateETA(s.early, s.late),
-            type: "stop",
-          };
-        }),
-      } as ExtendedLoadRow["route"];
+          timestamp: new Date().toISOString(),
+        } as RoutePoint & { timestamp?: string },
+
+        stopPoints: data.stop?.map(
+          (s, idx) =>
+            ({
+              ...(currentRoute.stopPoints?.[idx] || {}),
+              early: s.early,
+              late: s.late,
+              address: s.address,
+              status: s.condition,
+              eta: calculateETA(s.early, s.late),
+              type: "stop",
+              timestamp: new Date().toISOString(),
+            } as RoutePoint & { timestamp?: string })
+        ),
+      };
 
       const res = await fetch(`/api/load_board/${load.load_id}`, {
         method: "PATCH",

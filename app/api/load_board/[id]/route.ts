@@ -93,7 +93,7 @@ export async function GET(
 
 /**
  * Handles the PUT request to update a Load entity and its related Route, Shipment, and Customer data.
- * 
+ *
  * This function performs the following operations:
  * - Connects to the database.
  * - Retrieves the Load by its ID or load_id, including its associated Route.
@@ -106,9 +106,9 @@ export async function GET(
  * - Retrieves the updated Load with populated references for route, shipment, carrier, and customer.
  * - Calls a helper function to update the Load status based on its points.
  * - Returns the updated Load as a JSON response.
- * 
+ *
  * All Vietnamese comments in the function have been translated to English.
- * 
+ *
  * @param req - The incoming Next.js request object.
  * @param context - The context object containing route parameters.
  * @returns A JSON response with the updated Load or an error message.
@@ -143,7 +143,7 @@ export async function PUT(
             ...body.route,
           },
         },
-        { new: false } 
+        { new: false }
       );
 
       // Fetch the updated route after updating (must fetch again to get correct data)
@@ -240,7 +240,7 @@ export async function DELETE(
   const { id } = await params;
   try {
     const load = mongoose.Types.ObjectId.isValid(id)
-      ? await Load.findById(id) 
+      ? await Load.findById(id)
       : await Load.findOne({ load_id: id });
     if (!load) {
       return NextResponse.json({ message: "Load not found" }, { status: 404 });
@@ -283,6 +283,33 @@ export async function PATCH(
     console.log("PATCH body:", body);
     console.log("Booking body:", body);
 
+    // === CASE 0: Update statusHistory
+    if (body.status) {
+      const load = await Load.findOne({ load_id: loadId });
+      if (!load) {
+        return NextResponse.json(
+          { message: "Load not found" },
+          { status: 404 }
+        );
+      }
+
+      const newStatusEntry = {
+        status: body.status,
+        location: body.location || "",
+        timestamp: body.timestamp ? new Date(body.timestamp) : new Date(),
+      };
+
+      // Push vào statusHistory
+      load.statusHistory = [...(load.statusHistory || []), newStatusEntry];
+      load.currentStatus = body.status;
+      await load.save();
+
+      return NextResponse.json({
+        message: "Status updated",
+        statusHistory: load.statusHistory,
+        currentStatus: load.currentStatus,
+      });
+    }
     // === CASE 1: Only update Route status or points in the route ===
     if (body.route) {
       const load = await Load.findOne({ load_id: loadId }).populate("route");
@@ -305,65 +332,91 @@ export async function PATCH(
         { new: true }
       );
 
+      // === Thêm log statusHistory cho từng điểm có thay đổi ===
+      const points = [
+        body.route.pickupPoint,
+        ...(body.route.stopPoints || []),
+        body.route.deliveryPoint,
+      ].filter(Boolean);
+
+      points.forEach((point: any) => {
+        if (point.status) {
+          load.statusHistory = [
+            ...(load.statusHistory || []),
+            {
+              status: `${point.type} : ${point.status}`,
+              location: point.address || "",
+              timestamp: point.timestamp
+                ? new Date(point.timestamp)
+                : new Date(),
+            },
+          ];
+        }
+      });
+
+      await load.save();
+
       // After updating the route, automatically update the overall status
       await updateLoadStatusBasedOnPoints(loadId);
 
       return NextResponse.json({
         message: "Route updated",
         route: updatedRoute,
+        statusHistory: load.statusHistory,
       });
-        }
-        // Booking Form
-        const { driver, dispatcher, vehicle, pickupETA, pickupTime } = body;
+    }
 
-        if (
+    // Booking Form
+    const { driver, dispatcher, vehicle, pickupETA, pickupTime } = body;
+
+    if (
       !loadId ||
       !driver ||
       !dispatcher ||
       !vehicle ||
       !pickupETA ||
       !pickupTime
-        ) {
+    ) {
       return NextResponse.json(
         { message: "Missing required fields" },
         { status: 400 }
       );
-        }
+    }
 
-        if (!pickupETA?.includes(":") || !pickupTime?.includes(":")) {
+    if (!pickupETA?.includes(":") || !pickupTime?.includes(":")) {
       return NextResponse.json(
         { message: "pickupETA or pickupTime format invalid" },
         { status: 400 }
       );
-        }
+    }
 
-        const load = await Load.findOne({ load_id: loadId }).populate("route");
-        if (!load || !load.route || !load.route.pickupPoint) {
+    const load = await Load.findOne({ load_id: loadId }).populate("route");
+    if (!load || !load.route || !load.route.pickupPoint) {
       return NextResponse.json(
         { message: "Load or pickupPoint not found" },
         { status: 404 }
       );
-        }
+    }
 
-        const pickupDate = new Date(load.route.pickupPoint.date);
-        const [etaHours, etaMinutes] = pickupETA.split(":").map(Number);
-        const [timeHours, timeMinutes] = pickupTime.split(":").map(Number);
+    const pickupDate = new Date(load.route.pickupPoint.date);
+    const [etaHours, etaMinutes] = pickupETA.split(":").map(Number);
+    const [timeHours, timeMinutes] = pickupTime.split(":").map(Number);
 
-        const pickupETADate = new Date(pickupDate);
-        pickupETADate.setHours(etaHours, etaMinutes, 0, 0);
+    const pickupETADate = new Date(pickupDate);
+    pickupETADate.setHours(etaHours, etaMinutes, 0, 0);
 
-        const pickupTimeDate = new Date(pickupDate);
-        pickupTimeDate.setHours(timeHours, timeMinutes, 0, 0);
+    const pickupTimeDate = new Date(pickupDate);
+    pickupTimeDate.setHours(timeHours, timeMinutes, 0, 0);
 
-        const driverDoc = await Driver.findOne({ employee: driver });
-        if (!driverDoc) {
+    const driverDoc = await Driver.findOne({ employee: driver });
+    if (!driverDoc) {
       return NextResponse.json(
         { message: "Driver not found" },
         { status: 404 }
       );
-        }
+    }
 
-        const updatedLoad = await Load.findOneAndUpdate(
+    const updatedLoad = await Load.findOneAndUpdate(
       { load_id: loadId },
       {
         driver: driverDoc._id,
@@ -374,29 +427,29 @@ export async function PATCH(
         status: "booked",
       },
       { new: true }
-        );
+    );
 
-        if (!updatedLoad) {
+    if (!updatedLoad) {
       return NextResponse.json({ message: "Load not found" }, { status: 404 });
-        }
+    }
 
-        await Vehicle.findByIdAndUpdate(vehicle, { isEmpty: false });
+    await Vehicle.findByIdAndUpdate(vehicle, { isEmpty: false });
 
-        // Update the overall load status based on route points
-        try {
+    // Update the overall load status based on route points
+    try {
       await updateLoadStatusBasedOnPoints(loadId);
-        } catch (err) {
+    } catch (err) {
       console.error("Error updating load status:", err);
-        }
+    }
 
-        return NextResponse.json({
+    return NextResponse.json({
       message: "Booking confirmed",
       load: {
         _id: updatedLoad._id,
         load_id: updatedLoad.load_id,
         status: updatedLoad.status,
       },
-        });
+    });
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error("Confirm Booking Error:", error);

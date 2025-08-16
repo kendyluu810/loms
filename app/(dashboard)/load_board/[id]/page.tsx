@@ -8,6 +8,7 @@ import { useParams, useRouter } from "next/navigation";
 import { ExtendedLoadRow } from "@/type";
 import InvoiceTabs from "@/components/load_board/load-form/Tabs/InvoiceTabs";
 import { toast } from "sonner";
+import HistoryTab from "@/components/load_board/load-form/Tabs/HistoryTab";
 
 export default function LoadDetails() {
   const router = useRouter();
@@ -167,9 +168,7 @@ export default function LoadDetails() {
           <GeneralTabs load={load} onUpdateLoad={handleUpdateLoad} />
         )}
         {activeTab === "invoice" && <InvoiceTabs load={load} />}
-        {activeTab === "history" && (
-          <div className="text-center text-gray-500">History details here</div>
-        )}
+        {activeTab === "history" && <HistoryTab load={load} />}
       </div>
     </div>
   );

@@ -13,6 +13,7 @@ export interface IRoutePoint extends Document {
   status: string;
   eta: string;
   load_id: mongoose.Types.ObjectId;
+  timestamp: Date;
 }
 
 export const RoutePointSchema = new Schema(
@@ -33,6 +34,7 @@ export const RoutePointSchema = new Schema(
     status: { type: String },
     eta: { type: String },
     load_id: { type: Schema.Types.ObjectId, ref: "Load" },
+    timestamp: { type: Date },
   },
   { _id: true, timestamps: true }
 );

@@ -185,6 +185,12 @@ export interface ShipmentPoint {
   remarks?: string;
 }
 
+// StatusHistoryItem
+export interface StatusHistoryItem {
+  status: string; // ví dụ: "pickup:Completed", "stop[1]:In Progress"
+  timestamp: string; // ISO
+}
+
 // LoadRow
 export interface LoadRow {
   _id: string;
@@ -246,4 +252,5 @@ export interface ExtendedLoadRow extends LoadRow {
   vehicle?: Vehicle;
   carrier?: Carrier;
   invoice?: Invoice;
+  statusHistory?: StatusHistoryItem[];
 }

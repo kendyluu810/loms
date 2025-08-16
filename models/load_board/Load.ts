@@ -19,13 +19,17 @@ export interface ILoad extends Document {
   shipment: mongoose.Types.ObjectId | IShipment;
   customer: mongoose.Types.ObjectId;
   carrier?: mongoose.Types.ObjectId;
-  status: "posted" | "in_transit" | "delivered" | "cancelled";
+  status: "posted" | "booked" | "in_progress" | "delivered" | "cancelled";
   invoice: mongoose.Types.ObjectId;
   driver: mongoose.Types.ObjectId;
   dispatcher: mongoose.Types.ObjectId;
   vehicle: mongoose.Types.ObjectId;
   pickupETA: String;
   pickupTime: String;
+  statusHistory: {
+    status: string;
+    timestamp: Date;
+  }[];
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -79,6 +83,12 @@ const LoadBoardSchema: Schema = new Schema(
     },
     pickupETA: String,
     pickupTime: String,
+    statusHistory: [
+      {
+        status: { type: String, required: true },
+        timestamp: { type: Date, default: Date.now },
+      },
+    ],
   },
   { timestamps: true }
 );
