@@ -1,17 +1,16 @@
-// app/api/load_board/tracking/[loadId]/route.ts
 import dbConnect from "@/lib/mongodb";
 import Load from "@/models/load_board/Load";
 import { NextResponse } from "next/server";
 
 export async function GET(
   req: Request,
-  { params }: { params: { loadId: string } }
+  { params }: { params: Promise<{ loadId: string }> }
 ) {
   await dbConnect();
 
-  const { loadId } = params;
+  const { loadId } = await params;
 
-  // 1. Tìm Load theo load_id
+  // 1. Find Load by load_id
   const load = await Load.findOne({ load_id: loadId })
     .populate({
       path: "shipment",
@@ -29,14 +28,14 @@ export async function GET(
     );
   }
 
-  // 2. Trả về dữ liệu tracking
+  // 2. Return tracking data
   return NextResponse.json({
     success: true,
     data: {
       customer: load.customer,
       shipment: load.shipment,
       currentStatus: load.currentStatus || load.status,
-      statusHistory: load.statusHistory || [], // 👈 thêm history để tab History hiển thị
+      statusHistory: load.statusHistory || [], // 👈 add history so the History tab displays
     },
   });
 }
