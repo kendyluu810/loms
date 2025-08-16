@@ -15,6 +15,7 @@ import "@/models/employees/Employees";
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
 import { updateLoadStatusBasedOnPoints } from "@/lib/updateLoadStatusBasedOnPoints";
+import { RoutePoint } from "@/type";
 
 /**
  * Handles GET requests for loading a board by its ID.
@@ -172,7 +173,7 @@ export async function PUT(
         newStatus = "booked";
       }
 
-      // Cập nhật nếu thay đổi
+      // Update if changed
       if (load.status !== newStatus) {
         load.status = newStatus;
         await load.save();
@@ -299,7 +300,7 @@ export async function PATCH(
         timestamp: body.timestamp ? new Date(body.timestamp) : new Date(),
       };
 
-      // Push vào statusHistory
+      // Push to statusHistory
       load.statusHistory = [...(load.statusHistory || []), newStatusEntry];
       load.currentStatus = body.status;
       await load.save();
@@ -332,14 +333,14 @@ export async function PATCH(
         { new: true }
       );
 
-      // === Thêm log statusHistory cho từng điểm có thay đổi ===
+      // Add log statusHistory for each point that has changed
       const points = [
         body.route.pickupPoint,
         ...(body.route.stopPoints || []),
         body.route.deliveryPoint,
       ].filter(Boolean);
 
-      points.forEach((point: any) => {
+      points.forEach((point: RoutePoint & { timestamp?: string | Date }) => {
         if (point.status) {
           load.statusHistory = [
             ...(load.statusHistory || []),
