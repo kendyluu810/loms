@@ -4,11 +4,11 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   req: Request,
-  { params }: { params: Promise<{ loadId: string }> }
+  { params }: { params: { loadId: string } }
 ) {
   await dbConnect();
 
-  const { loadId } = await params;
+  const { loadId } = params;
 
   // 1. Find Load by load_id
   const load = await Load.findOne({ load_id: loadId })
