@@ -4,14 +4,13 @@ import Load from "@/models/load_board/Load";
 import "@/models/load_board/Shipment";
 import "@/models/customer/Customers";
 import { NextRequest, NextResponse } from "next/server";
-
 export async function GET(
   _req: NextRequest,
-  { params }: { params: Promise<{ loadId: string }> }
+  { params }: { params: { loadId: string } }
 ) {
   await dbConnect();
 
-  const { loadId } = await params; // await params in Next 15
+  const { loadId } = params; // ✅ lấy trực tiếp
   const key = decodeURIComponent(loadId).trim();
 
   const or: Record<string, unknown>[] = [{ load_id: key }, { loadId: key }];
@@ -31,9 +30,6 @@ export async function GET(
         "companyName companyEmail companyPhone contactPerson contactPhone contactEmail",
     });
 
-  console.log("Load:", load);
-  console.log("Load.customer:", load.customer);
-  console.log("Load.shipment:", load.shipment);
 
   if (!load) {
     return NextResponse.json(
