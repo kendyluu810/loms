@@ -1,6 +1,7 @@
 import mongoose, { Document, Schema } from "mongoose";
 import { IRoute } from "./Routes";
 import { IShipment } from "./Shipment";
+import { ICustomer } from "../customer/Customers";
 
 function generateLoadID() {
   const now = new Date();
@@ -17,7 +18,7 @@ export interface ILoad extends Document {
   load_id: string;
   route: mongoose.Types.ObjectId | IRoute;
   shipment: mongoose.Types.ObjectId | IShipment;
-  customer: mongoose.Types.ObjectId;
+  customer: mongoose.Types.ObjectId | ICustomer;
   carrier?: mongoose.Types.ObjectId;
   status: "posted" | "booked" | "in_progress" | "delivered" | "cancelled";
   invoice: mongoose.Types.ObjectId;

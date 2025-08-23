@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import dbConnect from "@/lib/mongodb";
 import Load from "@/models/load_board/Load";
 import "@/models/load_board/Shipment";
-import "@/models/customer/Customers"
+import "@/models/customer/Customers";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
@@ -20,15 +20,20 @@ export async function GET(
   }
 
   // 1. Find Load by load_id
-  const load = await Load.findOne({ load_id: loadId })
+  const load = await Load.findOne({ $or: or })
     .populate({
       path: "shipment",
-      select: "pickupLocation deliveryLocation pickupDate deliveryDate",
+      select: "pickupPoint stopPoint deliveryPoint itemCategory weight rate",
     })
     .populate({
       path: "customer",
-      select: "name phone email",
+      select:
+        "companyName companyEmail companyPhone contactPerson contactPhone contactEmail",
     });
+
+  console.log("Load:", load);
+  console.log("Load.customer:", load.customer);
+  console.log("Load.shipment:", load.shipment);
 
   if (!load) {
     return NextResponse.json(
