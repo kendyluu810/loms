@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import dbConnect from "@/lib/mongodb";
 import Load from "@/models/load_board/Load";
+import "@/models/load_board/Shipment";
+import "@/models/customer/Customers"
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
