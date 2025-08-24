@@ -6,11 +6,11 @@ import "@/models/customer/Customers";
 import { NextRequest, NextResponse } from "next/server";
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { loadId: string } }
+  { params }: { params: Promise<{ loadId: string }> }
 ) {
   await dbConnect();
 
-  const { loadId } = params; // ✅ lấy trực tiếp
+  const { loadId } = await params; // await params in Next 15
   const key = decodeURIComponent(loadId).trim();
 
   const or: Record<string, unknown>[] = [{ load_id: key }, { loadId: key }];
