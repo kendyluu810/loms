@@ -14,7 +14,6 @@ export async function GET(
   const { loadId } = await context.params;
   const key = decodeURIComponent(loadId ?? "").trim();
 
-
   const or: Record<string, unknown>[] = [{ load_id: key }, { loadId: key }];
   if (mongoose.Types.ObjectId.isValid(key)) {
     or.push({ _id: new mongoose.Types.ObjectId(key) });
@@ -31,7 +30,6 @@ export async function GET(
       select:
         "companyName companyEmail companyPhone contactPerson contactPhone contactEmail",
     });
-
 
   if (!load) {
     return NextResponse.json(
@@ -50,4 +48,17 @@ export async function GET(
       statusHistory: load.statusHistory || [], // 👈 add history so the History tab displays
     },
   });
+}
+
+export async function OPTIONS() {
+  return NextResponse.json(
+    {},
+    {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      },
+    }
+  );
 }
