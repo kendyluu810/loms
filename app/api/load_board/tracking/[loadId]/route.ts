@@ -4,18 +4,16 @@ import Load from "@/models/load_board/Load";
 import "@/models/load_board/Shipment";
 import "@/models/customer/Customers";
 import { NextRequest, NextResponse } from "next/server";
+
 export async function GET(
   _req: NextRequest,
-  context:
-    | { params: { loadId: string } }
-    | { params: Promise<{ loadId: string }> }
+  context: { params: Promise<{ loadId: string }> }
 ) {
   await dbConnect();
-  const rawParams =
-    "then" in context.params ? await context.params : context.params;
 
-  const { loadId } = rawParams;
-  const key = decodeURIComponent(loadId).trim();
+  const { loadId } = await context.params;
+  const key = decodeURIComponent(loadId ?? "").trim();
+
 
   const or: Record<string, unknown>[] = [{ load_id: key }, { loadId: key }];
   if (mongoose.Types.ObjectId.isValid(key)) {
@@ -33,6 +31,7 @@ export async function GET(
       select:
         "companyName companyEmail companyPhone contactPerson contactPhone contactEmail",
     });
+
 
   if (!load) {
     return NextResponse.json(
